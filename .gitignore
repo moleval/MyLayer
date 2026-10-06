@@ -1,0 +1,19 @@
+if (-not (Test-Path .gitignore)) {
+@"
+# AutoCAD temporary files
+*.bak
+*.dwl
+*.dwl2
+*.tmp
+*.sv$
+*.log
+
+# Если XML-файлы являются только результатами экспорта,
+# а не шаблонами, можно раскомментировать строку ниже:
+# *.xml
+
+# Если нужно игнорировать все XML, кроме шаблона, можно сделать так:
+# *.xml
+# !Слои.xml
+"@ | Out-File -FilePath .gitignore -Encoding utf8
+}
