@@ -936,11 +936,15 @@
 
   (if fh
     (progn
+      ;; Обязательный XML-заголовок
       (write-line
         "<?xml version=\"1.0\" encoding=\"windows-1251\"?>"
         fh
       )
 
+      ;; Эта инструкция говорит Windows/Excel,
+      ;; что файл нужно открывать как таблицу.
+      ;; Без неё Excel 2013 может выдать ошибку издателя.
       (write-line
         "<?mso-application progid=\"Excel.Sheet\"?>"
         fh
@@ -957,6 +961,19 @@
         )
         fh
       )
+
+      ;; Блок Styles обязателен для корректного открытия
+      ;; в Excel 2013.
+      (write-line " <Styles>" fh)
+      (write-line "  <Style ss:ID=\"Default\" ss:Name=\"Normal\">" fh)
+      (write-line "   <Alignment ss:Vertical=\"Bottom\"/>" fh)
+      (write-line "   <Borders/>" fh)
+      (write-line "   <Font ss:FontName=\"Arial\" ss:Size=\"10\"/>" fh)
+      (write-line "   <Interior/>" fh)
+      (write-line "   <NumberFormat/>" fh)
+      (write-line "   <Protection/>" fh)
+      (write-line "  </Style>" fh)
+      (write-line " </Styles>" fh)
 
       (LX:WriteLayersSheet fh doc)
       (LX:WriteFiltersSheet fh)
