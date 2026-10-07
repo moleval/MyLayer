@@ -1,7 +1,8 @@
 ;;; ============================================================
 ;;; 03_LayerImport.lsp
 ;;; Импорт слоёв и фильтров из Excel-XML (формат 2003).
-;;; Универсальное чтение (UTF-8 / Windows-1251 / UTF-16).
+;;; Универсальное чтение: encoding из пролога, иначе перебор
+;;;   utf-8 ? windows-1251 ? unicode.
 ;;; Вложенные фильтры: >>Имя = потомок этого фильтра.
 ;;; Слои потомков автоматически поднимаются в родителя.
 ;;; Для существующих слоёв видимость, заморозка и блокировка
@@ -15,7 +16,7 @@
 (setq *LI:ALWAYS-ASK* nil)
 (setq *LI:DELETE-EXISTING-FILTERS* nil)
 (setq *LI:SET-CURRENT-FILTER* nil)
-(setq *LI:WARN* nil)   ; список предупреждений: (имя категория описание)
+(setq *LI:WARN* nil)
 
 ;;; ============================================================
 ;;; Базовые безопасные функции
@@ -23,12 +24,15 @@
 
 (defun LI:IsString (x) (eq (type x) 'STR))
 (defun LI:IsError (x) (if x (vl-catch-all-error-p x) nil))
+
 (defun LI:ForceString (x)
   (cond ((null x) "") ((LI:IsString x) x) (t (vl-prin1-to-string x)))
 )
+
 (defun LI:IsSpaceChar (c)
   (or (= c " ") (= c (chr 9)) (= c (chr 10)) (= c (chr 13)))
 )
+
 (defun LI:SafeTrim (s / n)
   (setq s (LI:ForceString s))
   (while (and (> (strlen s) 0) (LI:IsSpaceChar (substr s 1 1)))
@@ -41,9 +45,9 @@
   )
   s
 )
+
 (defun LI:Trim (s) (LI:SafeTrim s))
 
-;;; Дополнить строку пробелами до width символов справа.
 (defun LI:PadRight (s width / n)
   (setq s (LI:ForceString s))
   (setq n (strlen s))
@@ -54,7 +58,6 @@
   s
 )
 
-;;; Повторить символ c n раз
 (defun LI:RepeatChar (c n / s)
   (setq s "")
   (while (> n 0)
@@ -64,7 +67,6 @@
   s
 )
 
-;;; Добавить предупреждение в список *LI:WARN*
 (defun LI:AddWarn (name category description)
   (setq *LI:WARN*
     (append *LI:WARN* (list (list (LI:ForceString name)
@@ -72,7 +74,6 @@
                                   (LI:ForceString description)))))
 )
 
-;;; Напечатать таблицу предупреждений (с отбивкой сверху и снизу)
 (defun LI:PrintWarnings ( / )
   (if *LI:WARN*
     (progn
@@ -107,14 +108,15 @@
     ((= (type x) 'VLA-OBJECT) x)
     ((= (type x) 'ENAME)
       (setq obj (vl-catch-all-apply 'vlax-ename->vla-object (list x)))
-      (if (LI:IsError obj) nil obj)
-    )
+      (if (LI:IsError obj) nil obj))
     (t nil)
   )
 )
+
 (defun LI:Replace (s find rep / pos start out lenf)
   (setq s (LI:ForceString s) find (LI:ForceString find) rep (LI:ForceString rep))
-  (if (or (= s "") (= find "")) s
+  (if (or (= s "") (= find ""))
+    s
     (progn
       (setq lenf (strlen find) start 0 out "")
       (while (setq pos (vl-string-search find s start))
@@ -126,6 +128,7 @@
     )
   )
 )
+
 (defun LI:XmlUnescape (s)
   (setq s (LI:Replace s "&lt;"   "<"))
   (setq s (LI:Replace s "&gt;"   ">"))
@@ -134,10 +137,15 @@
   (setq s (LI:Replace s "&amp;"  "&"))
   s
 )
+
 (defun LI:ToInt (s / v)
   (setq s (LI:SafeTrim s))
-  (if (= s "") nil (progn (setq v (distof s)) (if (numberp v) (fix v) nil)))
+  (if (= s "")
+    nil
+    (progn (setq v (distof s)) (if (numberp v) (fix v) nil))
+  )
 )
+
 (defun LI:YesNoTrue (s / tstr)
   (setq tstr (strcase (LI:SafeTrim s)))
   (or (= tstr "ДА") (= tstr "YES") (= tstr "TRUE") (= tstr "1")
@@ -145,9 +153,10 @@
 )
 
 ;;; ============================================================
-;;; Чтение XML (ADODB.Stream с перебором кодировок)
+;;; Чтение XML (ADODB.Stream)
 ;;; ============================================================
 
+;;; Прочитать файл в указанной кодировке через ADODB.Stream.
 (defun LI:ReadFileWithCharset (fname charset / stream txt)
   (setq stream (vl-catch-all-apply 'vlax-create-object (list "ADODB.Stream")))
   (if (and stream (eq (type stream) 'VLA-OBJECT))
@@ -165,20 +174,103 @@
   )
 )
 
-(defun LI:ReadFile (fname / charsets cs txt)
-  (setq charsets (list "utf-8" "windows-1251" "unicode"))
-  (setq txt nil)
-  (foreach cs charsets
-    (if (not txt)
-      (progn
-        (setq txt (LI:ReadFileWithCharset fname cs))
-        (if (and txt (not (vl-string-search "<Worksheet" txt)))
-          (setq txt nil)
+;;; Прочитать пролог файла (ANSI) и найти объявленный encoding.
+(defun LI:ReadXmlEncoding (fname / f line p1 p2 c enc)
+  (setq enc nil)
+  (if (setq f (open fname "r"))
+    (progn
+      (setq line (read-line f))
+      (close f)
+      (if (and line (eq (type line) 'STR) (> (strlen line) 0))
+        (progn
+          (setq p1 (vl-string-search "encoding=" line))
+          (if p1
+            (progn
+              (setq p1 (+ p1 9))
+              (setq c (substr line p1 1))
+              (if (or (= c "\"") (= c "'"))
+                (setq p1 (1+ p1))
+              )
+              (setq p2 (vl-string-search "\"" line p1))
+              (if (not p2) (setq p2 (vl-string-search "'" line p1)))
+              (if p2
+                (setq enc (substr line p1 (- p2 p1)))
+              )
+            )
+          )
         )
       )
     )
   )
-  txt
+  enc
+)
+
+;;; Преобразовать объявленную кодировку в имя для ADODB.Stream.
+(defun LI:MapCharset (decl / d)
+  (setq d (strcase (LI:ForceString decl)))
+  (cond
+    ((or (= d "WINDOWS-1251") (= d "CP1251")) "windows-1251")
+    ((or (= d "UTF-8") (= d "UTF8"))           "utf-8")
+    ((or (= d "UTF-16") (= d "UTF-16LE") (= d "UNICODE")) "unicode")
+    (t decl)
+  )
+)
+
+;;; Универсальное чтение:
+;;; 1) смотрим encoding в прологе;
+;;; 2) читаем в этой кодировке;
+;;; 3) если в тексте нет кириллицы — перебираем utf-8 / windows-1251 / unicode.
+(defun LI:ReadFile (fname / decl cs charsets s best first)
+  (setq best nil)
+  (setq first nil)
+
+  (setq decl (LI:ReadXmlEncoding fname))
+  (if decl
+    (progn
+      (setq cs (LI:MapCharset decl))
+      (setq s (LI:ReadFileWithCharset fname cs))
+      (if s
+        (progn
+          (if (or (vl-string-search "Слои" s)
+                  (vl-string-search "Имя слоя" s)
+                  (vl-string-search "Фильтры" s))
+            (setq best s)
+            (if (vl-string-search "<Worksheet" s)
+              (setq first s)
+            )
+          )
+        )
+      )
+    )
+  )
+
+  (if (not best)
+    (progn
+      (setq charsets (list "utf-8" "windows-1251" "unicode"))
+      (foreach cs charsets
+        (if (not best)
+          (progn
+            (setq s (LI:ReadFileWithCharset fname cs))
+            (if s
+              (progn
+                (if (or (vl-string-search "Слои" s)
+                        (vl-string-search "Имя слоя" s)
+                        (vl-string-search "Фильтры" s))
+                  (setq best s)
+                  (if (and (not first)
+                           (vl-string-search "<Worksheet" s))
+                    (setq first s)
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+
+  (if best best first)
 )
 
 (defun LI:GetWorksheet (xml name / pattern pos start end)
@@ -334,7 +426,8 @@
           (if (not (LI:IsError obj))
             (progn
               (setq res (vl-catch-all-apply 'vlax-put (list obj 'Percent num)))
-              (if (LI:IsError res) (vl-catch-all-apply 'vlax-put (list obj 'Value num)))
+              (if (LI:IsError res)
+                (vl-catch-all-apply 'vlax-put (list obj 'Value num)))
             )
           )
         )
@@ -345,17 +438,18 @@
 
 (defun LI:SetPlotStyle (layer val / res)
   (setq res (vl-catch-all-apply 'vlax-put (list layer 'PlotStyleName val)))
-  (if (LI:IsError res) (vl-catch-all-apply 'vlax-put (list layer 'PlotStyle val)))
+  (if (LI:IsError res)
+    (vl-catch-all-apply 'vlax-put (list layer 'PlotStyle val)))
 )
 
-;;; Логика:
+;;; Применение строки слоя.
 ;;;  - Новый слой: цвет и флаги применяются из XML.
 ;;;  - Существующий слой:
 ;;;      * код 62: значение ACI из XML, знак — от текущего (видимость);
-;;;      * код 70: биты 1, 2, 4 НЕ ТРОГАЮТСЯ (заморозка/блокировка);
-;;;      * предупреждения складываются в *LI:WARN*.
-;;; Отчёт: имя | видимость | заморозка | блокировка
-(defun LI:ApplyLayerRow (doc vals map / name isNew ename ent flags aci onStr on oldColor colorVal desc lt lw plotStr res layerObj transStr plotStyle ent2 c62 f70)
+;;;      * код 70: биты 1, 2, 4 НЕ ТРОГАЮТСЯ (заморозка/блокировка).
+(defun LI:ApplyLayerRow (doc vals map / name isNew ename ent flags aci onStr on
+                          oldColor colorVal desc lt lw plotStr res layerObj
+                          transStr plotStyle ent2 c62 f70)
   (setq name (LI:SafeTrim (LI:GetByHeader vals map "Имя слоя")))
   (if (= name "") nil
     (progn
@@ -393,7 +487,7 @@
                         (setq ent (LI:SetDxf ent 6 "Continuous"))
                         (LI:AddWarn name "тип линии" (strcat lt " -> Continuous"))
                       )
-                      (LI:AddWarn name "тип линии" (strcat lt " (не найден, не заменён)"))
+                      (LI:AddWarn name "тип линии" (strcat lt " (не найден)"))
                     )
                   )
                 )
@@ -449,7 +543,9 @@
               )
 
               (setq plotStr (LI:SafeTrim (LI:GetByHeader vals map "Печатается")))
-              (if (/= plotStr "") (setq ent (LI:SetDxf ent 290 (if (LI:YesNoTrue plotStr) 1 0))))
+              (if (/= plotStr "")
+                (setq ent (LI:SetDxf ent 290 (if (LI:YesNoTrue plotStr) 1 0))))
+
               (setq res (vl-catch-all-apply 'entmod (list ent)))
               (if (LI:IsError res)
                 (progn
@@ -468,11 +564,12 @@
                       (if (/= plotStyle "") (LI:SetPlotStyle layerObj plotStyle))
                     )
                   )
-                  ;; Печатаем строку с состоянием (вкл/выкл | зам/разм | блок/----)
+
                   (setq ent2 (entget ename))
                   (setq c62 (cdr (assoc 62 ent2)))
                   (setq f70 (cdr (assoc 70 ent2)))
                   (if (null f70) (setq f70 0))
+
                   (princ (strcat "\n"
                                  (if isNew "[Создан]    " "[Обновлён]  ")
                                  (LI:PadRight name 45)
@@ -482,6 +579,7 @@
                                  (if (= (logand f70 1) 1) "зам " "разм")
                                  " | "
                                  (if (= (logand f70 4) 4) "блок" "----")))
+
                   (if isNew "Создан" "Обновлён")
                 )
               )
@@ -546,18 +644,25 @@
 
 (defun LI:SafeGetFilterRef (token / up pos)
   (setq token (LI:SafeTrim token))
-  (while (and (> (strlen token) 1) (or (= (substr token 1 1) "\"") (= (substr token 1 1) "'")))
+  (while (and (> (strlen token) 1)
+              (or (= (substr token 1 1) "\"") (= (substr token 1 1) "'")))
     (setq token (LI:SafeTrim (substr token 2)))
   )
-  (while (and (> (strlen token) 1) (or (= (substr token (strlen token) 1) "\"") (= (substr token (strlen token) 1) "'")))
+  (while (and (> (strlen token) 1)
+              (or (= (substr token (strlen token) 1) "\"")
+                  (= (substr token (strlen token) 1) "'")))
     (setq token (LI:SafeTrim (substr token 1 (1- (strlen token)))))
   )
   (setq up (strcase token))
   (cond
-    ((and (setq pos (vl-string-search "@" token)) (<= pos 5)) (LI:SafeTrim (substr token (+ pos 2))))
-    ((and (setq pos (vl-string-search ">>" token)) (<= pos 5)) (LI:SafeTrim (substr token (+ pos 3))))
-    ((and (setq pos (vl-string-search "FILTER:" up)) (<= pos 5)) (LI:SafeTrim (substr token (+ pos 8))))
-    ((and (setq pos (vl-string-search "ФИЛЬТР:" up)) (<= pos 5)) (LI:SafeTrim (substr token (+ pos 8))))
+    ((and (setq pos (vl-string-search "@" token)) (<= pos 5))
+      (LI:SafeTrim (substr token (+ pos 2))))
+    ((and (setq pos (vl-string-search ">>" token)) (<= pos 5))
+      (LI:SafeTrim (substr token (+ pos 3))))
+    ((and (setq pos (vl-string-search "FILTER:" up)) (<= pos 5))
+      (LI:SafeTrim (substr token (+ pos 8))))
+    ((and (setq pos (vl-string-search "ФИЛЬТР:" up)) (<= pos 5))
+      (LI:SafeTrim (substr token (+ pos 8))))
     (t nil)
   )
 )
@@ -573,9 +678,13 @@
           (setq ref (vl-catch-all-apply 'LI:SafeGetFilterRef (list token)))
           (if (LI:IsError ref) (setq ref nil))
           (cond
-            ((and (LI:IsString ref) (/= ref "")) (setq children (LI:SafeAddUnique children ref)))
-            ((null ref) (setq direct (LI:SafeAddUnique direct token)))
-            (t (if (not (and (LI:IsString ref) (= ref ""))) (setq direct (LI:SafeAddUnique direct token))))
+            ((and (LI:IsString ref) (/= ref ""))
+              (setq children (LI:SafeAddUnique children ref)))
+            ((null ref)
+              (setq direct (LI:SafeAddUnique direct token)))
+            (t
+              (if (not (and (LI:IsString ref) (= ref "")))
+                (setq direct (LI:SafeAddUnique direct token))))
           )
         )
       )
@@ -602,7 +711,8 @@
       (progn
         (setq vals (LI:GetCellValues row))
         (foreach v vals
-          (if (and (not found) (LI:IsString v) (= (strcase (LI:SafeTrim v)) "ИМЯ ФИЛЬТРА"))
+          (if (and (not found) (LI:IsString v)
+                   (= (strcase (LI:SafeTrim v)) "ИМЯ ФИЛЬТРА"))
             (setq found i)
           )
         )
@@ -615,7 +725,10 @@
 
 (defun LI:DropRows (lst n / i out)
   (setq i 0 out nil)
-  (foreach x lst (if (>= i n) (setq out (append out (list x)))) (setq i (1+ i)))
+  (foreach x lst
+    (if (>= i n) (setq out (append out (list x))))
+    (setq i (1+ i))
+  )
   out
 )
 
@@ -625,13 +738,16 @@
       (setq parentInput "")
       (if (and parentName (/= parentName "")) (setq parentInput parentName))
       (if (not layerString) (setq layerString ""))
-      (command "._-LAYER" "_Filter" "_New" "_Group" parentInput layerString name "_Exit" "")
+      (command "._-LAYER" "_Filter" "_New" "_Group"
+               parentInput layerString name "_Exit" "")
       T
     )
   )
 )
 
 ;;; Молча удалить фильтр по имени.
+;;; ВАЖНО: command вызывается напрямую, без vl-catch-all-apply —
+;;; 'command нельзя передавать в vl-catch-all-apply.
 (defun LI:DeleteFilterByName (name)
   (if (and name (/= name ""))
     (command "._-LAYER" "_Filter" "_Delete" name "")
@@ -639,7 +755,7 @@
 )
 
 ;;; ============================================================
-;;; Вложенность: >>Имя = потомок. Родитель наследует слои потомков.
+;;; Вложенность
 ;;; ============================================================
 
 (defun LI:NameInList (lst name / found x)
@@ -665,7 +781,8 @@
   found
 )
 
-(defun LI:BuildFilterOrder (parsedDefs / remaining ordered createdNames def name parent placed progress)
+(defun LI:BuildFilterOrder (parsedDefs / remaining ordered createdNames
+                             def name parent placed progress)
   (setq remaining parsedDefs)
   (setq ordered nil)
   (setq createdNames nil)
@@ -701,7 +818,6 @@
   ordered
 )
 
-;;; Полный список слоёв фильтра = собственные + все слои потомков.
 (defun LI:CollectLayersDeep (parsedDefs name visited / p direct children child sub)
   (if (LI:NameInList visited name) nil
     (progn
@@ -712,7 +828,8 @@
           (setq children (nth 2 p))
           (if (not (listp direct)) (setq direct nil))
           (foreach child children
-            (setq sub (LI:CollectLayersDeep parsedDefs child (append visited (list name))))
+            (setq sub (LI:CollectLayersDeep parsedDefs child
+                                            (append visited (list name))))
             (foreach l sub
               (setq direct (LI:SafeAddUnique direct l))
             )
@@ -725,19 +842,27 @@
 )
 
 ;;; ============================================================
-;;; Импорт фильтров с вложенностью (табличный вывод, отбивка)
+;;; Импорт фильтров
 ;;; ============================================================
 
-(defun LI:ImportFilters (doc xml / sheet rows headerIndex headers dataRows map row vals name layersList filterDefs uniqueDefs def parsedDefs p raw parsed direct children directString fullLayers orderedDefs reversedDefs createdNames parentName delPass ok parentLabel layerCount)
+(defun LI:ImportFilters (doc xml / sheet rows headerIndex headers dataRows
+                          map row vals name layersList filterDefs uniqueDefs
+                          def parsedDefs p raw parsed direct children
+                          directString fullLayers orderedDefs reversedDefs
+                          createdNames parentName delPass ok parentLabel
+                          layerCount)
   (princ "\n\n")
   (princ "\nЧтение фильтров слоёв...")
   (setq filterDefs nil)
   (setq sheet (LI:GetWorksheet xml "Фильтры"))
-  (if (not sheet) (princ "\nЛист 'Фильтры' не найден в XML.")
+  (if (not sheet)
+    (princ "\nЛист 'Фильтры' не найден в XML.")
     (progn
       (setq rows (LI:GetRows sheet))
-      (princ (strcat "\nНайдено строк на листе 'Фильтры': " (itoa (length rows))))
-      (if (< (length rows) 2) (princ "\nВ файле нет данных о фильтрах.")
+      (princ (strcat "\nНайдено строк на листе 'Фильтры': "
+                     (itoa (length rows))))
+      (if (< (length rows) 2)
+        (princ "\nВ файле нет данных о фильтрах.")
         (progn
           (setq headerIndex (LI:FindFilterHeaderIndex rows))
           (if headerIndex
@@ -745,19 +870,26 @@
               (setq headers (LI:GetCellValues (nth headerIndex rows)))
               (setq dataRows (LI:DropRows rows (1+ headerIndex)))
               (setq map (LI:BuildHeaderMap headers))
-              (if (or (not (assoc "ИМЯ ФИЛЬТРА" map)) (not (assoc "СПИСОК СЛОЕВ" map)))
+              (if (or (not (assoc "ИМЯ ФИЛЬТРА" map))
+                      (not (assoc "СПИСОК СЛОЕВ" map)))
                 (setq map (LI:FixedFilterHeaderMap))
               )
             )
-            (progn (setq dataRows rows) (setq map (LI:FixedFilterHeaderMap)))
+            (progn
+              (setq dataRows rows)
+              (setq map (LI:FixedFilterHeaderMap))
+            )
           )
 
           (foreach row dataRows
             (setq vals (LI:GetCellValues row))
             (setq name (LI:SafeTrim (LI:GetByHeader vals map "Имя фильтра")))
             (setq layersList (LI:ForceString (LI:GetByHeader vals map "Список слоев")))
-            (if (= layersList "") (setq layersList (LI:ForceString (LI:GetByHeader vals map "Выражение"))))
-            (if (and (/= name "") (/= (LI:SafeStrCase name) "ИМЯ ФИЛЬТРА"))
+            (if (= layersList "")
+              (setq layersList (LI:ForceString (LI:GetByHeader vals map "Выражение"))))
+            (if (and (/= name "")
+                     (/= (LI:SafeStrCase name) "ИМЯ ФИЛЬТРА")
+                     (/= (LI:SafeStrCase name) "ФИЛЬТРЫ НЕ НАЙДЕНЫ"))
               (setq filterDefs (append filterDefs (list (list name layersList))))
             )
           )
@@ -773,13 +905,13 @@
           (setq parsedDefs nil)
           (foreach def filterDefs
             (setq name (LI:ForceString (car def)))
-            (setq raw (LI:ForceString (cadr def)))
+            (setq raw  (LI:ForceString (cadr def)))
             (setq parsed (vl-catch-all-apply 'LI:ParseFilterDef (list raw)))
             (if (LI:IsError parsed) (setq parsed (cons nil nil)))
             (if (not (listp parsed)) (setq parsed (cons nil nil)))
-            (setq direct (car parsed))
+            (setq direct   (car parsed))
             (setq children (cdr parsed))
-            (if (not (listp direct)) (setq direct nil))
+            (if (not (listp direct))   (setq direct nil))
             (if (not (listp children)) (setq children nil))
             (setq parsedDefs (append parsedDefs (list (list name direct children))))
           )
@@ -825,7 +957,7 @@
             )
             (setq delPass (1+ delPass))
           )
-          (princ "\n  готово.")
+          (princ " готово.")
           (princ "\n\n")
 
           ;; ---------- ТАБЛИЦА: Создание ----------
@@ -856,16 +988,19 @@
             (setq layerCount (length fullLayers))
             (setq directString (LI:SafeListToComma fullLayers))
 
-            (if (and (/= parentName "") (not (LI:NameInList createdNames parentName)))
+            (if (and (/= parentName "")
+                     (not (LI:NameInList createdNames parentName)))
               (progn
-                (LI:AddWarn name "фильтр" (strcat "родитель '" parentName
-                                                  "' не найден, создан как корневой"))
+                (LI:AddWarn name "фильтр"
+                            (strcat "родитель '" parentName
+                                    "' не найден, создан как корневой"))
                 (setq parentName "")
               )
             )
 
             (setq parentLabel (if (= parentName "") "-" parentName))
-            (setq ok (LI:CreateGroupFilterWithParentCmd name directString parentName))
+            (setq ok (LI:CreateGroupFilterWithParentCmd
+                       name directString parentName))
 
             (princ (strcat "\n  "
                            (LI:PadRight (if ok "[OK] " "[!] ") 9)
@@ -896,21 +1031,25 @@
 ;;; Импорт из файла
 ;;; ============================================================
 
-(defun LI:ImportFromFile (fname / doc xml sheet rows headers map row vals status created updated errors oldLayer)
+(defun LI:ImportFromFile (fname / doc xml sheet rows headers map row vals
+                           status created updated errors oldLayer)
   (setq created 0 updated 0 errors 0)
   (setq *LI:WARN* nil)
   (setq xml (LI:ReadFile fname))
-  (if (not xml) (princ (strcat "\nНе удалось прочитать файл: " fname))
+  (if (not xml)
+    (princ (strcat "\nНе удалось прочитать файл: " fname))
     (progn
       (setq doc (vla-get-ActiveDocument (vlax-get-acad-object)))
       (setq oldLayer (getvar "CLAYER"))
       (vl-catch-all-apply 'setvar (list "CLAYER" "0"))
       (setq sheet (LI:GetWorksheet xml "Слои"))
       (if (not sheet) (setq sheet (LI:GetFirstWorksheet xml)))
-      (if (not sheet) (princ "\nНе найден лист слоёв в XML-файле.")
+      (if (not sheet)
+        (princ "\nНе найден лист слоёв в XML-файле.")
         (progn
           (setq rows (LI:GetRows sheet))
-          (if (< (length rows) 2) (princ "\nВ файле нет данных слоёв.")
+          (if (< (length rows) 2)
+            (princ "\nВ файле нет данных слоёв.")
             (progn
               (setq headers (LI:GetCellValues (car rows)))
               (setq map (LI:BuildHeaderMap headers))
@@ -920,9 +1059,9 @@
                   (progn
                     (setq status (LI:ApplyLayerRow doc vals map))
                     (cond
-                      ((= status "Создан") (setq created (1+ created)))
-                      ((= status "Обновлён") (setq updated (1+ updated)))
-                      ((= status "Ошибка") (setq errors (1+ errors)))
+                      ((= status "Создан")   (setq created (1+ created)))
+                      ((= status "Обновлён")(setq updated (1+ updated)))
+                      ((= status "Ошибка")   (setq errors  (1+ errors)))
                     )
                   )
                 )
@@ -932,9 +1071,7 @@
         )
       )
 
-      ;; Таблица предупреждений сразу после списка слоёв (с отбивкой)
       (LI:PrintWarnings)
-
       (LI:ImportFilters doc xml)
 
       (if (and oldLayer (tblsearch "LAYER" oldLayer))
@@ -951,17 +1088,21 @@
 )
 
 ;;; ============================================================
-;;; Поиск и выбор файла шаблона
+;;; Поиск шаблона
 ;;; ============================================================
 
 (defun LI:EnsureSlash (p)
-  (if (and p (/= p "")) (if (= (substr p (strlen p) 1) "\\") p (strcat p "\\")) p)
+  (if (and p (/= p ""))
+    (if (= (substr p (strlen p) 1) "\\") p (strcat p "\\"))
+    p)
 )
 
 (defun LI:DrawingDir (/ p)
   (setq p (getvar "DWGPREFIX"))
   (if (and p (/= p ""))
-    (if (vl-file-directory-p p) (setq p (LI:EnsureSlash p)) (setq p (LI:EnsureSlash (vl-filename-directory p))))
+    (if (vl-file-directory-p p)
+      (setq p (LI:EnsureSlash p))
+      (setq p (LI:EnsureSlash (vl-filename-directory p))))
     (setq p nil)
   )
   (if (or (not p) (= p "") (= p "\\")) nil p)
@@ -1007,8 +1148,10 @@
 
 (defun LI:SelectTemplateFile (/ initial f)
   (setq initial (LI:FindTemplateFile))
-  (if (or (not initial) (not (eq (type initial) 'STR))) (setq initial (LI:DrawingDir)))
-  (if (or (not initial) (not (eq (type initial) 'STR))) (setq initial ""))
+  (if (or (not initial) (not (eq (type initial) 'STR)))
+    (setq initial (LI:DrawingDir)))
+  (if (or (not initial) (not (eq (type initial) 'STR)))
+    (setq initial ""))
   (setq f (getfiled "Выберите XML-шаблон слоёв" initial "xml" 0))
   f
 )
@@ -1018,7 +1161,8 @@
   (if (and fname (not *LI:ALWAYS-ASK*))
     (princ (strcat "\nИспользуется шаблон: " fname))
     (progn
-      (if (not fname) (princ "\nШаблон слоёв в папке чертежа не найден."))
+      (if (not fname)
+        (princ "\nШаблон слоёв в папке чертежа не найден."))
       (setq fname (LI:SelectTemplateFile))
     )
   )
@@ -1030,7 +1174,7 @@
 )
 
 (defun C:СЛОИЗАГРУЗИТЬ () (LI:Run))
-(defun C:LAYERSLOAD () (LI:Run))
+(defun C:LAYERSLOAD ()   (LI:Run))
 
 ;;; ============================================================
 ;;; ДИАГНОСТИКА XML
@@ -1043,7 +1187,8 @@
     (princ "\nШаблон не найден.")
     (progn
       (princ (strcat "\nФайл: " fname))
-      (princ (strcat "\nНайден через findfile: " (if (findfile fname) "ДА" "НЕТ")))
+      (princ (strcat "\nНайден через findfile: "
+                     (if (findfile fname) "ДА" "НЕТ")))
       (foreach cs (list "utf-8" "windows-1251" "unicode")
         (setq txt (LI:ReadFileWithCharset fname cs))
         (princ (strcat "\n\nКодировка '" cs "':"))
