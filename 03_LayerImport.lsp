@@ -1,10 +1,13 @@
 ;;; ============================================================
 ;;; 03_LayerImport.lsp
-;;; Импорт слоёв и фильтров из Excel-XML (формат 2003)
+;;; Импорт слоёв и фильтров из Excel-XML (формат 2003).
 ;;; Универсальное чтение (UTF-8 / Windows-1251 / UTF-16).
 ;;; Вложенные фильтры: >>Имя = потомок этого фильтра.
-;;; Слои потомков автоматически поднимаются в родителя —
-;;; иначе AutoCAD создаёт пустые вложенные фильтры.
+;;; Слои потомков автоматически поднимаются в родителя.
+;;; Для существующих слоёв видимость, заморозка и блокировка
+;;; НЕ ТРОГАЮТСЯ — сохраняется как в чертеже.
+;;; Существующие фильтры молча удаляются перед созданием.
+;;; Предупреждения и фильтры — отдельными таблицами с отбивкой.
 ;;; ============================================================
 
 (vl-load-com)
@@ -12,6 +15,7 @@
 (setq *LI:ALWAYS-ASK* nil)
 (setq *LI:DELETE-EXISTING-FILTERS* nil)
 (setq *LI:SET-CURRENT-FILTER* nil)
+(setq *LI:WARN* nil)   ; список предупреждений: (имя категория описание)
 
 ;;; ============================================================
 ;;; Базовые безопасные функции
@@ -38,6 +42,66 @@
   s
 )
 (defun LI:Trim (s) (LI:SafeTrim s))
+
+;;; Дополнить строку пробелами до width символов справа.
+(defun LI:PadRight (s width / n)
+  (setq s (LI:ForceString s))
+  (setq n (strlen s))
+  (while (< n width)
+    (setq s (strcat s " "))
+    (setq n (1+ n))
+  )
+  s
+)
+
+;;; Повторить символ c n раз
+(defun LI:RepeatChar (c n / s)
+  (setq s "")
+  (while (> n 0)
+    (setq s (strcat s c))
+    (setq n (1- n))
+  )
+  s
+)
+
+;;; Добавить предупреждение в список *LI:WARN*
+(defun LI:AddWarn (name category description)
+  (setq *LI:WARN*
+    (append *LI:WARN* (list (list (LI:ForceString name)
+                                  (LI:ForceString category)
+                                  (LI:ForceString description)))))
+)
+
+;;; Напечатать таблицу предупреждений (с отбивкой сверху и снизу)
+(defun LI:PrintWarnings ( / )
+  (if *LI:WARN*
+    (progn
+      (princ "\n\n")
+      (princ "\nПредупреждения:")
+      (princ (strcat "\n  "
+                     (LI:PadRight "Слой" 45)
+                     "| "
+                     (LI:PadRight "Категория" 12)
+                     "| Описание"))
+      (princ (strcat "\n  "
+                     (LI:RepeatChar "-" 45)
+                     "+"
+                     (LI:RepeatChar "-" 13)
+                     "+"
+                     (LI:RepeatChar "-" 30)))
+      (foreach w *LI:WARN*
+        (princ (strcat "\n  "
+                       (LI:PadRight (nth 0 w) 45)
+                       "| "
+                       (LI:PadRight (nth 1 w) 12)
+                       "| "
+                       (nth 2 w)))
+      )
+      (princ "\n\n")
+    )
+  )
+)
+
 (defun LI:AsVla (x / obj)
   (cond
     ((= (type x) 'VLA-OBJECT) x)
@@ -284,21 +348,40 @@
   (if (LI:IsError res) (vl-catch-all-apply 'vlax-put (list layer 'PlotStyle val)))
 )
 
-(defun LI:ApplyLayerRow (doc vals map / name isNew ename ent flags aci onStr on oldColor colorVal desc lt lw plotStr frozen frozenVp locked res layerObj transStr plotStyle)
+;;; Логика:
+;;;  - Новый слой: цвет и флаги применяются из XML.
+;;;  - Существующий слой:
+;;;      * код 62: значение ACI из XML, знак — от текущего (видимость);
+;;;      * код 70: биты 1, 2, 4 НЕ ТРОГАЮТСЯ (заморозка/блокировка);
+;;;      * предупреждения складываются в *LI:WARN*.
+;;; Отчёт: имя | видимость | заморозка | блокировка
+(defun LI:ApplyLayerRow (doc vals map / name isNew ename ent flags aci onStr on oldColor colorVal desc lt lw plotStr res layerObj transStr plotStyle ent2 c62 f70)
   (setq name (LI:SafeTrim (LI:GetByHeader vals map "Имя слоя")))
   (if (= name "") nil
     (progn
       (setq isNew (not (tblsearch "LAYER" name)))
       (if (not (LI:EnsureLayer doc name))
-        (progn (princ (strcat "\n[Ошибка] Не удалось создать слой: " name)) "Ошибка")
+        (progn
+          (LI:AddWarn name "ошибка" "не удалось создать слой")
+          (princ (strcat "\n[Ошибка]    " (LI:PadRight name 45)
+                         "| не удалось создать слой"))
+          "Ошибка"
+        )
         (progn
           (setq ename (tblobjname "LAYER" name))
           (if (not ename)
-            (progn (princ (strcat "\n[Ошибка] Не найден объект слоя: " name)) "Ошибка")
+            (progn
+              (LI:AddWarn name "ошибка" "не найден объект слоя")
+              (princ (strcat "\n[Ошибка]    " (LI:PadRight name 45)
+                             "| не найден объект слоя"))
+              "Ошибка"
+            )
             (progn
               (setq ent (entget ename))
               (setq desc (LI:SafeTrim (LI:GetByHeader vals map "Описание")))
               (if (/= desc "") (setq ent (LI:SetDxf ent 3 desc)))
+
+              ;; ---------- Тип линии ----------
               (setq lt (LI:SafeTrim (LI:GetByHeader vals map "Тип линии")))
               (if (/= lt "")
                 (progn
@@ -306,47 +389,75 @@
                   (if (tblsearch "LTYPE" lt)
                     (setq ent (LI:SetDxf ent 6 lt))
                     (if (tblsearch "LTYPE" "Continuous")
-                      (progn (setq ent (LI:SetDxf ent 6 "Continuous"))
-                        (princ (strcat "\n[Предупреждение] Тип линии не найден: " lt ". Назначен Continuous.")))
-                      (princ (strcat "\n[Предупреждение] Тип линии не найден: " lt))
+                      (progn
+                        (setq ent (LI:SetDxf ent 6 "Continuous"))
+                        (LI:AddWarn name "тип линии" (strcat lt " -> Continuous"))
+                      )
+                      (LI:AddWarn name "тип линии" (strcat lt " (не найден, не заменён)"))
                     )
                   )
                 )
               )
+
+              ;; ---------- Цвет ACI ----------
               (setq aci (LI:ToInt (LI:GetByHeader vals map "Цвет ACI")))
-              (setq onStr (LI:SafeTrim (LI:GetByHeader vals map "Включен")))
-              (if (= onStr "") (setq on T) (setq on (LI:YesNoTrue onStr)))
               (if (and aci (>= aci 1) (<= aci 255))
                 (progn
-                  (setq colorVal (abs aci))
-                  (if (not on) (setq colorVal (- colorVal)))
-                  (setq ent (LI:SetDxf ent 62 colorVal))
-                )
-                (progn
-                  (setq oldColor (cdr (assoc 62 ent)))
-                  (if (and oldColor (/= oldColor 0))
+                  (if isNew
                     (progn
-                      (if on (setq colorVal (abs oldColor)) (setq colorVal (- (abs oldColor))))
+                      (setq onStr (LI:SafeTrim (LI:GetByHeader vals map "Включен")))
+                      (if (= onStr "") (setq on T) (setq on (LI:YesNoTrue onStr)))
+                      (setq colorVal (abs aci))
+                      (if (not on) (setq colorVal (- colorVal)))
+                      (setq ent (LI:SetDxf ent 62 colorVal))
+                    )
+                    (progn
+                      (setq oldColor (cdr (assoc 62 ent)))
+                      (if (and oldColor (/= oldColor 0))
+                        (if (< oldColor 0)
+                          (setq colorVal (- (abs aci)))
+                          (setq colorVal (abs aci))
+                        )
+                        (setq colorVal (abs aci))
+                      )
                       (setq ent (LI:SetDxf ent 62 colorVal))
                     )
                   )
                 )
               )
+
+              ;; ---------- Вес линии ----------
               (setq lw (LI:ToInt (LI:GetByHeader vals map "Вес линии код")))
               (if (numberp lw) (setq ent (LI:SetDxf ent 370 lw)))
-              (setq flags (if (cdr (assoc 70 ent)) (cdr (assoc 70 ent)) 0))
-              (setq frozen (LI:YesNoTrue (LI:GetByHeader vals map "Заморожен")))
-              (setq frozenVp (LI:YesNoTrue (LI:GetByHeader vals map "Заморожен в новых ВЭ")))
-              (setq locked (LI:YesNoTrue (LI:GetByHeader vals map "Заблокирован")))
-              (setq flags (LI:SetBit flags 1 frozen))
-              (setq flags (LI:SetBit flags 2 frozenVp))
-              (setq flags (LI:SetBit flags 4 locked))
-              (setq ent (LI:SetDxf ent 70 flags))
+
+              ;; ---------- Флаги 70 ----------
+              (if isNew
+                (progn
+                  (setq flags (if (cdr (assoc 70 ent)) (cdr (assoc 70 ent)) 0))
+                  (setq onStr (LI:SafeTrim (LI:GetByHeader vals map "Заморожен")))
+                  (if (/= onStr "")
+                    (setq flags (LI:SetBit flags 1 (LI:YesNoTrue onStr))))
+                  (setq onStr (LI:SafeTrim (LI:GetByHeader vals map "Заморожен в новых ВЭ")))
+                  (if (/= onStr "")
+                    (setq flags (LI:SetBit flags 2 (LI:YesNoTrue onStr))))
+                  (setq onStr (LI:SafeTrim (LI:GetByHeader vals map "Заблокирован")))
+                  (if (/= onStr "")
+                    (setq flags (LI:SetBit flags 4 (LI:YesNoTrue onStr))))
+                  (setq ent (LI:SetDxf ent 70 flags))
+                )
+                nil
+              )
+
               (setq plotStr (LI:SafeTrim (LI:GetByHeader vals map "Печатается")))
               (if (/= plotStr "") (setq ent (LI:SetDxf ent 290 (if (LI:YesNoTrue plotStr) 1 0))))
               (setq res (vl-catch-all-apply 'entmod (list ent)))
               (if (LI:IsError res)
-                (progn (princ (strcat "\n[Ошибка] Не удалось изменить слой: " name)) "Ошибка")
+                (progn
+                  (LI:AddWarn name "ошибка" "не удалось изменить слой (entmod)")
+                  (princ (strcat "\n[Ошибка]    " (LI:PadRight name 45)
+                                 "| не удалось изменить слой"))
+                  "Ошибка"
+                )
                 (progn
                   (setq layerObj (LI:AsVla ename))
                   (if layerObj
@@ -357,7 +468,20 @@
                       (if (/= plotStyle "") (LI:SetPlotStyle layerObj plotStyle))
                     )
                   )
-                  (if isNew (princ (strcat "\n[Создан] " name)) (princ (strcat "\n[Обновлён] " name)))
+                  ;; Печатаем строку с состоянием (вкл/выкл | зам/разм | блок/----)
+                  (setq ent2 (entget ename))
+                  (setq c62 (cdr (assoc 62 ent2)))
+                  (setq f70 (cdr (assoc 70 ent2)))
+                  (if (null f70) (setq f70 0))
+                  (princ (strcat "\n"
+                                 (if isNew "[Создан]    " "[Обновлён]  ")
+                                 (LI:PadRight name 45)
+                                 "| "
+                                 (if (and c62 (< c62 0)) "выкл" "вкл ")
+                                 " | "
+                                 (if (= (logand f70 1) 1) "зам " "разм")
+                                 " | "
+                                 (if (= (logand f70 4) 4) "блок" "----")))
                   (if isNew "Создан" "Обновлён")
                 )
               )
@@ -460,17 +584,6 @@
   (cons direct children)
 )
 
-(defun LI:AssocNoCase (alist key / keyUp found pair carVal)
-  (setq keyUp (LI:SafeStrCase key))
-  (foreach pair alist
-    (setq carVal (car pair))
-    (if (and carVal (LI:IsString carVal) (= (LI:SafeStrCase carVal) keyUp))
-      (setq found pair)
-    )
-  )
-  found
-)
-
 (defun LI:FindParsedDef (parsedDefs name / found p)
   (foreach p parsedDefs
     (if (= (LI:SafeStrCase (nth 0 p)) (LI:SafeStrCase name)) (setq found p))
@@ -506,15 +619,6 @@
   out
 )
 
-(defun LI:SetCurrentFilterAll ( / )
-  (command "._-LAYER" "_Filter" "_Set" "Все" "_Exit" "")
-)
-
-(defun LI:DeleteFilterCmd (name)
-  (if (and name (/= name "")) (command "._-LAYER" "_Filter" "_Delete" name ""))
-  T
-)
-
 (defun LI:CreateGroupFilterWithParentCmd (name layerString parentName / parentInput)
   (if (or (not name) (= name "")) nil
     (progn
@@ -524,6 +628,13 @@
       (command "._-LAYER" "_Filter" "_New" "_Group" parentInput layerString name "_Exit" "")
       T
     )
+  )
+)
+
+;;; Молча удалить фильтр по имени.
+(defun LI:DeleteFilterByName (name)
+  (if (and name (/= name ""))
+    (command "._-LAYER" "_Filter" "_Delete" name "")
   )
 )
 
@@ -591,8 +702,6 @@
 )
 
 ;;; Полный список слоёв фильтра = собственные + все слои потомков.
-;;; Нужен, потому что AutoCAD ограничивает слои ребёнка слоями родителя:
-;;; если у родителя пусто, у ребёнка тоже будет пусто.
 (defun LI:CollectLayersDeep (parsedDefs name visited / p direct children child sub)
   (if (LI:NameInList visited name) nil
     (progn
@@ -616,10 +725,11 @@
 )
 
 ;;; ============================================================
-;;; Импорт фильтров с вложенностью
+;;; Импорт фильтров с вложенностью (табличный вывод, отбивка)
 ;;; ============================================================
 
-(defun LI:ImportFilters (doc xml / sheet rows headerIndex headers dataRows map row vals name layersList filterDefs uniqueDefs def parsedDefs p raw parsed direct children directString fullLayers orderedDefs createdNames parentName)
+(defun LI:ImportFilters (doc xml / sheet rows headerIndex headers dataRows map row vals name layersList filterDefs uniqueDefs def parsedDefs p raw parsed direct children directString fullLayers orderedDefs reversedDefs createdNames parentName delPass ok parentLabel layerCount)
+  (princ "\n\n")
   (princ "\nЧтение фильтров слоёв...")
   (setq filterDefs nil)
   (setq sheet (LI:GetWorksheet xml "Фильтры"))
@@ -660,7 +770,6 @@
           (setq filterDefs uniqueDefs)
           (princ (strcat "\nНайдено фильтров: " (itoa (length filterDefs))))
 
-          (princ "\nЭтап: разбор фильтров...")
           (setq parsedDefs nil)
           (foreach def filterDefs
             (setq name (LI:ForceString (car def)))
@@ -674,64 +783,106 @@
             (if (not (listp children)) (setq children nil))
             (setq parsedDefs (append parsedDefs (list (list name direct children))))
           )
-          (princ (strcat "\nРазобрано фильтров: " (itoa (length parsedDefs))))
 
+          ;; ---------- ТАБЛИЦА: Структура ----------
+          (princ "\n\n")
           (princ "\nСтруктура фильтров:")
+          (princ (strcat "\n  "
+                         (LI:PadRight "Фильтр" 24)
+                         "| "
+                         (LI:PadRight "Родитель" 14)
+                         "| Слои (с вложенными)"))
+          (princ (strcat "\n  "
+                         (LI:RepeatChar "-" 24)
+                         "+"
+                         (LI:RepeatChar "-" 15)
+                         "+"
+                         (LI:RepeatChar "-" 46)))
           (foreach p parsedDefs
             (setq name (nth 0 p))
-            (setq direct (nth 1 p))
-            (setq children (nth 2 p))
             (setq parentName (LI:FindParentOf parsedDefs name))
-            (if parentName
-              (princ (strcat "\n  " name "  [родитель: " parentName "]"))
-              (princ (strcat "\n  " name "  (корневой)"))
-            )
-            (if (and (listp children) children)
-              (princ (strcat "  потомки: " (LI:SafeListToComma children)))
-            )
-            (if (and (listp direct) direct)
-              (princ (strcat "  слои: " (LI:SafeListToComma direct)))
-            )
+            (if (null parentName) (setq parentName "-"))
+            (setq fullLayers (LI:CollectLayersDeep parsedDefs name nil))
+            (princ (strcat "\n  "
+                           (LI:PadRight name 24)
+                           "| "
+                           (LI:PadRight parentName 14)
+                           "| "
+                           (LI:SafeListToComma fullLayers)))
           )
+          (princ "\n\n")
 
-          (princ "\nЭтап: построение порядка создания (с учётом вложенности)...")
+          ;; ---------- Порядок создания ----------
           (setq orderedDefs (LI:BuildFilterOrder parsedDefs))
-          (princ (strcat "\nЗапланировано к созданию: " (itoa (length orderedDefs))))
 
-          (princ "\nЭтап: создание фильтров...")
+          (princ "\nЭтап: удаление старых одноимённых фильтров...")
+          (setq reversedDefs nil)
+          (foreach p orderedDefs (setq reversedDefs (cons p reversedDefs)))
+          (setq delPass 1)
+          (while (<= delPass 2)
+            (foreach p reversedDefs
+              (LI:DeleteFilterByName (nth 0 p))
+            )
+            (setq delPass (1+ delPass))
+          )
+          (princ "\n  готово.")
+          (princ "\n\n")
+
+          ;; ---------- ТАБЛИЦА: Создание ----------
+          (princ "\nСоздание фильтров:")
+          (princ (strcat "\n  "
+                         (LI:PadRight "Статус" 9)
+                         "| "
+                         (LI:PadRight "Фильтр" 24)
+                         "| "
+                         (LI:PadRight "Родитель" 14)
+                         "| Слои"))
+          (princ (strcat "\n  "
+                         (LI:RepeatChar "-" 9)
+                         "+"
+                         (LI:RepeatChar "-" 25)
+                         "+"
+                         (LI:RepeatChar "-" 15)
+                         "+"
+                         (LI:RepeatChar "-" 12)))
+
           (setq createdNames nil)
           (foreach p orderedDefs
             (setq name (nth 0 p))
             (setq parentName (LI:FindParentOf parsedDefs name))
             (if (null parentName) (setq parentName ""))
 
-            ;; Собираем ПОЛНЫЙ набор слоёв: собственные + все слои потомков.
-            ;; Иначе вложенный фильтр будет пустым (ограничение AutoCAD).
             (setq fullLayers (LI:CollectLayersDeep parsedDefs name nil))
+            (setq layerCount (length fullLayers))
             (setq directString (LI:SafeListToComma fullLayers))
 
             (if (and (/= parentName "") (not (LI:NameInList createdNames parentName)))
               (progn
-                (princ (strcat "\n[Внимание] Родитель '" parentName
-                               "' не найден — фильтр '" name "' создаётся как корневой."))
+                (LI:AddWarn name "фильтр" (strcat "родитель '" parentName
+                                                  "' не найден, создан как корневой"))
                 (setq parentName "")
               )
             )
 
-            (princ (strcat "\nСоздание: " name))
-            (if (/= parentName "")
-              (princ (strcat "  [внутри: " parentName "]"))
-            )
-            (princ (strcat "  Слои: " directString))
+            (setq parentLabel (if (= parentName "") "-" parentName))
+            (setq ok (LI:CreateGroupFilterWithParentCmd name directString parentName))
 
-            (if (LI:CreateGroupFilterWithParentCmd name directString parentName)
-              (progn
-                (princ " -> OK")
-                (setq createdNames (append createdNames (list name)))
-              )
-              (princ " -> ОШИБКА")
+            (princ (strcat "\n  "
+                           (LI:PadRight (if ok "[OK] " "[!] ") 9)
+                           "| "
+                           (LI:PadRight name 24)
+                           "| "
+                           (LI:PadRight parentLabel 14)
+                           "| "
+                           (itoa layerCount)
+                           (if (= layerCount 1) " слой" " слоёв")))
+
+            (if ok
+              (setq createdNames (append createdNames (list name)))
+              (LI:AddWarn name "фильтр" "не удалось создать")
             )
           )
+          (princ "\n\n")
 
           (vl-catch-all-apply 'vl-cmdf (list "._REGENALL"))
           (princ "\nИмпорт фильтров завершён.")
@@ -747,6 +898,7 @@
 
 (defun LI:ImportFromFile (fname / doc xml sheet rows headers map row vals status created updated errors oldLayer)
   (setq created 0 updated 0 errors 0)
+  (setq *LI:WARN* nil)
   (setq xml (LI:ReadFile fname))
   (if (not xml) (princ (strcat "\nНе удалось прочитать файл: " fname))
     (progn
@@ -779,11 +931,20 @@
           )
         )
       )
+
+      ;; Таблица предупреждений сразу после списка слоёв (с отбивкой)
+      (LI:PrintWarnings)
+
       (LI:ImportFilters doc xml)
+
       (if (and oldLayer (tblsearch "LAYER" oldLayer))
         (vl-catch-all-apply 'setvar (list "CLAYER" oldLayer))
       )
-      (princ (strcat "\nГотово.\nСоздано слоёв: " (itoa created) "\nОбновлено слоёв: " (itoa updated) "\nОшибок: " (itoa errors)))
+      (princ "\n\n")
+      (princ "\nГотово.")
+      (princ (strcat "\nСоздано слоёв:   " (itoa created)))
+      (princ (strcat "\nОбновлено слоёв: " (itoa updated)))
+      (princ (strcat "\nОшибок:          " (itoa errors)))
     )
   )
   (princ)
@@ -914,16 +1075,12 @@
 
 ;;; ============================================================
 ;;; Очистка фильтров слоёв
-;;; -Layer _Filter _Delete не поддерживает "*", поэтому удаляем
-;;; по именам, взятым из XML-шаблона. Делаем 3 прохода, чтобы
-;;; дети удалялись раньше родителей.
 ;;; ============================================================
 
 (defun C:ФИЛЬТРЫОЧИСТИТЬ ( / fname xml sheet rows vals name names pass)
   (princ "\n=== Удаление фильтров слоёв ===")
   (setq names nil)
 
-  ;; 1. Собрать имена фильтров из XML-шаблона
   (setq fname (LI:FindTemplateFile))
   (if fname
     (progn
@@ -957,7 +1114,6 @@
     (princ "\nШаблон не найден в папке чертежа.")
   )
 
-  ;; 2. Если имён нет — спросить вручную
   (if (null names)
     (progn
       (setq name (getstring T
@@ -968,8 +1124,6 @@
     )
   )
 
-  ;; 3. Удалить. Три прохода, чтобы вложенные удалились
-  ;;    раньше своих родителей.
   (if names
     (progn
       (princ (strcat "\nК удалению: " (itoa (length names))))
@@ -980,14 +1134,7 @@
           (if (and name (/= name ""))
             (progn
               (princ (strcat "\n  " name))
-              ;; После _Delete AutoCAD всегда снова спрашивает
-              ;; "Фильтр слоев для удаления [?]:" — как при успехе,
-              ;; так и при неудаче. Поэтому:
-              ;;   name    - попытка удалить
-              ;;   ""      - выход из запроса имени
-              ;;   _Exit   - выход из _Filter
-              ;;   ""      - выход из -LAYER
-              (command "._-LAYER" "_Filter" "_Delete" name "" "_Exit" "")
+              (LI:DeleteFilterByName name)
             )
           )
         )
@@ -1005,11 +1152,14 @@
 ;;; ============================================================
 
 (princ "\n=============================================")
-(princ "\nЗагружено: 03_LayerImport.lsp  (>>Имя = потомок, слои наследуются)")
+(princ "\nЗагружено: 03_LayerImport.lsp")
+(princ "\n  • слои: сохраняются видимость, заморозка, блокировка")
+(princ "\n  • фильтры: автоматически пересоздаются, вложенные >>Имя")
+(princ "\n  • предупреждения и фильтры — отдельными таблицами с отбивкой")
 (princ "\nКоманды:")
 (princ "\n  СЛОИЗАГРУЗИТЬ")
 (princ "\n  LAYERSLOAD")
 (princ "\n  ДИАГНОСТИКАXML")
-(princ "\n  ФИЛЬТРЫОЧИСТИТЬ   - удалить все фильтры слоёв")
+(princ "\n  ФИЛЬТРЫОЧИСТИТЬ")
 (princ "\n=============================================")
 (princ)
