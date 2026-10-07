@@ -1070,7 +1070,8 @@
         map row vals name layersList filterDefs uniqueDefs
         def parsedDefs p raw parsed direct children
         directString fullLayers orderedDefs reversedDefs
-        createdNames parentName delPass ok parentLabel layerCount)
+        createdNames parentName delPass ok parentLabel layerCount
+        existing tmp mergedCount)
   (princ "\n\n")
   (princ "\nЧтение фильтров слоёв...")
   (setq filterDefs nil)
@@ -1116,14 +1117,48 @@
                                        (list (list name layersList))))
             )
           )
+          (princ (strcat "\nСобрано строк: " (itoa (length filterDefs))))
+
+          ;; ---------- Объединение строк с одинаковым именем ----------
+          ;; В Excel-таблице один фильтр может быть описан несколькими
+          ;; строками: одна — прямые слои, остальные — ссылки >>Имя.
+          ;; Склеиваем их "Список слоев" через запятую, чтобы получить
+          ;; полное определение в одном месте.
           (setq uniqueDefs nil)
+          (setq mergedCount 0)
           (foreach def filterDefs
-            (if (not (LI:SafeGetFilterDef uniqueDefs (car def)))
+            (setq name       (LI:ForceString (car def)))
+            (setq layersList (LI:ForceString (cadr def)))
+            (setq existing   (LI:SafeGetFilterDef uniqueDefs name))
+            (if existing
+              (progn
+                (setq tmp nil)
+                (foreach u uniqueDefs
+                  (if (and (listp u) (car u)
+                           (= (LI:SafeStrCase (car u))
+                              (LI:SafeStrCase name)))
+                    (setq tmp
+                      (append tmp
+                              (list (list (car u)
+                                          (if (and (cadr u)
+                                                   (/= (cadr u) ""))
+                                            (strcat (cadr u) "," layersList)
+                                            layersList)))))
+                    (setq tmp (append tmp (list u)))
+                  )
+                )
+                (setq uniqueDefs tmp)
+                (setq mergedCount (1+ mergedCount))
+              )
               (setq uniqueDefs (append uniqueDefs (list def)))
             )
           )
           (setq filterDefs uniqueDefs)
           (princ (strcat "\nНайдено фильтров: " (itoa (length filterDefs))))
+          (if (> mergedCount 0)
+            (princ (strcat "  (объединено строк: " (itoa mergedCount) ")"))
+          )
+
           (setq parsedDefs nil)
           (foreach def filterDefs
             (setq name (LI:ForceString (car def)))
