@@ -3,17 +3,17 @@
 ;;;
 ;;; Импорт слоёв и фильтров слоёв из XML-шаблона.
 ;;;
-;;; Логика:
-;;; - если слоя нет - создать;
-;;; - если слой есть - обновить свойства;
-;;; - импорт групповых фильтров через команду -LAYER;
-;;; - шаблон ищется в папке чертежа;
-;;; - если шаблон не найден или нужно указать другой файл -
-;;;   открывается диалог выбора файла.
-;;;
 ;;; Команды:
 ;;; СЛОИЗАГРУЗИТЬ
 ;;; LAYERSLOAD
+;;;
+;;; Особенности:
+;;; - создаёт отсутствующие слои;
+;;; - обновляет существующие слои;
+;;; - создаёт групповые фильтры слоёв;
+;;; - поддерживает вложенные фильтры;
+;;; - запись вида >>ИмяФильтра означает, что указанный фильтр
+;;;   должен быть вложен внутрь текущего фильтра.
 ;;; ============================================================
 
 (vl-load-com)
@@ -25,8 +25,14 @@
 
 (setq *LI:ALWAYS-ASK* nil)
 
+;; Удалять существующие фильтры перед созданием.
+;; Пока рекомендуется nil, чтобы не ломать командную строку.
+;; Если нужно удалять существующие фильтры, поставь T.
+
+(setq *LI:DELETE-EXISTING-FILTERS* nil)
+
 ;;; ============================================================
-;;; Базовые функции
+;;; Базовые безопасные функции
 ;;; ============================================================
 
 (defun LI:IsString (x)
@@ -38,6 +44,58 @@
     (vl-catch-all-error-p x)
     nil
   )
+)
+
+(defun LI:ForceString (x)
+  (cond
+    ((null x)
+      ""
+    )
+
+    ((LI:IsString x)
+      x
+    )
+
+    (t
+      (vl-prin1-to-string x)
+    )
+  )
+)
+
+(defun LI:IsSpaceChar (c)
+  (or
+    (= c " ")
+    (= c (chr 9))
+    (= c (chr 10))
+    (= c (chr 13))
+  )
+)
+
+(defun LI:SafeTrim (s / n)
+  (setq s (LI:ForceString s))
+
+  (while (and
+           (> (strlen s) 0)
+           (LI:IsSpaceChar (substr s 1 1))
+         )
+    (setq s (substr s 2))
+  )
+
+  (setq n (strlen s))
+
+  (while (and
+           (> n 0)
+           (LI:IsSpaceChar (substr s n 1))
+         )
+    (setq s (substr s 1 (1- n)))
+    (setq n (1- n))
+  )
+
+  s
+)
+
+(defun LI:Trim (s)
+  (LI:SafeTrim s)
 )
 
 (defun LI:AsVla (x / obj)
@@ -64,15 +122,11 @@
 )
 
 (defun LI:Replace (s find rep / pos start out lenf)
-  (if (null s)
-    (setq s "")
-  )
+  (setq s (LI:ForceString s))
+  (setq find (LI:ForceString find))
+  (setq rep (LI:ForceString rep))
 
-  (if (not (LI:IsString s))
-    (setq s (vl-prin1-to-string s))
-  )
-
-  (if (or (not find) (= find ""))
+  (if (or (= s "") (= find ""))
     s
     (progn
       (setq lenf (strlen find))
@@ -103,49 +157,6 @@
   )
 )
 
-(defun LI:IsSpaceChar (c)
-  (or
-    (= c " ")
-    (= c (chr 9))
-    (= c (chr 10))
-    (= c (chr 13))
-  )
-)
-
-(defun LI:Trim (s / n i)
-  (if (null s)
-    (setq s "")
-  )
-
-  (if (not (LI:IsString s))
-    (setq s (vl-prin1-to-string s))
-  )
-
-  (setq n (strlen s))
-  (setq i 1)
-
-  (while (and
-           (<= i n)
-           (LI:IsSpaceChar (substr s i 1))
-         )
-    (setq i (1+ i))
-  )
-
-  (setq s (substr s i))
-
-  (setq n (strlen s))
-
-  (while (and
-           (> n 0)
-           (LI:IsSpaceChar (substr s n 1))
-         )
-    (setq s (substr s 1 (1- n)))
-    (setq n (1- n))
-  )
-
-  s
-)
-
 (defun LI:XmlUnescape (s)
   (setq s (LI:Replace s "&lt;"   "<"))
   (setq s (LI:Replace s "&gt;"   ">"))
@@ -156,7 +167,7 @@
 )
 
 (defun LI:ToInt (s / v)
-  (setq s (LI:Trim s))
+  (setq s (LI:SafeTrim s))
 
   (if (= s "")
     nil
@@ -172,7 +183,7 @@
 )
 
 (defun LI:YesNoTrue (s / tstr)
-  (setq tstr (strcase (LI:Trim s)))
+  (setq tstr (strcase (LI:SafeTrim s)))
 
   (or
     (= tstr "ДА")
@@ -333,7 +344,7 @@
 )
 
 ;;; ============================================================
-;;; Разбор заголовков таблицы
+;;; Заголовки
 ;;; ============================================================
 
 (defun LI:FixedHeaderMap ()
@@ -371,7 +382,7 @@
         map
         (list
           (cons
-            (strcase (LI:Trim h))
+            (strcase (LI:SafeTrim h))
             i
           )
         )
@@ -380,9 +391,6 @@
 
     (setq i (1+ i))
   )
-
-  ;; Если заголовки распознались нормально, используем их.
-  ;; Если нет - используем фиксированное расположение колонок.
 
   (if (assoc "ИМЯ СЛОЯ" map)
     map
@@ -394,7 +402,7 @@
   (setq idx
     (cdr
       (assoc
-        (strcase (LI:Trim header))
+        (strcase (LI:SafeTrim header))
         map
       )
     )
@@ -440,7 +448,6 @@
 (defun LI:SetBit (flags bit on)
   (if on
     (logior flags bit)
-    ;; Если бит установлен, вычитаем его значение, чтобы сбросить
     (if (= (logand flags bit) bit)
       (- flags bit)
       flags
@@ -581,7 +588,7 @@
        )
 
   (setq name
-    (LI:Trim
+    (LI:SafeTrim
       (LI:GetByHeader vals map "Имя слоя")
     )
   )
@@ -607,10 +614,6 @@
           "Ошибка"
         )
         (progn
-          ;; Получаем ename слоя напрямую через tblobjname.
-          ;; Это исправляет ошибку, когда ассоциативный список
-          ;; от tblsearch не содержит ключа -1.
-
           (setq ename (tblobjname "LAYER" name))
 
           (if (not ename)
@@ -630,7 +633,7 @@
               ;; Описание слоя
 
               (setq desc
-                (LI:Trim
+                (LI:SafeTrim
                   (LI:GetByHeader vals map "Описание")
                 )
               )
@@ -642,7 +645,7 @@
               ;; Тип линии
 
               (setq lt
-                (LI:Trim
+                (LI:SafeTrim
                   (LI:GetByHeader vals map "Тип линии")
                 )
               )
@@ -689,7 +692,7 @@
               )
 
               (setq onStr
-                (LI:Trim
+                (LI:SafeTrim
                   (LI:GetByHeader vals map "Включен")
                 )
               )
@@ -773,7 +776,7 @@
               ;; Печать
 
               (setq plotStr
-                (LI:Trim
+                (LI:SafeTrim
                   (LI:GetByHeader vals map "Печатается")
                 )
               )
@@ -818,7 +821,7 @@
                       ;; Прозрачность
 
                       (setq transStr
-                        (LI:Trim
+                        (LI:SafeTrim
                           (LI:GetByHeader vals map "Прозрачность")
                         )
                       )
@@ -830,7 +833,7 @@
                       ;; Стиль печати
 
                       (setq plotStyle
-                        (LI:Trim
+                        (LI:SafeTrim
                           (LI:GetByHeader vals map "Стиль печати")
                         )
                       )
@@ -871,96 +874,118 @@
 )
 
 ;;; ============================================================
-;;; Импорт фильтров слоёв (Ultra-Safe Version)
+;;; Безопасные функции для фильтров
 ;;; ============================================================
 
-;; Абсолютно безопасное преобразование в строку.
-(defun LI:ForceString (x)
-  (cond
-    ((null x) "")
-    ((eq (type x) 'STR) x)
-    (t (vl-prin1-to-string x))
-  )
-)
-
-;; Безопасный Trim
-(defun LI:SafeTrim (s)
-  (setq s (LI:ForceString s))
-  (if (= s "")
-    ""
-    (progn
-      (while (and (> (strlen s) 0) (LI:IsSpaceChar (substr s 1 1)))
-        (setq s (substr s 2))
-      )
-      (while (and (> (strlen s) 0) (LI:IsSpaceChar (substr s (strlen s) 1)))
-        (setq s (substr s 1 (1- (strlen s))))
-      )
-      s
-    )
-  )
-)
-
-;; Безопасное разбиение строки
 (defun LI:SafeSplit (s delim / tokens pos start lenf)
   (setq s (LI:ForceString s))
   (setq delim (LI:ForceString delim))
+
   (if (or (= s "") (= delim ""))
     nil
     (progn
-      (setq tokens nil start 0 lenf (strlen delim))
+      (setq tokens nil)
+      (setq start 0)
+      (setq lenf (strlen delim))
+
       (while (setq pos (vl-string-search delim s start))
-        (setq tokens (append tokens (list (LI:SafeTrim (substr s (1+ start) (- pos start))))))
+        (setq tokens
+          (append
+            tokens
+            (list
+              (LI:SafeTrim
+                (substr s (1+ start) (- pos start))
+              )
+            )
+          )
+        )
+
         (setq start (+ pos lenf))
       )
-      (setq tokens (append tokens (list (LI:SafeTrim (substr s (1+ start))))))
+
+      (setq tokens
+        (append
+          tokens
+          (list
+            (LI:SafeTrim
+              (substr s (1+ start))
+            )
+          )
+        )
+      )
+
       tokens
     )
   )
 )
 
-;; Безопасное добавление уникальной строки
 (defun LI:SafeAddUnique (lst s / found x)
   (setq s (LI:SafeTrim s))
+
   (if (= s "")
     lst
     (progn
       (foreach x lst
-        (if (= (strcase (LI:ForceString x)) (strcase s))
+        (if (=
+              (strcase (LI:ForceString x))
+              (strcase s)
+            )
           (setq found T)
         )
       )
-      (if found lst (append lst (list s)))
+
+      (if found
+        lst
+        (append lst (list s))
+      )
     )
   )
 )
 
-;; Безопасный поиск определения фильтра
+(defun LI:SafeStrCase (s)
+  (strcase (LI:ForceString s))
+)
+
 (defun LI:SafeGetFilterDef (defs name / found d)
-  (setq name (strcase (LI:SafeTrim name)))
   (foreach d defs
-    (if (and (listp d) (car d) (= (strcase (LI:ForceString (car d))) name))
+    (if (and
+          (listp d)
+          (car d)
+          (=
+            (LI:SafeStrCase (car d))
+            (LI:SafeStrCase name)
+          )
+        )
       (setq found d)
     )
   )
+
   found
 )
 
-;; Безопасное преобразование списка в строку через запятую
 (defun LI:SafeListToComma (lst / s txt x)
   (foreach x lst
     (setq txt (LI:SafeTrim x))
+
     (if (/= txt "")
-      (setq s (strcat s (if s "," "") txt))
+      (setq s
+        (strcat
+          s
+          (if s "," "")
+          txt
+        )
+      )
     )
   )
+
   (if s s "")
 )
 
-;; Безопасное определение ссылки на фильтр
 (defun LI:SafeGetFilterRef (token / up pos)
   (setq token (LI:SafeTrim token))
 
   ;; Удаляем возможные кавычки/апострофы слева
+
   (while (and
            (> (strlen token) 1)
            (or (= (substr token 1 1) "\"")
@@ -970,12 +995,17 @@
   )
 
   ;; Удаляем возможные кавычки/апострофы справа
+
   (while (and
            (> (strlen token) 1)
            (or (= (substr token (strlen token) 1) "\"")
                (= (substr token (strlen token) 1) "'"))
          )
-    (setq token (LI:SafeTrim (substr token 1 (1- (strlen token)))))
+    (setq token
+      (LI:SafeTrim
+        (substr token 1 (1- (strlen token)))
+      )
+    )
   )
 
   (setq up (strcase token))
@@ -1027,194 +1057,276 @@
   )
 )
 
-;; Рекурсивное раскрытие ссылок (с защитой от nil и циклов)
-(defun LI:SafeResolve (name defs visited / def raw tokens result token ref childLayers)
-  (setq name (LI:SafeTrim name))
-  (if (member (strcase name) visited)
-    nil
-    (progn
-      (setq visited (cons (strcase name) visited))
-      (setq def (LI:SafeGetFilterDef defs name))
-      (if def
+(defun LI:ParseFilterDef (raw / tokens direct children token ref)
+  (setq tokens (LI:SafeSplit raw ","))
+
+  (setq direct nil)
+  (setq children nil)
+
+  (if tokens
+    (foreach token tokens
+      (setq token (LI:SafeTrim token))
+
+      (if (/= token "")
         (progn
-          (setq raw (LI:ForceString (cadr def)))
-          (setq tokens (LI:SafeSplit raw ","))
-          (if tokens
-            (foreach token tokens
-              (setq token (LI:SafeTrim token))
-              (if (/= token "")
-                (progn
-                  (setq ref (LI:SafeGetFilterRef token))
-                  (if ref
-                    (progn
-                      (if (LI:SafeGetFilterDef defs ref)
-                        (progn
-                          (setq childLayers (LI:SafeResolve ref defs visited))
-                          (if childLayers
-                            (foreach l childLayers (setq result (LI:SafeAddUnique result l)))
-                          )
-                        )
-                        (princ (strcat "\n[Предупреждение] Фильтр-ссылка не найден: " ref))
-                      )
-                    )
-                    (setq result (LI:SafeAddUnique result token))
-                  )
-                )
+          (setq ref (LI:SafeGetFilterRef token))
+
+          (if ref
+            (if (/= ref "")
+              (setq children
+                (LI:SafeAddUnique children ref)
               )
+            )
+            (setq direct
+              (LI:SafeAddUnique direct token)
             )
           )
         )
       )
-      result
     )
+  )
+
+  (cons direct children)
+)
+
+(defun LI:AssocNoCase (alist key / keyUp found pair carVal)
+  (setq keyUp (LI:SafeStrCase key))
+
+  (foreach pair alist
+    (setq carVal (car pair))
+
+    (if (and
+          carVal
+          (LI:IsString carVal)
+          (=
+            (LI:SafeStrCase carVal)
+            keyUp
+          )
+        )
+      (setq found pair)
+    )
+  )
+
+  found
+)
+
+(defun LI:FindParsedDef (parsedDefs name / found p)
+  (foreach p parsedDefs
+    (if (=
+          (LI:SafeStrCase (nth 0 p))
+          (LI:SafeStrCase name)
+        )
+      (setq found p)
+    )
+  )
+
+  found
+)
+
+(defun LI:FixedFilterHeaderMap ()
+  (list
+    (cons "ИМЯ ФИЛЬТРА"   0)
+    (cons "СПИСОК СЛОЕВ"  1)
+    (cons "ВЫРАЖЕНИЕ"     1)
   )
 )
 
-;; Фиксированные заголовки для фильтров
-(defun LI:FixedFilterHeaderMap ()
-  (list (cons "ИМЯ ФИЛЬТРА" 0) (cons "СПИСОК СЛОЕВ" 1) (cons "ВЫРАЖЕНИЕ" 1))
-)
-
-;; Поиск строки заголовка
 (defun LI:FindFilterHeaderIndex (rows / i row vals found v)
   (setq i 0)
+
   (foreach row rows
     (if (not found)
       (progn
         (setq vals (LI:GetCellValues row))
+
         (foreach v vals
-          (if (and (not found) (eq (type v) 'STR) (= (strcase (LI:SafeTrim v)) "ИМЯ ФИЛЬТРА"))
+          (if (and
+                (not found)
+                (LI:IsString v)
+                (=
+                  (strcase (LI:SafeTrim v))
+                  "ИМЯ ФИЛЬТРА"
+                )
+              )
             (setq found i)
           )
         )
       )
     )
+
     (setq i (1+ i))
   )
+
   found
 )
 
-;; Удаление первых n строк
 (defun LI:DropRows (lst n / i out)
-  (setq i 0 out nil)
-  (foreach x lst (if (>= i n) (setq out (append out (list x)))) (setq i (1+ i)))
+  (setq i 0)
+  (setq out nil)
+
+  (foreach x lst
+    (if (>= i n)
+      (setq out (append out (list x)))
+    )
+
+    (setq i (1+ i))
+  )
+
   out
 )
 
-(defun LI:CreateGroupFilterCmd (name layerString / res)
-  (setq res
-    (vl-catch-all-apply
-      'vl-cmdf
-      (list
-        "._-LAYER"
-        "_Filter"
-        "_New"
-        "_Group"
-        ""              ; родительский фильтр - по умолчанию
-        layerString     ; список слоёв для включения
-        name            ; имя создаваемого фильтра
-        "_Yes"          ; если AutoCAD спросит замену существующего фильтра
-        "_Exit"         ; выход из подменю фильтров
-        ""              ; выход из команды -LAYER
-      )
-    )
-  )
+;;; ============================================================
+;;; Команды создания/удаления фильтров
+;;; ============================================================
 
-  (not (vl-catch-all-error-p res))
-)
-
-(defun LI:SetCurrentFilterAll ( / res)
-  (setq res
-    (vl-catch-all-apply
-      'vl-cmdf
-      (list
-        "._-LAYER"
-        "_Filter"
-        "_Set"
-        "Все"
-        ""
-      )
-    )
-  )
-
-  ;; Если русское "Все" вдруг не сработало, пробуем английское "All"
-  (if (vl-catch-all-error-p res)
-    (vl-catch-all-apply
-      'vl-cmdf
-      (list
-        "._-LAYER"
-        "_Filter"
-        "_Set"
-        "All"
-        ""
-      )
-    )
+(defun LI:SetCurrentFilterAll ( / )
+  (command
+    "._-LAYER"
+    "_Filter"
+    "_Set"
+    "Все"
+    "_Exit"
+    ""
   )
 )
 
-(defun LI:DeleteFilterCmd (name / res)
-  (setq res
-    (vl-catch-all-apply
-      'vl-cmdf
-      (list
-        "._-LAYER"
-        "_Filter"
-        "_Delete"
+(defun LI:DeleteFilterCmd (name)
+  (if (and name (/= name ""))
+    (command
+      "._-LAYER"
+      "_Filter"
+      "_Delete"
+      name
+      ""
+    )
+  )
+
+  T
+)
+
+(defun LI:CreateGroupFilterWithParentCmd
+       (
         name
-        ""
+        layerString
+        parentName
+        /
+        parentInput
+       )
+
+  (if (or (not name) (= name ""))
+    nil
+    (progn
+      (setq parentInput "")
+
+      (if (and parentName (/= parentName ""))
+        (setq parentInput parentName)
       )
-    )
-  )
 
-  (not (vl-catch-all-error-p res))
-)
+      (if (not layerString)
+        (setq layerString "")
+      )
 
-(defun LI:CreateGroupFilterCmd (name layerString / res)
-  (setq res
-    (vl-catch-all-apply
-      'vl-cmdf
-      (list
+      (command
         "._-LAYER"
         "_Filter"
         "_New"
         "_Group"
-        ""              ; родительский фильтр - по умолчанию
+        parentInput     ; родительский фильтр
         layerString     ; список слоёв
         name            ; имя фильтра
         "_Exit"         ; выход из подменю фильтров
         ""              ; выход из команды -LAYER
       )
+
+      T
     )
   )
-
-  (not (vl-catch-all-error-p res))
 )
 
 ;;; ============================================================
-;;; Основная функция импорта фильтров
+;;; Импорт фильтров
 ;;; ============================================================
 
-(defun LI:ImportFilters (doc xml / sheet rows headerIndex headers dataRows map row vals name layersList filterDefs uniqueDefs def origName rawList resolved layerString res)
+(defun LI:ImportFilters
+       (
+        doc
+        xml
+        /
+        sheet
+        rows
+        headerIndex
+        headers
+        dataRows
+        map
+        row
+        vals
+        name
+        layersList
+        filterDefs
+        uniqueDefs
+        def
+        parsedDefs
+        p
+        raw
+        parsed
+        direct
+        children
+        parentMap
+        ordered
+        simCreated
+        passes
+        parentPair
+        parentName
+        directString
+        revOrdered
+        created
+       )
+
   (princ "\nЧтение фильтров слоёв...")
+
   (setq filterDefs nil)
+
   (setq sheet (LI:GetWorksheet xml "Фильтры"))
-  
+
   (if (not sheet)
     (princ "\nЛист 'Фильтры' не найден в XML.")
     (progn
       (setq rows (LI:GetRows sheet))
-      (princ (strcat "\nНайдено строк на листе 'Фильтры': " (itoa (length rows))))
-      
+
+      (princ
+        (strcat
+          "\nНайдено строк на листе 'Фильтры': "
+          (itoa (length rows))
+        )
+      )
+
       (if (< (length rows) 2)
         (princ "\nВ файле нет данных о фильтрах.")
         (progn
-          (setq headerIndex (LI:FindFilterHeaderIndex rows))
+          (setq headerIndex
+            (LI:FindFilterHeaderIndex rows)
+          )
+
           (if headerIndex
             (progn
-              (setq headers (LI:GetCellValues (nth headerIndex rows)))
-              (setq dataRows (LI:DropRows rows (1+ headerIndex)))
-              (setq map (LI:BuildHeaderMap headers))
-              (if (or (not (assoc "ИМЯ ФИЛЬТРА" map)) (not (assoc "СПИСОК СЛОЕВ" map)))
+              (setq headers
+                (LI:GetCellValues
+                  (nth headerIndex rows)
+                )
+              )
+
+              (setq dataRows
+                (LI:DropRows rows (1+ headerIndex))
+              )
+
+              (setq map
+                (LI:BuildHeaderMap headers)
+              )
+
+              (if (or
+                    (not (assoc "ИМЯ ФИЛЬТРА" map))
+                    (not (assoc "СПИСОК СЛОЕВ" map))
+                  )
                 (setq map (LI:FixedFilterHeaderMap))
               )
             )
@@ -1223,60 +1335,309 @@
               (setq map (LI:FixedFilterHeaderMap))
             )
           )
-          
+
+          ;; Собираем фильтры из строк
+
           (foreach row dataRows
             (setq vals (LI:GetCellValues row))
-            (setq name (LI:SafeTrim (LI:GetByHeader vals map "Имя фильтра")))
-            (setq layersList (LI:ForceString (LI:GetByHeader vals map "Список слоев")))
-            (if (= layersList "") (setq layersList (LI:ForceString (LI:GetByHeader vals map "Выражение"))))
-            
-            (if (and (/= name "") (/= (strcase name) "ИМЯ ФИЛЬТРА"))
-              (setq filterDefs (append filterDefs (list (list name layersList))))
+
+            (setq name
+              (LI:SafeTrim
+                (LI:GetByHeader vals map "Имя фильтра")
+              )
+            )
+
+            (setq layersList
+              (LI:ForceString
+                (LI:GetByHeader vals map "Список слоев")
+              )
+            )
+
+            (if (= layersList "")
+              (setq layersList
+                (LI:ForceString
+                  (LI:GetByHeader vals map "Выражение")
+                )
+              )
+            )
+
+            (if (and
+                  (/= name "")
+                  (/= (LI:SafeStrCase name) "ИМЯ ФИЛЬТРА")
+                )
+              (setq filterDefs
+                (append
+                  filterDefs
+                  (list
+                    (list name layersList)
+                  )
+                )
+              )
             )
           )
-          
+
+          ;; Убираем дубли фильтров по имени
+
           (setq uniqueDefs nil)
+
           (foreach def filterDefs
             (if (not (LI:SafeGetFilterDef uniqueDefs (car def)))
-              (setq uniqueDefs (append uniqueDefs (list def)))
+              (setq uniqueDefs
+                (append uniqueDefs (list def))
+              )
             )
           )
+
           (setq filterDefs uniqueDefs)
-          
-          (princ (strcat "\nНайдено фильтров: " (itoa (length filterDefs))))
 
-          ;; Сбрасываем текущий фильтр на "Все",
-          ;; чтобы не мешать удалению/созданию фильтров.
+          (princ
+            (strcat
+              "\nНайдено фильтров: "
+              (itoa (length filterDefs))
+            )
+          )
+
+          ;; Сбрасываем текущий фильтр на "Все"
+
           (LI:SetCurrentFilterAll)
-          
+
+          ;; Разбираем фильтры:
+          ;; отдельно обычные слои и отдельно ссылки на дочерние фильтры
+
+          (setq parsedDefs nil)
+
           (foreach def filterDefs
-            (setq origName (LI:ForceString (car def)))
-            (setq rawList (LI:ForceString (cadr def)))
-            
-            (princ (strcat "\nФильтр: " origName))
-            (princ (strcat "  Исходный список: " rawList))
-            
-            ;; ВРЕМЕННО: используем исходный список без разбора ссылок
-            (setq layerString rawList)
-            
-            (princ (strcat "  Развёрнутый список: " layerString))
-            
-                (if (/= layerString "")
-                  (progn
-                    (princ (strcat "\nСоздание фильтра: " origName))
+            (setq name (LI:ForceString (car def)))
+            (setq raw (LI:ForceString (cadr def)))
 
-                    ;; Сначала удаляем существующий фильтр, если он есть
-                    (LI:DeleteFilterCmd origName)
+            (setq parsed (LI:ParseFilterDef raw))
 
-                    ;; Создаём фильтр заново
-                    (if (LI:CreateGroupFilterCmd origName layerString)
-                      (princ (strcat "\n[OK] Фильтр создан: " origName))
-                      (princ (strcat "\n[Ошибка] Не удалось создать фильтр: " origName))
+            (setq direct (car parsed))
+            (setq children (cdr parsed))
+
+            (setq parsedDefs
+              (append
+                parsedDefs
+                (list
+                  (list name direct children)
+                )
+              )
+            )
+          )
+
+          ;; Строим карту родителей:
+          ;; если фильтр Фасады содержит >>Подсистема,
+          ;; значит Подсистема имеет родителя Фасады
+
+          (setq parentMap nil)
+
+          (foreach p parsedDefs
+            (setq name (nth 0 p))
+            (setq children (nth 2 p))
+
+            (foreach child children
+              (if (not (LI:AssocNoCase parentMap child))
+                (setq parentMap
+                  (cons
+                    (cons
+                      (LI:SafeStrCase child)
+                      name
+                    )
+                    parentMap
+                  )
+                )
+              )
+            )
+          )
+
+          ;; Строим порядок создания:
+          ;; сначала родители, потом дочерние фильтры
+
+          (setq ordered nil)
+          (setq simCreated nil)
+
+          (setq passes (length parsedDefs))
+
+          (if (< passes 1)
+            (setq passes 1)
+          )
+
+          (repeat passes
+            (foreach p parsedDefs
+              (setq name (nth 0 p))
+
+              (if (not (member (LI:SafeStrCase name) simCreated))
+                (progn
+                  (setq parentPair
+                    (LI:AssocNoCase parentMap name)
+                  )
+
+                  (if parentPair
+                    (setq parentName (cdr parentPair))
+                    (setq parentName nil)
+                  )
+
+                  (if (or
+                        (not parentName)
+                        (= (LI:SafeStrCase parentName) "")
+                        (member (LI:SafeStrCase parentName) simCreated)
+                      )
+                    (progn
+                      (setq ordered
+                        (append ordered (list name))
+                      )
+
+                      (setq simCreated
+                        (cons (LI:SafeStrCase name) simCreated)
+                      )
                     )
                   )
-                  (princ (strcat "\n[Пропущено] Фильтр без слоёв: " origName))
                 )
+              )
+            )
           )
+
+          ;; Если остались фильтры из-за циклов или отсутствия родителя,
+          ;; добавляем их как корневые
+
+          (foreach p parsedDefs
+            (setq name (nth 0 p))
+
+            (if (not (member (LI:SafeStrCase name) simCreated))
+              (progn
+                (setq ordered
+                  (append ordered (list name))
+                )
+
+                (setq simCreated
+                  (cons (LI:SafeStrCase name) simCreated)
+                )
+              )
+            )
+          )
+
+          (princ
+            (strcat
+              "\nПорядок создания фильтров: "
+              (LI:SafeListToComma ordered)
+            )
+          )
+
+          ;; Удаляем существующие фильтры только если включено.
+          ;; Пока удаление отключено, чтобы не ломать командную строку.
+
+          (if *LI:DELETE-EXISTING-FILTERS*
+            (progn
+              (setq revOrdered (reverse ordered))
+
+              (foreach name revOrdered
+                (LI:DeleteFilterCmd name)
+              )
+            )
+          )
+
+          ;; Создаём фильтры в правильном порядке
+
+          (setq created nil)
+
+          (foreach name ordered
+            (setq p (LI:FindParsedDef parsedDefs name))
+
+            (if p
+              (progn
+                (setq direct (nth 1 p))
+
+                (setq parentPair
+                  (LI:AssocNoCase parentMap name)
+                )
+
+                (if parentPair
+                  (setq parentName (cdr parentPair))
+                  (setq parentName nil)
+                )
+
+                ;; Если родитель ещё не создан или не существует,
+                ;; создаём фильтр как корневой.
+
+                (if (or
+                      (not parentName)
+                      (= (LI:SafeStrCase parentName) "")
+                      (not (member (LI:SafeStrCase parentName) created))
+                    )
+                  (setq parentName nil)
+                )
+
+                (setq directString
+                  (LI:SafeListToComma direct)
+                )
+
+                (princ
+                  (strcat
+                    "\nСоздание фильтра: "
+                    name
+                  )
+                )
+
+                (if (and
+                      parentName
+                      (/= (LI:SafeStrCase parentName) "")
+                    )
+                  (princ
+                    (strcat
+                      "  Родитель: "
+                      parentName
+                    )
+                  )
+                  (princ "  Родитель: <Все>")
+                )
+
+                (princ
+                  (strcat
+                    "  Слои: "
+                    directString
+                  )
+                )
+
+                (if (LI:CreateGroupFilterWithParentCmd
+                      name
+                      directString
+                      parentName
+                    )
+                  (progn
+                    (princ
+                      (strcat
+                        "\n[OK] Фильтр создан: "
+                        name
+                      )
+                    )
+
+                    (setq created
+                      (cons (LI:SafeStrCase name) created)
+                    )
+                  )
+                  (princ
+                    (strcat
+                      "\n[Ошибка] Не удалось создать фильтр: "
+                      name
+                    )
+                  )
+                )
+              )
+            )
+          )
+
+          ;; Возвращаем текущий фильтр на "Все"
+
+          (LI:SetCurrentFilterAll)
+
+          ;; Дополнительное обновление чертежа
+
+          (vl-catch-all-apply
+            'vl-cmdf
+            (list "._REGENALL")
+          )
+
+          (princ "\nИмпорт фильтров завершён.")
         )
       )
     )
@@ -1389,7 +1750,8 @@
         )
       )
 
-      ;; Запускаем импорт фильтров
+      ;; Импорт фильтров слоёв
+
       (LI:ImportFilters doc xml)
 
       ;; Возвращаем предыдущий текущий слой, если это возможно.
