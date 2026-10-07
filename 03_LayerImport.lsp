@@ -1,18 +1,16 @@
 ;;; ============================================================
 ;;; 03_LayerImport.lsp
 ;;; Импорт слоёв и фильтров из Excel-XML (формат 2003).
-;;; Универсальное чтение: encoding из пролога, иначе перебор
-;;;   utf-8 ? windows-1251 ? unicode.
+;;; Универсальное чтение: encoding из пролога, иначе перебор.
 ;;; Вложенные фильтры: >>Имя = потомок этого фильтра.
-;;; Слои потомков автоматически поднимаются в родителя.
 ;;; Для существующих слоёв видимость, заморозка и блокировка
-;;; НЕ ТРОГАЮТСЯ — сохраняется как в чертеже.
-;;; Существующие фильтры молча удаляются перед созданием.
-;;; Заглушка "Фильтры не найдены" пропускается.
+;;; НЕ ТРОГАЮТСЯ. TrueColor применяется, если задан в XML.
+;;; Слои обрабатываются и печатаются в алфавитном порядке.
 ;;; Команды:
 ;;;   МОИСЛОИЗАГРУЗИТЬ
 ;;;   МОИСЛОИПРОВЕРИТЬXML
 ;;;   МОИСЛОИФИЛЬТРЫОЧИСТИТЬ
+;;;   МОИСЛОИПОКАЗАТЬСЛОЙ
 ;;; ============================================================
 
 (vl-load-com)
@@ -27,10 +25,14 @@
 ;;; ============================================================
 
 (defun LI:IsString (x) (eq (type x) 'STR))
-(defun LI:IsError (x) (if x (vl-catch-all-error-p x) nil))
+(defun LI:IsError (x)  (if x (vl-catch-all-error-p x) nil))
 
 (defun LI:ForceString (x)
-  (cond ((null x) "") ((LI:IsString x) x) (t (vl-prin1-to-string x)))
+  (cond
+    ((null x) "")
+    ((LI:IsString x) x)
+    (t (vl-prin1-to-string x))
+  )
 )
 
 (defun LI:IsSpaceChar (c)
@@ -73,9 +75,10 @@
 
 (defun LI:AddWarn (name category description)
   (setq *LI:WARN*
-    (append *LI:WARN* (list (list (LI:ForceString name)
-                                  (LI:ForceString category)
-                                  (LI:ForceString description)))))
+    (append *LI:WARN*
+            (list (list (LI:ForceString name)
+                        (LI:ForceString category)
+                        (LI:ForceString description)))))
 )
 
 (defun LI:PrintWarnings ( / )
@@ -89,17 +92,13 @@
                      (LI:PadRight "Категория" 12)
                      "| Описание"))
       (princ (strcat "\n  "
-                     (LI:RepeatChar "-" 45)
-                     "+"
-                     (LI:RepeatChar "-" 13)
-                     "+"
+                     (LI:RepeatChar "-" 45) "+"
+                     (LI:RepeatChar "-" 13) "+"
                      (LI:RepeatChar "-" 30)))
       (foreach w *LI:WARN*
         (princ (strcat "\n  "
-                       (LI:PadRight (nth 0 w) 45)
-                       "| "
-                       (LI:PadRight (nth 1 w) 12)
-                       "| "
+                       (LI:PadRight (nth 0 w) 45) "| "
+                       (LI:PadRight (nth 1 w) 12) "| "
                        (nth 2 w)))
       )
       (princ "\n\n")
@@ -112,17 +111,22 @@
     ((= (type x) 'VLA-OBJECT) x)
     ((= (type x) 'ENAME)
       (setq obj (vl-catch-all-apply 'vlax-ename->vla-object (list x)))
-      (if (LI:IsError obj) nil obj))
+      (if (LI:IsError obj) nil obj)
+    )
     (t nil)
   )
 )
 
 (defun LI:Replace (s find rep / pos start out lenf)
-  (setq s (LI:ForceString s) find (LI:ForceString find) rep (LI:ForceString rep))
+  (setq s    (LI:ForceString s))
+  (setq find (LI:ForceString find))
+  (setq rep  (LI:ForceString rep))
   (if (or (= s "") (= find ""))
     s
     (progn
-      (setq lenf (strlen find) start 0 out "")
+      (setq lenf (strlen find))
+      (setq start 0)
+      (setq out "")
       (while (setq pos (vl-string-search find s start))
         (setq out (strcat out (substr s (1+ start) (- pos start)) rep))
         (setq start (+ pos lenf))
@@ -146,7 +150,10 @@
   (setq s (LI:SafeTrim s))
   (if (= s "")
     nil
-    (progn (setq v (distof s)) (if (numberp v) (fix v) nil))
+    (progn
+      (setq v (distof s))
+      (if (numberp v) (fix v) nil)
+    )
   )
 )
 
@@ -157,7 +164,7 @@
 )
 
 ;;; ============================================================
-;;; Чтение XML (ADODB.Stream)
+;;; Чтение XML
 ;;; ============================================================
 
 (defun LI:ReadFileWithCharset (fname charset / stream txt)
@@ -171,7 +178,10 @@
       (setq txt (vl-catch-all-apply 'vlax-get (list stream 'ReadText)))
       (vl-catch-all-apply 'vlax-invoke (list stream 'Close))
       (vl-catch-all-apply 'vlax-release-object (list stream))
-      (if (and txt (eq (type txt) 'STR) (> (strlen txt) 0)) txt nil)
+      (if (and txt (eq (type txt) 'STR) (> (strlen txt) 0))
+        txt
+        nil
+      )
     )
     nil
   )
@@ -220,7 +230,6 @@
 (defun LI:ReadFile (fname / decl cs charsets s best first)
   (setq best nil)
   (setq first nil)
-
   (setq decl (LI:ReadXmlEncoding fname))
   (if decl
     (progn
@@ -240,7 +249,6 @@
       )
     )
   )
-
   (if (not best)
     (progn
       (setq charsets (list "utf-8" "windows-1251" "unicode"))
@@ -266,7 +274,6 @@
       )
     )
   )
-
   (if best best first)
 )
 
@@ -301,7 +308,8 @@
 )
 
 (defun LI:GetRows (sheet / rows pos tagEnd end row)
-  (setq rows nil pos 0)
+  (setq rows nil)
+  (setq pos 0)
   (while (setq pos (vl-string-search "<Row" sheet pos))
     (setq tagEnd (vl-string-search ">" sheet pos))
     (if tagEnd
@@ -323,7 +331,8 @@
 )
 
 (defun LI:GetCellValues (row / vals pos tagEnd start0 end val)
-  (setq vals nil pos 0)
+  (setq vals nil)
+  (setq pos 0)
   (while (setq pos (vl-string-search "<Data" row pos))
     (setq tagEnd (vl-string-search ">" row pos))
     (if tagEnd
@@ -346,7 +355,7 @@
 )
 
 ;;; ============================================================
-;;; Заголовки и работа со слоями
+;;; Заголовки
 ;;; ============================================================
 
 (defun LI:FixedHeaderMap ()
@@ -363,7 +372,8 @@
 )
 
 (defun LI:BuildHeaderMap (headers / i map h)
-  (setq i 0 map nil)
+  (setq i 0)
+  (setq map nil)
   (foreach h headers
     (setq map (append map (list (cons (strcase (LI:SafeTrim h)) i))))
     (setq i (1+ i))
@@ -376,8 +386,13 @@
   (if (and idx (< idx (length vals))) (nth idx vals) "")
 )
 
+;;; ============================================================
+;;; Работа со слоями
+;;; ============================================================
+
 (defun LI:EnsureLayer (doc name / layers res)
-  (if (tblsearch "LAYER" name) T
+  (if (tblsearch "LAYER" name)
+    T
     (progn
       (setq layers (vla-get-Layers doc))
       (setq res (vl-catch-all-apply 'vla-add (list layers name)))
@@ -388,11 +403,20 @@
 
 (defun LI:SetDxf (ent code val / old)
   (setq old (assoc code ent))
-  (if old (subst (cons code val) old ent) (append ent (list (cons code val))))
+  (if old
+    (subst (cons code val) old ent)
+    (append ent (list (cons code val)))
+  )
 )
 
 (defun LI:SetBit (flags bit on)
-  (if on (logior flags bit) (if (= (logand flags bit) bit) (- flags bit) flags))
+  (if on
+    (logior flags bit)
+    (if (= (logand flags bit) bit)
+      (- flags bit)
+      flags
+    )
+  )
 )
 
 (defun LI:LoadLinetype (doc name / ltypes res)
@@ -403,7 +427,8 @@
         (progn
           (setq res (vl-catch-all-apply 'vlax-invoke (list ltypes 'Load name)))
           (if (LI:IsError res)
-            (setq res (vl-catch-all-apply 'vlax-invoke (list ltypes 'Load name "")))
+            (setq res (vl-catch-all-apply 'vlax-invoke
+                                          (list ltypes 'Load name "")))
           )
         )
       )
@@ -424,7 +449,8 @@
             (progn
               (setq res (vl-catch-all-apply 'vlax-put (list obj 'Percent num)))
               (if (LI:IsError res)
-                (vl-catch-all-apply 'vlax-put (list obj 'Value num)))
+                (vl-catch-all-apply 'vlax-put (list obj 'Value num))
+              )
             )
           )
         )
@@ -436,14 +462,43 @@
 (defun LI:SetPlotStyle (layer val / res)
   (setq res (vl-catch-all-apply 'vlax-put (list layer 'PlotStyleName val)))
   (if (LI:IsError res)
-    (vl-catch-all-apply 'vlax-put (list layer 'PlotStyle val)))
+    (vl-catch-all-apply 'vlax-put (list layer 'PlotStyle val))
+  )
 )
 
-(defun LI:ApplyLayerRow (doc vals map / name isNew ename ent flags aci onStr on
-                          oldColor colorVal desc lt lw plotStr res layerObj
-                          transStr plotStyle ent2 c62 f70)
+(defun LI:ApplyTrueColor (layerObj r g b / tcObj res1 res2)
+  (if (and layerObj r g b
+           (>= r 0) (<= r 255)
+           (>= g 0) (<= g 255)
+           (>= b 0) (<= b 255))
+    (progn
+      (setq tcObj (vl-catch-all-apply 'vla-get-truecolor (list layerObj)))
+      (if (LI:IsError tcObj)
+        nil
+        (progn
+          (setq res1 (vl-catch-all-apply 'vla-setrgb (list tcObj r g b)))
+          (if (LI:IsError res1)
+            nil
+            (progn
+              (setq res2 (vl-catch-all-apply 'vla-put-truecolor
+                                             (list layerObj tcObj)))
+              (not (LI:IsError res2))
+            )
+          )
+        )
+      )
+    )
+    T
+  )
+)
+
+(defun LI:ApplyLayerRow (doc vals map / name isNew ename ent flags aci
+                          onStr on oldColor colorVal desc lt lw plotStr res
+                          layerObj transStr plotStyle ent2 c62 f70 tc2
+                          rVal gVal bVal)
   (setq name (LI:SafeTrim (LI:GetByHeader vals map "Имя слоя")))
-  (if (= name "") nil
+  (if (= name "")
+    nil
     (progn
       (setq isNew (not (tblsearch "LAYER" name)))
       (if (not (LI:EnsureLayer doc name))
@@ -464,6 +519,7 @@
             )
             (progn
               (setq ent (entget ename))
+
               (setq desc (LI:SafeTrim (LI:GetByHeader vals map "Описание")))
               (if (/= desc "") (setq ent (LI:SetDxf ent 3 desc)))
 
@@ -476,9 +532,11 @@
                     (if (tblsearch "LTYPE" "Continuous")
                       (progn
                         (setq ent (LI:SetDxf ent 6 "Continuous"))
-                        (LI:AddWarn name "тип линии" (strcat lt " -> Continuous"))
+                        (LI:AddWarn name "тип линии"
+                                    (strcat lt " -> Continuous"))
                       )
-                      (LI:AddWarn name "тип линии" (strcat lt " (не найден)"))
+                      (LI:AddWarn name "тип линии"
+                                  (strcat lt " (не найден)"))
                     )
                   )
                 )
@@ -489,8 +547,12 @@
                 (progn
                   (if isNew
                     (progn
-                      (setq onStr (LI:SafeTrim (LI:GetByHeader vals map "Включен")))
-                      (if (= onStr "") (setq on T) (setq on (LI:YesNoTrue onStr)))
+                      (setq onStr (LI:SafeTrim
+                                    (LI:GetByHeader vals map "Включен")))
+                      (if (= onStr "")
+                        (setq on T)
+                        (setq on (LI:YesNoTrue onStr))
+                      )
                       (setq colorVal (abs aci))
                       (if (not on) (setq colorVal (- colorVal)))
                       (setq ent (LI:SetDxf ent 62 colorVal))
@@ -515,29 +577,41 @@
 
               (if isNew
                 (progn
-                  (setq flags (if (cdr (assoc 70 ent)) (cdr (assoc 70 ent)) 0))
-                  (setq onStr (LI:SafeTrim (LI:GetByHeader vals map "Заморожен")))
+                  (setq flags (if (cdr (assoc 70 ent))
+                                (cdr (assoc 70 ent)) 0))
+                  (setq onStr (LI:SafeTrim
+                                (LI:GetByHeader vals map "Заморожен")))
                   (if (/= onStr "")
-                    (setq flags (LI:SetBit flags 1 (LI:YesNoTrue onStr))))
-                  (setq onStr (LI:SafeTrim (LI:GetByHeader vals map "Заморожен в новых ВЭ")))
+                    (setq flags (LI:SetBit flags 1 (LI:YesNoTrue onStr)))
+                  )
+                  (setq onStr (LI:SafeTrim
+                                (LI:GetByHeader vals map
+                                                "Заморожен в новых ВЭ")))
                   (if (/= onStr "")
-                    (setq flags (LI:SetBit flags 2 (LI:YesNoTrue onStr))))
-                  (setq onStr (LI:SafeTrim (LI:GetByHeader vals map "Заблокирован")))
+                    (setq flags (LI:SetBit flags 2 (LI:YesNoTrue onStr)))
+                  )
+                  (setq onStr (LI:SafeTrim
+                                (LI:GetByHeader vals map "Заблокирован")))
                   (if (/= onStr "")
-                    (setq flags (LI:SetBit flags 4 (LI:YesNoTrue onStr))))
+                    (setq flags (LI:SetBit flags 4 (LI:YesNoTrue onStr)))
+                  )
                   (setq ent (LI:SetDxf ent 70 flags))
                 )
                 nil
               )
 
-              (setq plotStr (LI:SafeTrim (LI:GetByHeader vals map "Печатается")))
+              (setq plotStr (LI:SafeTrim
+                              (LI:GetByHeader vals map "Печатается")))
               (if (/= plotStr "")
-                (setq ent (LI:SetDxf ent 290 (if (LI:YesNoTrue plotStr) 1 0))))
+                (setq ent (LI:SetDxf ent 290
+                                     (if (LI:YesNoTrue plotStr) 1 0)))
+              )
 
               (setq res (vl-catch-all-apply 'entmod (list ent)))
               (if (LI:IsError res)
                 (progn
-                  (LI:AddWarn name "ошибка" "не удалось изменить слой (entmod)")
+                  (LI:AddWarn name "ошибка"
+                              "не удалось изменить слой (entmod)")
                   (princ (strcat "\n[Ошибка]    " (LI:PadRight name 45)
                                  "| не удалось изменить слой"))
                   "Ошибка"
@@ -546,16 +620,45 @@
                   (setq layerObj (LI:AsVla ename))
                   (if layerObj
                     (progn
-                      (setq transStr (LI:SafeTrim (LI:GetByHeader vals map "Прозрачность")))
-                      (if (/= transStr "") (LI:SetTransparency layerObj transStr))
-                      (setq plotStyle (LI:SafeTrim (LI:GetByHeader vals map "Стиль печати")))
-                      (if (/= plotStyle "") (LI:SetPlotStyle layerObj plotStyle))
+                      (setq rVal (LI:ToInt (LI:GetByHeader vals map "R")))
+                      (setq gVal (LI:ToInt (LI:GetByHeader vals map "G")))
+                      (setq bVal (LI:ToInt (LI:GetByHeader vals map "B")))
+                      (if (and rVal gVal bVal
+                               (>= rVal 0) (<= rVal 255)
+                               (>= gVal 0) (<= gVal 255)
+                               (>= bVal 0) (<= bVal 255))
+                        (progn
+                          (if (not (LI:ApplyTrueColor layerObj
+                                                      rVal gVal bVal))
+                            (LI:AddWarn name "TrueColor"
+                                        (strcat "не удалось применить RGB("
+                                                (itoa rVal) ","
+                                                (itoa gVal) ","
+                                                (itoa bVal) ")"))
+                          )
+                        )
+                      )
+
+                      (setq transStr (LI:SafeTrim
+                                       (LI:GetByHeader vals map
+                                                       "Прозрачность")))
+                      (if (/= transStr "")
+                        (LI:SetTransparency layerObj transStr)
+                      )
+
+                      (setq plotStyle (LI:SafeTrim
+                                        (LI:GetByHeader vals map
+                                                        "Стиль печати")))
+                      (if (/= plotStyle "")
+                        (LI:SetPlotStyle layerObj plotStyle)
+                      )
                     )
                   )
 
                   (setq ent2 (entget ename))
                   (setq c62 (cdr (assoc 62 ent2)))
                   (setq f70 (cdr (assoc 70 ent2)))
+                  (setq tc2 (cdr (assoc 420 ent2)))
                   (if (null f70) (setq f70 0))
 
                   (princ (strcat "\n"
@@ -566,8 +669,13 @@
                                  " | "
                                  (if (= (logand f70 1) 1) "зам " "разм")
                                  " | "
-                                 (if (= (logand f70 4) 4) "блок" "----")))
-
+                                 (if (= (logand f70 4) 4) "блок" "----")
+                                 (if (and tc2 (numberp tc2) (>= tc2 0))
+                                   (strcat "  RGB("
+                                           (itoa (logand (lsh tc2 -16) 255)) ","
+                                           (itoa (logand (lsh tc2 -8)  255)) ","
+                                           (itoa (logand tc2 255)) ")")
+                                   "")))
                   (if isNew "Создан" "Обновлён")
                 )
               )
@@ -580,19 +688,26 @@
 )
 
 ;;; ============================================================
-;;; Функции для фильтров
+;;; Фильтры — вспомогательные
 ;;; ============================================================
 
 (defun LI:SafeSplit (s delim / tokens pos start lenf)
-  (setq s (LI:ForceString s) delim (LI:ForceString delim))
-  (if (or (= s "") (= delim "")) nil
+  (setq s     (LI:ForceString s))
+  (setq delim (LI:ForceString delim))
+  (if (or (= s "") (= delim ""))
+    nil
     (progn
-      (setq tokens nil start 0 lenf (strlen delim))
+      (setq tokens nil)
+      (setq start 0)
+      (setq lenf (strlen delim))
       (while (setq pos (vl-string-search delim s start))
-        (setq tokens (append tokens (list (LI:SafeTrim (substr s (1+ start) (- pos start))))))
+        (setq tokens (append tokens
+                             (list (LI:SafeTrim
+                                     (substr s (1+ start) (- pos start))))))
         (setq start (+ pos lenf))
       )
-      (setq tokens (append tokens (list (LI:SafeTrim (substr s (1+ start))))))
+      (setq tokens (append tokens
+                           (list (LI:SafeTrim (substr s (1+ start))))))
       tokens
     )
   )
@@ -600,9 +715,14 @@
 
 (defun LI:SafeAddUnique (lst s / found x)
   (setq s (LI:SafeTrim s))
-  (if (= s "") lst
+  (if (= s "")
+    lst
     (progn
-      (foreach x lst (if (= (strcase (LI:ForceString x)) (strcase s)) (setq found T)))
+      (foreach x lst
+        (if (= (strcase (LI:ForceString x)) (strcase s))
+          (setq found T)
+        )
+      )
       (if found lst (append lst (list s)))
     )
   )
@@ -612,7 +732,8 @@
 
 (defun LI:SafeGetFilterDef (defs name / found d)
   (foreach d defs
-    (if (and (listp d) (car d) (= (LI:SafeStrCase (car d)) (LI:SafeStrCase name)))
+    (if (and (listp d) (car d)
+             (= (LI:SafeStrCase (car d)) (LI:SafeStrCase name)))
       (setq found d)
     )
   )
@@ -633,7 +754,8 @@
 (defun LI:SafeGetFilterRef (token / up pos)
   (setq token (LI:SafeTrim token))
   (while (and (> (strlen token) 1)
-              (or (= (substr token 1 1) "\"") (= (substr token 1 1) "'")))
+              (or (= (substr token 1 1) "\"")
+                  (= (substr token 1 1) "'")))
     (setq token (LI:SafeTrim (substr token 2)))
   )
   (while (and (> (strlen token) 1)
@@ -657,7 +779,8 @@
 
 (defun LI:ParseFilterDef (raw / tokens direct children token ref)
   (setq tokens (LI:SafeSplit raw ","))
-  (setq direct nil children nil)
+  (setq direct nil)
+  (setq children nil)
   (if tokens
     (foreach token tokens
       (setq token (LI:SafeTrim token))
@@ -672,7 +795,9 @@
               (setq direct (LI:SafeAddUnique direct token)))
             (t
               (if (not (and (LI:IsString ref) (= ref "")))
-                (setq direct (LI:SafeAddUnique direct token))))
+                (setq direct (LI:SafeAddUnique direct token))
+              )
+            )
           )
         )
       )
@@ -683,7 +808,9 @@
 
 (defun LI:FindParsedDef (parsedDefs name / found p)
   (foreach p parsedDefs
-    (if (= (LI:SafeStrCase (nth 0 p)) (LI:SafeStrCase name)) (setq found p))
+    (if (= (LI:SafeStrCase (nth 0 p)) (LI:SafeStrCase name))
+      (setq found p)
+    )
   )
   found
 )
@@ -712,7 +839,8 @@
 )
 
 (defun LI:DropRows (lst n / i out)
-  (setq i 0 out nil)
+  (setq i 0)
+  (setq out nil)
   (foreach x lst
     (if (>= i n) (setq out (append out (list x))))
     (setq i (1+ i))
@@ -720,11 +848,15 @@
   out
 )
 
-(defun LI:CreateGroupFilterWithParentCmd (name layerString parentName / parentInput)
-  (if (or (not name) (= name "")) nil
+(defun LI:CreateGroupFilterWithParentCmd
+       (name layerString parentName / parentInput)
+  (if (or (not name) (= name ""))
+    nil
     (progn
       (setq parentInput "")
-      (if (and parentName (/= parentName "")) (setq parentInput parentName))
+      (if (and parentName (/= parentName ""))
+        (setq parentInput parentName)
+      )
       (if (not layerString) (setq layerString ""))
       (command "._-LAYER" "_Filter" "_New" "_Group"
                parentInput layerString name "_Exit" "")
@@ -733,22 +865,17 @@
   )
 )
 
-;;; Молча удалить фильтр по имени.
-;;; ВАЖНО: command вызывается напрямую, без vl-catch-all-apply —
-;;; 'command нельзя передавать в vl-catch-all-apply.
 (defun LI:DeleteFilterByName (name)
   (if (and name (/= name ""))
     (command "._-LAYER" "_Filter" "_Delete" name "")
   )
 )
 
-;;; ============================================================
-;;; Вложенность
-;;; ============================================================
-
 (defun LI:NameInList (lst name / found x)
   (foreach x lst
-    (if (= (LI:SafeStrCase x) (LI:SafeStrCase name)) (setq found T))
+    (if (= (LI:SafeStrCase x) (LI:SafeStrCase name))
+      (setq found T)
+    )
   )
   found
 )
@@ -806,11 +933,14 @@
   ordered
 )
 
-(defun LI:CollectLayersDeep (parsedDefs name visited / p direct children child sub)
-  (if (LI:NameInList visited name) nil
+(defun LI:CollectLayersDeep (parsedDefs name visited
+                             / p direct children child sub)
+  (if (LI:NameInList visited name)
+    nil
     (progn
       (setq p (LI:FindParsedDef parsedDefs name))
-      (if (null p) nil
+      (if (null p)
+        nil
         (progn
           (setq direct (nth 1 p))
           (setq children (nth 2 p))
@@ -833,12 +963,12 @@
 ;;; Импорт фильтров
 ;;; ============================================================
 
-(defun LI:ImportFilters (doc xml / sheet rows headerIndex headers dataRows
-                          map row vals name layersList filterDefs uniqueDefs
-                          def parsedDefs p raw parsed direct children
-                          directString fullLayers orderedDefs reversedDefs
-                          createdNames parentName delPass ok parentLabel
-                          layerCount)
+(defun LI:ImportFilters
+       (doc xml / sheet rows headerIndex headers dataRows
+        map row vals name layersList filterDefs uniqueDefs
+        def parsedDefs p raw parsed direct children
+        directString fullLayers orderedDefs reversedDefs
+        createdNames parentName delPass ok parentLabel layerCount)
   (princ "\n\n")
   (princ "\nЧтение фильтров слоёв...")
   (setq filterDefs nil)
@@ -868,17 +998,20 @@
               (setq map (LI:FixedFilterHeaderMap))
             )
           )
-
           (foreach row dataRows
             (setq vals (LI:GetCellValues row))
             (setq name (LI:SafeTrim (LI:GetByHeader vals map "Имя фильтра")))
-            (setq layersList (LI:ForceString (LI:GetByHeader vals map "Список слоев")))
+            (setq layersList (LI:ForceString
+                               (LI:GetByHeader vals map "Список слоев")))
             (if (= layersList "")
-              (setq layersList (LI:ForceString (LI:GetByHeader vals map "Выражение"))))
+              (setq layersList (LI:ForceString
+                                 (LI:GetByHeader vals map "Выражение")))
+            )
             (if (and (/= name "")
                      (/= (LI:SafeStrCase name) "ИМЯ ФИЛЬТРА")
                      (/= (LI:SafeStrCase name) "ФИЛЬТРЫ НЕ НАЙДЕНЫ"))
-              (setq filterDefs (append filterDefs (list (list name layersList))))
+              (setq filterDefs (append filterDefs
+                                       (list (list name layersList))))
             )
           )
           (setq uniqueDefs nil)
@@ -889,7 +1022,6 @@
           )
           (setq filterDefs uniqueDefs)
           (princ (strcat "\nНайдено фильтров: " (itoa (length filterDefs))))
-
           (setq parsedDefs nil)
           (foreach def filterDefs
             (setq name (LI:ForceString (car def)))
@@ -901,21 +1033,18 @@
             (setq children (cdr parsed))
             (if (not (listp direct))   (setq direct nil))
             (if (not (listp children)) (setq children nil))
-            (setq parsedDefs (append parsedDefs (list (list name direct children))))
+            (setq parsedDefs
+              (append parsedDefs (list (list name direct children))))
           )
-
           (princ "\n\n")
           (princ "\nСтруктура фильтров:")
           (princ (strcat "\n  "
-                         (LI:PadRight "Фильтр" 24)
-                         "| "
+                         (LI:PadRight "Фильтр" 24) "| "
                          (LI:PadRight "Родитель" 14)
                          "| Слои (с вложенными)"))
           (princ (strcat "\n  "
-                         (LI:RepeatChar "-" 24)
-                         "+"
-                         (LI:RepeatChar "-" 15)
-                         "+"
+                         (LI:RepeatChar "-" 24) "+"
+                         (LI:RepeatChar "-" 15) "+"
                          (LI:RepeatChar "-" 46)))
           (foreach p parsedDefs
             (setq name (nth 0 p))
@@ -923,19 +1052,17 @@
             (if (null parentName) (setq parentName "-"))
             (setq fullLayers (LI:CollectLayersDeep parsedDefs name nil))
             (princ (strcat "\n  "
-                           (LI:PadRight name 24)
-                           "| "
-                           (LI:PadRight parentName 14)
-                           "| "
+                           (LI:PadRight name 24) "| "
+                           (LI:PadRight parentName 14) "| "
                            (LI:SafeListToComma fullLayers)))
           )
           (princ "\n\n")
-
           (setq orderedDefs (LI:BuildFilterOrder parsedDefs))
-
           (princ "\nЭтап: удаление старых одноимённых фильтров...")
           (setq reversedDefs nil)
-          (foreach p orderedDefs (setq reversedDefs (cons p reversedDefs)))
+          (foreach p orderedDefs
+            (setq reversedDefs (cons p reversedDefs))
+          )
           (setq delPass 1)
           (while (<= delPass 2)
             (foreach p reversedDefs
@@ -945,34 +1072,24 @@
           )
           (princ " готово.")
           (princ "\n\n")
-
           (princ "\nСоздание фильтров:")
           (princ (strcat "\n  "
-                         (LI:PadRight "Статус" 9)
-                         "| "
-                         (LI:PadRight "Фильтр" 24)
-                         "| "
-                         (LI:PadRight "Родитель" 14)
-                         "| Слои"))
+                         (LI:PadRight "Статус" 9) "| "
+                         (LI:PadRight "Фильтр" 24) "| "
+                         (LI:PadRight "Родитель" 14) "| Слои"))
           (princ (strcat "\n  "
-                         (LI:RepeatChar "-" 9)
-                         "+"
-                         (LI:RepeatChar "-" 25)
-                         "+"
-                         (LI:RepeatChar "-" 15)
-                         "+"
+                         (LI:RepeatChar "-" 9)  "+"
+                         (LI:RepeatChar "-" 25) "+"
+                         (LI:RepeatChar "-" 15) "+"
                          (LI:RepeatChar "-" 12)))
-
           (setq createdNames nil)
           (foreach p orderedDefs
             (setq name (nth 0 p))
             (setq parentName (LI:FindParentOf parsedDefs name))
             (if (null parentName) (setq parentName ""))
-
             (setq fullLayers (LI:CollectLayersDeep parsedDefs name nil))
             (setq layerCount (length fullLayers))
             (setq directString (LI:SafeListToComma fullLayers))
-
             (if (and (/= parentName "")
                      (not (LI:NameInList createdNames parentName)))
               (progn
@@ -982,28 +1099,21 @@
                 (setq parentName "")
               )
             )
-
             (setq parentLabel (if (= parentName "") "-" parentName))
             (setq ok (LI:CreateGroupFilterWithParentCmd
                        name directString parentName))
-
             (princ (strcat "\n  "
-                           (LI:PadRight (if ok "[OK] " "[!] ") 9)
-                           "| "
-                           (LI:PadRight name 24)
-                           "| "
-                           (LI:PadRight parentLabel 14)
-                           "| "
+                           (LI:PadRight (if ok "[OK] " "[!] ") 9) "| "
+                           (LI:PadRight name 24) "| "
+                           (LI:PadRight parentLabel 14) "| "
                            (itoa layerCount)
                            (if (= layerCount 1) " слой" " слоёв")))
-
             (if ok
               (setq createdNames (append createdNames (list name)))
               (LI:AddWarn name "фильтр" "не удалось создать")
             )
           )
           (princ "\n\n")
-
           (vl-catch-all-apply 'vl-cmdf (list "._REGENALL"))
           (princ "\nИмпорт фильтров завершён.")
         )
@@ -1016,9 +1126,13 @@
 ;;; Импорт из файла
 ;;; ============================================================
 
-(defun LI:ImportFromFile (fname / doc xml sheet rows headers map row vals
-                           status created updated errors oldLayer)
-  (setq created 0 updated 0 errors 0)
+(defun LI:ImportFromFile
+       (fname / doc xml sheet rows headers map vals
+        status created updated errors oldLayer
+        parsedRows rec name vals2)
+  (setq created 0)
+  (setq updated 0)
+  (setq errors  0)
   (setq *LI:WARN* nil)
   (setq xml (LI:ReadFile fname))
   (if (not xml)
@@ -1038,11 +1152,29 @@
             (progn
               (setq headers (LI:GetCellValues (car rows)))
               (setq map (LI:BuildHeaderMap headers))
+              (setq parsedRows nil)
               (foreach row (cdr rows)
                 (setq vals (LI:GetCellValues row))
                 (if vals
                   (progn
-                    (setq status (LI:ApplyLayerRow doc vals map))
+                    (setq name (LI:SafeTrim
+                                 (LI:GetByHeader vals map "Имя слоя")))
+                    (setq parsedRows
+                      (append parsedRows (list (cons name vals))))
+                  )
+                )
+              )
+              (setq parsedRows
+                (vl-sort parsedRows
+                  '(lambda (a b)
+                     (< (strcase (car a)) (strcase (car b))))
+                )
+              )
+              (foreach rec parsedRows
+                (setq vals2 (cdr rec))
+                (if vals2
+                  (progn
+                    (setq status (LI:ApplyLayerRow doc vals2 map))
                     (cond
                       ((= status "Создан")   (setq created (1+ created)))
                       ((= status "Обновлён")(setq updated (1+ updated)))
@@ -1062,15 +1194,13 @@
       (if (and oldLayer (tblsearch "LAYER" oldLayer))
         (vl-catch-all-apply 'setvar (list "CLAYER" oldLayer))
       )
+
       (princ "\n\n")
       (princ "\nГотово.")
       (princ (strcat "\nСоздано слоёв:   " (itoa created)))
       (princ (strcat "\nОбновлено слоёв: " (itoa updated)))
       (princ (strcat "\nОшибок:          " (itoa errors)))
 
-      ;; ---------- Интеграция с 01_Variables.lsp ----------
-      ;; После импорта слоёв применяем переменные (TEXTLAYER, DIMLAYER, ...).
-      ;; Модуль 01 даёт команду МОИСЛОИПОУМОЛЧАНИЮ.
       (cond
         (C:МОИСЛОИПОУМОЛЧАНИЮ
           (princ "\n\n")
@@ -1093,8 +1223,12 @@
 
 (defun LI:EnsureSlash (p)
   (if (and p (/= p ""))
-    (if (= (substr p (strlen p) 1) "\\") p (strcat p "\\"))
-    p)
+    (if (= (substr p (strlen p) 1) "\\")
+      p
+      (strcat p "\\")
+    )
+    p
+  )
 )
 
 (defun LI:DrawingDir (/ p)
@@ -1102,7 +1236,8 @@
   (if (and p (/= p ""))
     (if (vl-file-directory-p p)
       (setq p (LI:EnsureSlash p))
-      (setq p (LI:EnsureSlash (vl-filename-directory p))))
+      (setq p (LI:EnsureSlash (vl-filename-directory p)))
+    )
     (setq p nil)
   )
   (if (or (not p) (= p "") (= p "\\")) nil p)
@@ -1149,9 +1284,11 @@
 (defun LI:SelectTemplateFile (/ initial f)
   (setq initial (LI:FindTemplateFile))
   (if (or (not initial) (not (eq (type initial) 'STR)))
-    (setq initial (LI:DrawingDir)))
+    (setq initial (LI:DrawingDir))
+  )
   (if (or (not initial) (not (eq (type initial) 'STR)))
-    (setq initial ""))
+    (setq initial "")
+  )
   (setq f (getfiled "Выберите XML-шаблон слоёв" initial "xml" 0))
   f
 )
@@ -1195,14 +1332,14 @@
           (princ " не удалось прочитать или пусто")
           (progn
             (princ (strcat " длина " (itoa (strlen txt)) " симв."))
-            (princ (strcat "\n  Первые 60 симв.: ["
-                           (substr txt 1 (min 60 (strlen txt))) "]"))
             (princ (strcat "\n  Есть '<Worksheet': "
-                           (if (vl-string-search "<Worksheet" txt) "ДА" "нет")))
+                           (if (vl-string-search "<Worksheet" txt)
+                             "ДА" "нет")))
             (princ (strcat "\n  Есть 'Слои': "
                            (if (vl-string-search "Слои" txt) "ДА" "нет")))
             (princ (strcat "\n  Есть 'Фильтры': "
-                           (if (vl-string-search "Фильтры" txt) "ДА" "нет")))
+                           (if (vl-string-search "Фильтры" txt)
+                             "ДА" "нет")))
           )
         )
       )
@@ -1218,13 +1355,130 @@
 )
 
 ;;; ============================================================
-;;; Очистка фильтров слоёв
+;;; ДИАГНОСТИКА СЛОЯ (DXF: коды 62, 420, 430)
 ;;; ============================================================
 
-(defun C:МОИСЛОИФИЛЬТРЫОЧИСТИТЬ ( / fname xml sheet rows vals name names pass)
+(defun C:МОИСЛОИПОКАЗАТЬСЛОЙ
+       (/ name ent obj tc c62 c420 c430 aci r g b cname cmethod
+          resIdx resR resG resB)
+  (princ "\n=== Диагностика цвета слоя ===")
+  (setq name (getstring T "\nИмя слоя (Enter — отмена): "))
+  (if (or (not name) (= name ""))
+    (princ "\nОтменено.")
+    (progn
+      (setq ent (tblsearch "LAYER" name))
+      (if (not ent)
+        (princ (strcat "\nСлой не найден: " name))
+        (progn
+          (setq c62  (cdr (assoc 62  ent)))
+          (setq c420 (cdr (assoc 420 ent)))
+          (setq c430 (cdr (assoc 430 ent)))
+
+          (princ (strcat "\n\nСлой: " name))
+          (princ "\n--- DXF (tblsearch) ---")
+          (princ (strcat "\n  Код 62  (ACI):        "
+                         (if c62 (itoa c62) "нет")))
+          (if (and c420 (numberp c420) (>= c420 0))
+            (progn
+              (setq r (logand (lsh c420 -16) 255))
+              (setq g (logand (lsh c420 -8)  255))
+              (setq b (logand c420 255))
+              (princ (strcat "\n  Код 420 (TrueColor): "
+                             (itoa c420)
+                             "  = RGB("
+                             (itoa r) "," (itoa g) "," (itoa b) ")")))
+            (princ "\n  Код 420 (TrueColor): нет"))
+          (princ (strcat "\n  Код 430 (Color name): "
+                         (if c430 (strcat "\"" c430 "\"") "нет")))
+
+          ;; ---------- ActiveX ----------
+          (princ "\n--- ActiveX (vla-get-truecolor) ---")
+          (setq obj (vl-catch-all-apply 'vlax-ename->vla-object
+                                        (list (tblobjname "LAYER" name))))
+          (if (or (LI:IsError obj) (null obj))
+            (princ "\n  не удалось получить VLA-объект слоя")
+            (progn
+              (setq tc (vl-catch-all-apply 'vla-get-truecolor (list obj)))
+              (if (or (LI:IsError tc) (null tc))
+                (princ "\n  не удалось получить TrueColor")
+                (progn
+                  (setq resIdx (vl-catch-all-apply 'vla-get-colorindex
+                                                   (list tc)))
+                  (if (LI:IsError resIdx)
+                    (princ "\n  ColorIndex: недоступен")
+                    (princ (strcat "\n  ColorIndex: "
+                                   (if (numberp resIdx)
+                                     (itoa resIdx)
+                                     (vl-prin1-to-string resIdx)))))
+                  (setq resR (vl-catch-all-apply 'vla-get-red   (list tc)))
+                  (setq resG (vl-catch-all-apply 'vla-get-green (list tc)))
+                  (setq resB (vl-catch-all-apply 'vla-get-blue  (list tc)))
+                  (princ (strcat "\n  Red:   "
+                                 (if (numberp resR) (itoa resR) "?")))
+                  (princ (strcat "\n  Green: "
+                                 (if (numberp resG) (itoa resG) "?")))
+                  (princ (strcat "\n  Blue:  "
+                                 (if (numberp resB) (itoa resB) "?")))
+                  (setq resIdx (vl-catch-all-apply 'vla-get-colormethod
+                                                   (list tc)))
+                  (if (LI:IsError resIdx)
+                    nil
+                    (princ (strcat "\n  ColorMethod: "
+                                   (vl-prin1-to-string resIdx))))
+                  ;; Проверка: ACI-only или TrueColor?
+                  (if (and (numberp resR) (numberp resG) (numberp resB)
+                           (not (and (= resR 0) (= resG 0) (= resB 0))))
+                    (progn
+                      (princ "\n\n  Вывод: ActiveX показывает RGB "
+                             ) (princ (strcat "(" (itoa resR) ","
+                                              (itoa resG) ","
+                                              (itoa resB) ")."))
+                      (if (not (and c420 (numberp c420) (>= c420 0)))
+                        (progn
+                          (princ "\n  В DXF кода 420 нет, но RGB задан.")
+                          (princ "\n  Возможно, экспорт надо вести через ActiveX.")
+                        )
+                      )
+                    )
+                    (princ "\n\n  Вывод: ActiveX не даёт ненулевого RGB.")
+                  )
+                )
+              )
+            )
+          )
+
+          (princ "\n")
+          (cond
+            ((and c420 (numberp c420) (>= c420 0))
+              (princ "\nИтог: TrueColor задан, читается из DXF.")
+            )
+            ((and (numberp resR) (numberp resG) (numberp resB)
+                  (not (and (= resR 0) (= resG 0) (= resB 0))))
+              (princ "\nИтог: TrueColor задан, виден только через ActiveX.")
+              (princ "\n      Нужно доработать экспорт: читать R/G/B через")
+              (princ "\n      vla-get-truecolor, а не через DXF-код 420.")
+            )
+            (t
+              (princ "\nИтог: TrueColor не задан. Цвет слоя — индексный (ACI).")
+              (princ "\n      TrueColor в диалоге либо не применялся, либо")
+              (princ "\n      AutoCAD хранит ACI без отдельного RGB.")
+            )
+          )
+        )
+      )
+    )
+  )
+  (princ)
+)
+
+;;; ============================================================
+;;; Очистка фильтров
+;;; ============================================================
+
+(defun C:МОИСЛОИФИЛЬТРЫОЧИСТИТЬ
+       (/ fname xml sheet rows vals name names pass)
   (princ "\n=== Удаление фильтров слоёв ===")
   (setq names nil)
-
   (setq fname (LI:FindTemplateFile))
   (if fname
     (progn
@@ -1243,7 +1497,8 @@
                     (setq name (LI:SafeTrim (car vals)))
                     (if (and name (/= name "")
                                 (/= (LI:SafeStrCase name) "ИМЯ ФИЛЬТРА")
-                                (/= (LI:SafeStrCase name) "ФИЛЬТРЫ НЕ НАЙДЕНЫ"))
+                                (/= (LI:SafeStrCase name)
+                                    "ФИЛЬТРЫ НЕ НАЙДЕНЫ"))
                       (setq names (LI:SafeAddUnique names name))
                     )
                   )
@@ -1258,7 +1513,6 @@
     )
     (princ "\nШаблон не найден в папке чертежа.")
   )
-
   (if (null names)
     (progn
       (setq name (getstring T
@@ -1268,7 +1522,6 @@
       )
     )
   )
-
   (if names
     (progn
       (princ (strcat "\nК удалению: " (itoa (length names))))
@@ -1299,11 +1552,13 @@
 (princ "\n=============================================")
 (princ "\nЗагружено: 03_LayerImport.lsp")
 (princ "\n  • слои: сохраняются видимость, заморозка, блокировка")
+(princ "\n  • слои: обрабатываются и печатаются по алфавиту")
+(princ "\n  • TrueColor (R/G/B): применяется, если задан в XML")
 (princ "\n  • фильтры: автоматически пересоздаются, вложенные >>Имя")
-(princ "\n  • предупреждения и фильтры — отдельными таблицами с отбивкой")
 (princ "\nКоманды:")
 (princ "\n  МОИСЛОИЗАГРУЗИТЬ")
 (princ "\n  МОИСЛОИПРОВЕРИТЬXML")
 (princ "\n  МОИСЛОИФИЛЬТРЫОЧИСТИТЬ")
+(princ "\n  МОИСЛОИПОКАЗАТЬСЛОЙ")
 (princ "\n=============================================")
 (princ)
