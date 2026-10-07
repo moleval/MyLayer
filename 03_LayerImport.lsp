@@ -5,6 +5,8 @@
 ;;; Вложенные фильтры: >>Имя = потомок этого фильтра.
 ;;; Для существующих слоёв видимость, заморозка и блокировка
 ;;; НЕ ТРОГАЮТСЯ. TrueColor применяется, если задан в XML.
+;;; XREF-слои пропускаются с пометкой [XREF].
+;;; Парсер ячеек учитывает ss:Index и пустые <Cell></Cell>.
 ;;; Слои обрабатываются и печатаются в алфавитном порядке.
 ;;; Команды:
 ;;;   МОИСЛОИЗАГРУЗИТЬ
@@ -187,6 +189,9 @@
   )
 )
 
+;;; Прочитать пролог и вернуть объявленную кодировку.
+;;; vl-string-search возвращает 0-based позицию,
+;;; substr работает с 1-based — учитываем это в индексах.
 (defun LI:ReadXmlEncoding (fname / f line p1 p2 c enc)
   (setq enc nil)
   (if (setq f (open fname "r"))
@@ -198,15 +203,17 @@
           (setq p1 (vl-string-search "encoding=" line))
           (if p1
             (progn
-              (setq p1 (+ p1 9))
-              (setq c (substr line p1 1))
+              (setq p1 (+ p1 9))                 ; 0-based после "encoding="
+              (setq c (substr line (1+ p1) 1))   ; 1-based чтение
               (if (or (= c "\"") (= c "'"))
-                (setq p1 (1+ p1))
+                (setq p1 (1+ p1))                ; пропустить кавычку
               )
               (setq p2 (vl-string-search "\"" line p1))
-              (if (not p2) (setq p2 (vl-string-search "'" line p1)))
+              (if (not p2)
+                (setq p2 (vl-string-search "'" line p1))
+              )
               (if p2
-                (setq enc (substr line p1 (- p2 p1)))
+                (setq enc (substr line (1+ p1) (- p2 p1)))
               )
             )
           )
@@ -330,25 +337,92 @@
   rows
 )
 
-(defun LI:GetCellValues (row / vals pos tagEnd start0 end val)
+;;; ------------------------------------------------------------
+;;; Разбор <Row> в список значений.
+;;;
+;;; Особенности Excel XML 2003:
+;;;   - пустая ячейка = <Cell></Cell> (без <Data>) ИЛИ вовсе
+;;;     отсутствует (тогда следующая имеет ss:Index="N");
+;;;   - ss:Index задаёт 1-based номер колонки.
+;;;
+;;; ВАЖНО про индексы: vl-string-search возвращает 0-based
+;;; позицию, substr работает с 1-based. Все внутренние
+;;; переменные храним в 0-based; конверсия — только перед
+;;; substr (старт = pos+1, длина = end - start).
+;;; ------------------------------------------------------------
+
+(defun LI:GetCellValues
+       (row / vals pos cellStart tagEnd dataStart dataEnd cellEnd
+        val ssPos eqPos ssEnd idxStr idx curIdx
+        contentStart contentEnd tagEnd2)
   (setq vals nil)
   (setq pos 0)
-  (while (setq pos (vl-string-search "<Data" row pos))
-    (setq tagEnd (vl-string-search ">" row pos))
-    (if tagEnd
-      (progn
-        (setq start0 (1+ tagEnd))
-        (setq end (vl-string-search "</Data>" row start0))
-        (if end
-          (progn
-            (setq val (substr row (1+ start0) (- end start0)))
-            (setq vals (append vals (list (LI:XmlUnescape val))))
-            (setq pos (+ end 7))
-          )
-          (setq pos (strlen row))
-        )
-      )
+  (setq curIdx 1)
+  (while (setq cellStart (vl-string-search "<Cell" row pos))
+    (setq tagEnd (vl-string-search ">" row cellStart))
+    (if (not tagEnd)
       (setq pos (strlen row))
+      (progn
+        ;; ---------- ss:Index ----------
+        (setq ssPos (vl-string-search "ss:Index=" row cellStart))
+        (if (and ssPos (< ssPos tagEnd))
+          (progn
+            (setq eqPos (vl-string-search "=" row ssPos))
+            (if eqPos
+              (progn
+                (setq ssPos (1+ eqPos))         ; 0-based после "="
+                (if (or (= (substr row (1+ ssPos) 1) "\"")
+                        (= (substr row (1+ ssPos) 1) "'"))
+                  (setq ssPos (1+ ssPos))       ; пропустить кавычку
+                )
+                (setq ssEnd (vl-string-search "\"" row ssPos))
+                (if (not ssEnd)
+                  (setq ssEnd (vl-string-search "'" row ssPos))
+                )
+                (if ssEnd
+                  (progn
+                    (setq idxStr (substr row (1+ ssPos) (- ssEnd ssPos)))
+                    (setq idx (atoi idxStr))
+                    (if (> idx 0) (setq curIdx idx))
+                  )
+                )
+              )
+            )
+          )
+        )
+        ;; ---------- добить пропущенные колонки ----------
+        (while (< (length vals) (1- curIdx))
+          (setq vals (append vals (list "")))
+        )
+        ;; ---------- закрытие </Cell> ----------
+        (setq cellEnd (vl-string-search "</Cell>" row tagEnd))
+        (if (not cellEnd)
+          (setq cellEnd (strlen row))
+        )
+        ;; ---------- содержимое <Data>...</Data> ----------
+        (setq val nil)
+        (setq dataStart (vl-string-search "<Data" row tagEnd))
+        (if (and dataStart (< dataStart cellEnd))
+          (progn
+            (setq tagEnd2 (vl-string-search ">" row dataStart))
+            (if (and tagEnd2 (< tagEnd2 cellEnd))
+              (progn
+                (setq contentStart (1+ tagEnd2))     ; 0-based первого символа
+                (setq contentEnd (vl-string-search "</Data>" row contentStart))
+                (if (and contentEnd (< contentEnd cellEnd))
+                  (setq val (substr row
+                                    (1+ contentStart)
+                                    (- contentEnd contentStart)))
+                )
+              )
+            )
+          )
+        )
+        (if (null val) (setq val ""))
+        (setq vals (append vals (list (LI:XmlUnescape val))))
+        (setq curIdx (1+ curIdx))
+        (setq pos (+ cellEnd 7))
+      )
     )
   )
   vals
@@ -492,10 +566,20 @@
   )
 )
 
+;;; ------------------------------------------------------------
+;;; Применить одну строку слоя.
+;;;
+;;; Возвращает:
+;;;   "Создан"    — новый слой
+;;;   "Обновлён"  — существующий слой обновлён
+;;;   "Ошибка"    — не удалось
+;;;   "Пропущен"  — XREF-слой, не изменяем
+;;; ------------------------------------------------------------
+
 (defun LI:ApplyLayerRow (doc vals map / name isNew ename ent flags aci
                           onStr on oldColor colorVal desc lt lw plotStr res
                           layerObj transStr plotStyle ent2 c62 f70 tc2
-                          rVal gVal bVal)
+                          rVal gVal bVal xrefSkip)
   (setq name (LI:SafeTrim (LI:GetByHeader vals map "Имя слоя")))
   (if (= name "")
     nil
@@ -520,163 +604,181 @@
             (progn
               (setq ent (entget ename))
 
-              (setq desc (LI:SafeTrim (LI:GetByHeader vals map "Описание")))
-              (if (/= desc "") (setq ent (LI:SetDxf ent 3 desc)))
-
-              (setq lt (LI:SafeTrim (LI:GetByHeader vals map "Тип линии")))
-              (if (/= lt "")
+              ;; ---------- Проверка XREF ----------
+              (setq f70 (cdr (assoc 70 ent)))
+              (setq xrefSkip nil)
+              (if (and f70 (numberp f70) (= 16 (logand f70 16)))
                 (progn
-                  (if (not (tblsearch "LTYPE" lt)) (LI:LoadLinetype doc lt))
-                  (if (tblsearch "LTYPE" lt)
-                    (setq ent (LI:SetDxf ent 6 lt))
-                    (if (tblsearch "LTYPE" "Continuous")
-                      (progn
-                        (setq ent (LI:SetDxf ent 6 "Continuous"))
-                        (LI:AddWarn name "тип линии"
-                                    (strcat lt " -> Continuous"))
-                      )
-                      (LI:AddWarn name "тип линии"
-                                  (strcat lt " (не найден)"))
-                    )
-                  )
+                  (LI:AddWarn name "XREF"
+                              "слой из внешней ссылки, изменён не будет")
+                  (princ (strcat "\n[XREF]      " (LI:PadRight name 45)
+                                 "| пропущен (внешняя ссылка)"))
+                  (setq xrefSkip T)
                 )
               )
 
-              (setq aci (LI:ToInt (LI:GetByHeader vals map "Цвет ACI")))
-              (if (and aci (>= aci 1) (<= aci 255))
+              (if xrefSkip
+                "Пропущен"
                 (progn
+                  (setq desc (LI:SafeTrim (LI:GetByHeader vals map "Описание")))
+                  (if (/= desc "") (setq ent (LI:SetDxf ent 3 desc)))
+
+                  (setq lt (LI:SafeTrim (LI:GetByHeader vals map "Тип линии")))
+                  (if (/= lt "")
+                    (progn
+                      (if (not (tblsearch "LTYPE" lt)) (LI:LoadLinetype doc lt))
+                      (if (tblsearch "LTYPE" lt)
+                        (setq ent (LI:SetDxf ent 6 lt))
+                        (if (tblsearch "LTYPE" "Continuous")
+                          (progn
+                            (setq ent (LI:SetDxf ent 6 "Continuous"))
+                            (LI:AddWarn name "тип линии"
+                                        (strcat lt " -> Continuous"))
+                          )
+                          (LI:AddWarn name "тип линии"
+                                      (strcat lt " (не найден)"))
+                        )
+                      )
+                    )
+                  )
+
+                  (setq aci (LI:ToInt (LI:GetByHeader vals map "Цвет ACI")))
+                  (if (and aci (>= aci 1) (<= aci 255))
+                    (progn
+                      (if isNew
+                        (progn
+                          (setq onStr (LI:SafeTrim
+                                        (LI:GetByHeader vals map "Включен")))
+                          (if (= onStr "")
+                            (setq on T)
+                            (setq on (LI:YesNoTrue onStr))
+                          )
+                          (setq colorVal (abs aci))
+                          (if (not on) (setq colorVal (- colorVal)))
+                          (setq ent (LI:SetDxf ent 62 colorVal))
+                        )
+                        (progn
+                          (setq oldColor (cdr (assoc 62 ent)))
+                          (if (and oldColor (/= oldColor 0))
+                            (if (< oldColor 0)
+                              (setq colorVal (- (abs aci)))
+                              (setq colorVal (abs aci))
+                            )
+                            (setq colorVal (abs aci))
+                          )
+                          (setq ent (LI:SetDxf ent 62 colorVal))
+                        )
+                      )
+                    )
+                  )
+
+                  (setq lw (LI:ToInt (LI:GetByHeader vals map "Вес линии код")))
+                  (if (numberp lw) (setq ent (LI:SetDxf ent 370 lw)))
+
                   (if isNew
                     (progn
+                      (setq flags (if (cdr (assoc 70 ent))
+                                    (cdr (assoc 70 ent)) 0))
                       (setq onStr (LI:SafeTrim
-                                    (LI:GetByHeader vals map "Включен")))
-                      (if (= onStr "")
-                        (setq on T)
-                        (setq on (LI:YesNoTrue onStr))
+                                    (LI:GetByHeader vals map "Заморожен")))
+                      (if (/= onStr "")
+                        (setq flags (LI:SetBit flags 1 (LI:YesNoTrue onStr)))
                       )
-                      (setq colorVal (abs aci))
-                      (if (not on) (setq colorVal (- colorVal)))
-                      (setq ent (LI:SetDxf ent 62 colorVal))
+                      (setq onStr (LI:SafeTrim
+                                    (LI:GetByHeader vals map
+                                                    "Заморожен в новых ВЭ")))
+                      (if (/= onStr "")
+                        (setq flags (LI:SetBit flags 2 (LI:YesNoTrue onStr)))
+                      )
+                      (setq onStr (LI:SafeTrim
+                                    (LI:GetByHeader vals map "Заблокирован")))
+                      (if (/= onStr "")
+                        (setq flags (LI:SetBit flags 4 (LI:YesNoTrue onStr)))
+                      )
+                      (setq ent (LI:SetDxf ent 70 flags))
+                    )
+                    nil
+                  )
+
+                  (setq plotStr (LI:SafeTrim
+                                  (LI:GetByHeader vals map "Печатается")))
+                  (if (/= plotStr "")
+                    (setq ent (LI:SetDxf ent 290
+                                         (if (LI:YesNoTrue plotStr) 1 0)))
+                  )
+
+                  (setq res (vl-catch-all-apply 'entmod (list ent)))
+                  (if (LI:IsError res)
+                    (progn
+                      (LI:AddWarn name "ошибка"
+                                  "не удалось изменить слой (entmod)")
+                      (princ (strcat "\n[Ошибка]    " (LI:PadRight name 45)
+                                     "| не удалось изменить слой"))
+                      "Ошибка"
                     )
                     (progn
-                      (setq oldColor (cdr (assoc 62 ent)))
-                      (if (and oldColor (/= oldColor 0))
-                        (if (< oldColor 0)
-                          (setq colorVal (- (abs aci)))
-                          (setq colorVal (abs aci))
-                        )
-                        (setq colorVal (abs aci))
-                      )
-                      (setq ent (LI:SetDxf ent 62 colorVal))
-                    )
-                  )
-                )
-              )
-
-              (setq lw (LI:ToInt (LI:GetByHeader vals map "Вес линии код")))
-              (if (numberp lw) (setq ent (LI:SetDxf ent 370 lw)))
-
-              (if isNew
-                (progn
-                  (setq flags (if (cdr (assoc 70 ent))
-                                (cdr (assoc 70 ent)) 0))
-                  (setq onStr (LI:SafeTrim
-                                (LI:GetByHeader vals map "Заморожен")))
-                  (if (/= onStr "")
-                    (setq flags (LI:SetBit flags 1 (LI:YesNoTrue onStr)))
-                  )
-                  (setq onStr (LI:SafeTrim
-                                (LI:GetByHeader vals map
-                                                "Заморожен в новых ВЭ")))
-                  (if (/= onStr "")
-                    (setq flags (LI:SetBit flags 2 (LI:YesNoTrue onStr)))
-                  )
-                  (setq onStr (LI:SafeTrim
-                                (LI:GetByHeader vals map "Заблокирован")))
-                  (if (/= onStr "")
-                    (setq flags (LI:SetBit flags 4 (LI:YesNoTrue onStr)))
-                  )
-                  (setq ent (LI:SetDxf ent 70 flags))
-                )
-                nil
-              )
-
-              (setq plotStr (LI:SafeTrim
-                              (LI:GetByHeader vals map "Печатается")))
-              (if (/= plotStr "")
-                (setq ent (LI:SetDxf ent 290
-                                     (if (LI:YesNoTrue plotStr) 1 0)))
-              )
-
-              (setq res (vl-catch-all-apply 'entmod (list ent)))
-              (if (LI:IsError res)
-                (progn
-                  (LI:AddWarn name "ошибка"
-                              "не удалось изменить слой (entmod)")
-                  (princ (strcat "\n[Ошибка]    " (LI:PadRight name 45)
-                                 "| не удалось изменить слой"))
-                  "Ошибка"
-                )
-                (progn
-                  (setq layerObj (LI:AsVla ename))
-                  (if layerObj
-                    (progn
-                      (setq rVal (LI:ToInt (LI:GetByHeader vals map "R")))
-                      (setq gVal (LI:ToInt (LI:GetByHeader vals map "G")))
-                      (setq bVal (LI:ToInt (LI:GetByHeader vals map "B")))
-                      (if (and rVal gVal bVal
-                               (>= rVal 0) (<= rVal 255)
-                               (>= gVal 0) (<= gVal 255)
-                               (>= bVal 0) (<= bVal 255))
+                      (setq layerObj (LI:AsVla ename))
+                      (if layerObj
                         (progn
-                          (if (not (LI:ApplyTrueColor layerObj
-                                                      rVal gVal bVal))
-                            (LI:AddWarn name "TrueColor"
-                                        (strcat "не удалось применить RGB("
-                                                (itoa rVal) ","
-                                                (itoa gVal) ","
-                                                (itoa bVal) ")"))
+                          (setq rVal (LI:ToInt (LI:GetByHeader vals map "R")))
+                          (setq gVal (LI:ToInt (LI:GetByHeader vals map "G")))
+                          (setq bVal (LI:ToInt (LI:GetByHeader vals map "B")))
+                          (if (and rVal gVal bVal
+                                   (>= rVal 0) (<= rVal 255)
+                                   (>= gVal 0) (<= gVal 255)
+                                   (>= bVal 0) (<= bVal 255))
+                            (progn
+                              (if (not (LI:ApplyTrueColor layerObj
+                                                          rVal gVal bVal))
+                                (LI:AddWarn name "TrueColor"
+                                            (strcat "не удалось применить RGB("
+                                                    (itoa rVal) ","
+                                                    (itoa gVal) ","
+                                                    (itoa bVal) ")"))
+                              )
+                            )
+                          )
+
+                          (setq transStr (LI:SafeTrim
+                                           (LI:GetByHeader vals map
+                                                           "Прозрачность")))
+                          (if (/= transStr "")
+                            (LI:SetTransparency layerObj transStr)
+                          )
+
+                          (setq plotStyle (LI:SafeTrim
+                                            (LI:GetByHeader vals map
+                                                            "Стиль печати")))
+                          (if (/= plotStyle "")
+                            (LI:SetPlotStyle layerObj plotStyle)
                           )
                         )
                       )
 
-                      (setq transStr (LI:SafeTrim
-                                       (LI:GetByHeader vals map
-                                                       "Прозрачность")))
-                      (if (/= transStr "")
-                        (LI:SetTransparency layerObj transStr)
-                      )
+                      (setq ent2 (entget ename))
+                      (setq c62 (cdr (assoc 62 ent2)))
+                      (setq f70 (cdr (assoc 70 ent2)))
+                      (setq tc2 (cdr (assoc 420 ent2)))
+                      (if (null f70) (setq f70 0))
 
-                      (setq plotStyle (LI:SafeTrim
-                                        (LI:GetByHeader vals map
-                                                        "Стиль печати")))
-                      (if (/= plotStyle "")
-                        (LI:SetPlotStyle layerObj plotStyle)
-                      )
+                      (princ (strcat "\n"
+                                     (if isNew "[Создан]    " "[Обновлён]  ")
+                                     (LI:PadRight name 45)
+                                     "| "
+                                     (if (and c62 (< c62 0)) "выкл" "вкл ")
+                                     " | "
+                                     (if (= (logand f70 1) 1) "зам " "разм")
+                                     " | "
+                                     (if (= (logand f70 4) 4) "блок" "----")
+                                     (if (and tc2 (numberp tc2) (>= tc2 0))
+                                       (strcat "  RGB("
+                                               (itoa (logand (lsh tc2 -16) 255)) ","
+                                               (itoa (logand (lsh tc2 -8)  255)) ","
+                                               (itoa (logand tc2 255)) ")")
+                                       "")))
+                      (if isNew "Создан" "Обновлён")
                     )
                   )
-
-                  (setq ent2 (entget ename))
-                  (setq c62 (cdr (assoc 62 ent2)))
-                  (setq f70 (cdr (assoc 70 ent2)))
-                  (setq tc2 (cdr (assoc 420 ent2)))
-                  (if (null f70) (setq f70 0))
-
-                  (princ (strcat "\n"
-                                 (if isNew "[Создан]    " "[Обновлён]  ")
-                                 (LI:PadRight name 45)
-                                 "| "
-                                 (if (and c62 (< c62 0)) "выкл" "вкл ")
-                                 " | "
-                                 (if (= (logand f70 1) 1) "зам " "разм")
-                                 " | "
-                                 (if (= (logand f70 4) 4) "блок" "----")
-                                 (if (and tc2 (numberp tc2) (>= tc2 0))
-                                   (strcat "  RGB("
-                                           (itoa (logand (lsh tc2 -16) 255)) ","
-                                           (itoa (logand (lsh tc2 -8)  255)) ","
-                                           (itoa (logand tc2 255)) ")")
-                                   "")))
-                  (if isNew "Создан" "Обновлён")
                 )
               )
             )
@@ -1128,11 +1230,12 @@
 
 (defun LI:ImportFromFile
        (fname / doc xml sheet rows headers map vals
-        status created updated errors oldLayer
+        status created updated errors skipped oldLayer
         parsedRows rec name vals2)
   (setq created 0)
   (setq updated 0)
   (setq errors  0)
+  (setq skipped 0)
   (setq *LI:WARN* nil)
   (setq xml (LI:ReadFile fname))
   (if (not xml)
@@ -1179,6 +1282,7 @@
                       ((= status "Создан")   (setq created (1+ created)))
                       ((= status "Обновлён")(setq updated (1+ updated)))
                       ((= status "Ошибка")   (setq errors  (1+ errors)))
+                      ((= status "Пропущен")(setq skipped (1+ skipped)))
                     )
                   )
                 )
@@ -1200,6 +1304,9 @@
       (princ (strcat "\nСоздано слоёв:   " (itoa created)))
       (princ (strcat "\nОбновлено слоёв: " (itoa updated)))
       (princ (strcat "\nОшибок:          " (itoa errors)))
+      (if (> skipped 0)
+        (princ (strcat "\nПропущено (XREF): " (itoa skipped)))
+      )
 
       (cond
         (C:МОИСЛОИПОУМОЛЧАНИЮ
@@ -1355,11 +1462,11 @@
 )
 
 ;;; ============================================================
-;;; ДИАГНОСТИКА СЛОЯ (DXF: коды 62, 420, 430)
+;;; ДИАГНОСТИКА СЛОЯ (DXF + ActiveX)
 ;;; ============================================================
 
 (defun C:МОИСЛОИПОКАЗАТЬСЛОЙ
-       (/ name ent obj tc c62 c420 c430 aci r g b cname cmethod
+       (/ name ent obj tc c62 c420 c430 aci r g b
           resIdx resR resG resB)
   (princ "\n=== Диагностика цвета слоя ===")
   (setq name (getstring T "\nИмя слоя (Enter — отмена): "))
@@ -1391,7 +1498,6 @@
           (princ (strcat "\n  Код 430 (Color name): "
                          (if c430 (strcat "\"" c430 "\"") "нет")))
 
-          ;; ---------- ActiveX ----------
           (princ "\n--- ActiveX (vla-get-truecolor) ---")
           (setq obj (vl-catch-all-apply 'vlax-ename->vla-object
                                         (list (tblobjname "LAYER" name))))
@@ -1425,22 +1531,18 @@
                     nil
                     (princ (strcat "\n  ColorMethod: "
                                    (vl-prin1-to-string resIdx))))
-                  ;; Проверка: ACI-only или TrueColor?
                   (if (and (numberp resR) (numberp resG) (numberp resB)
                            (not (and (= resR 0) (= resG 0) (= resB 0))))
                     (progn
-                      (princ "\n\n  Вывод: ActiveX показывает RGB "
-                             ) (princ (strcat "(" (itoa resR) ","
-                                              (itoa resG) ","
-                                              (itoa resB) ")."))
+                      (princ (strcat "\n\n  ActiveX показывает RGB ("
+                                     (itoa resR) ","
+                                     (itoa resG) ","
+                                     (itoa resB) ")."))
                       (if (not (and c420 (numberp c420) (>= c420 0)))
-                        (progn
-                          (princ "\n  В DXF кода 420 нет, но RGB задан.")
-                          (princ "\n  Возможно, экспорт надо вести через ActiveX.")
-                        )
+                        (princ "\n  DXF кода 420 нет, но RGB задан.")
                       )
                     )
-                    (princ "\n\n  Вывод: ActiveX не даёт ненулевого RGB.")
+                    (princ "\n\n  ActiveX не даёт ненулевого RGB.")
                   )
                 )
               )
@@ -1450,19 +1552,12 @@
           (princ "\n")
           (cond
             ((and c420 (numberp c420) (>= c420 0))
-              (princ "\nИтог: TrueColor задан, читается из DXF.")
-            )
+              (princ "\nИтог: TrueColor задан, читается из DXF."))
             ((and (numberp resR) (numberp resG) (numberp resB)
                   (not (and (= resR 0) (= resG 0) (= resB 0))))
-              (princ "\nИтог: TrueColor задан, виден только через ActiveX.")
-              (princ "\n      Нужно доработать экспорт: читать R/G/B через")
-              (princ "\n      vla-get-truecolor, а не через DXF-код 420.")
-            )
+              (princ "\nИтог: TrueColor задан, виден только через ActiveX."))
             (t
-              (princ "\nИтог: TrueColor не задан. Цвет слоя — индексный (ACI).")
-              (princ "\n      TrueColor в диалоге либо не применялся, либо")
-              (princ "\n      AutoCAD хранит ACI без отдельного RGB.")
-            )
+              (princ "\nИтог: TrueColor не задан. Цвет слоя — ACI."))
           )
         )
       )
@@ -1554,6 +1649,8 @@
 (princ "\n  • слои: сохраняются видимость, заморозка, блокировка")
 (princ "\n  • слои: обрабатываются и печатаются по алфавиту")
 (princ "\n  • TrueColor (R/G/B): применяется, если задан в XML")
+(princ "\n  • XREF-слои пропускаются с пометкой [XREF]")
+(princ "\n  • парсер ячеек учитывает ss:Index и пустые <Cell>")
 (princ "\n  • фильтры: автоматически пересоздаются, вложенные >>Имя")
 (princ "\nКоманды:")
 (princ "\n  МОИСЛОИЗАГРУЗИТЬ")
