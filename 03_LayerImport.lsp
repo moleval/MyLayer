@@ -8,7 +8,11 @@
 ;;; ƒл€ существующих слоЄв видимость, заморозка и блокировка
 ;;; Ќ≈ “–ќ√јё“—я Ч сохран€етс€ как в чертеже.
 ;;; —уществующие фильтры молча удал€ютс€ перед созданием.
-;;; ѕредупреждени€ и фильтры Ч отдельными таблицами с отбивкой.
+;;; «аглушка "‘ильтры не найдены" пропускаетс€.
+;;;  оманды:
+;;;   ћќ»—Ћќ»«ј√–”«»“№
+;;;   ћќ»—Ћќ»ѕ–ќ¬≈–»“№XML
+;;;   ћќ»—Ћќ»‘»Ћ№“–џќ„»—“»“№
 ;;; ============================================================
 
 (vl-load-com)
@@ -156,7 +160,6 @@
 ;;; „тение XML (ADODB.Stream)
 ;;; ============================================================
 
-;;; ѕрочитать файл в указанной кодировке через ADODB.Stream.
 (defun LI:ReadFileWithCharset (fname charset / stream txt)
   (setq stream (vl-catch-all-apply 'vlax-create-object (list "ADODB.Stream")))
   (if (and stream (eq (type stream) 'VLA-OBJECT))
@@ -174,7 +177,6 @@
   )
 )
 
-;;; ѕрочитать пролог файла (ANSI) и найти объ€вленный encoding.
 (defun LI:ReadXmlEncoding (fname / f line p1 p2 c enc)
   (setq enc nil)
   (if (setq f (open fname "r"))
@@ -205,7 +207,6 @@
   enc
 )
 
-;;; ѕреобразовать объ€вленную кодировку в им€ дл€ ADODB.Stream.
 (defun LI:MapCharset (decl / d)
   (setq d (strcase (LI:ForceString decl)))
   (cond
@@ -216,10 +217,6 @@
   )
 )
 
-;;; ”ниверсальное чтение:
-;;; 1) смотрим encoding в прологе;
-;;; 2) читаем в этой кодировке;
-;;; 3) если в тексте нет кириллицы Ч перебираем utf-8 / windows-1251 / unicode.
 (defun LI:ReadFile (fname / decl cs charsets s best first)
   (setq best nil)
   (setq first nil)
@@ -442,11 +439,6 @@
     (vl-catch-all-apply 'vlax-put (list layer 'PlotStyle val)))
 )
 
-;;; ѕрименение строки сло€.
-;;;  - Ќовый слой: цвет и флаги примен€ютс€ из XML.
-;;;  - —уществующий слой:
-;;;      * код 62: значение ACI из XML, знак Ч от текущего (видимость);
-;;;      * код 70: биты 1, 2, 4 Ќ≈ “–ќ√јё“—я (заморозка/блокировка).
 (defun LI:ApplyLayerRow (doc vals map / name isNew ename ent flags aci onStr on
                           oldColor colorVal desc lt lw plotStr res layerObj
                           transStr plotStyle ent2 c62 f70)
@@ -475,7 +467,6 @@
               (setq desc (LI:SafeTrim (LI:GetByHeader vals map "ќписание")))
               (if (/= desc "") (setq ent (LI:SetDxf ent 3 desc)))
 
-              ;; ---------- “ип линии ----------
               (setq lt (LI:SafeTrim (LI:GetByHeader vals map "“ип линии")))
               (if (/= lt "")
                 (progn
@@ -493,7 +484,6 @@
                 )
               )
 
-              ;; ---------- ÷вет ACI ----------
               (setq aci (LI:ToInt (LI:GetByHeader vals map "÷вет ACI")))
               (if (and aci (>= aci 1) (<= aci 255))
                 (progn
@@ -520,11 +510,9 @@
                 )
               )
 
-              ;; ---------- ¬ес линии ----------
               (setq lw (LI:ToInt (LI:GetByHeader vals map "¬ес линии код")))
               (if (numberp lw) (setq ent (LI:SetDxf ent 370 lw)))
 
-              ;; ---------- ‘лаги 70 ----------
               (if isNew
                 (progn
                   (setq flags (if (cdr (assoc 70 ent)) (cdr (assoc 70 ent)) 0))
@@ -916,7 +904,6 @@
             (setq parsedDefs (append parsedDefs (list (list name direct children))))
           )
 
-          ;; ---------- “јЅЋ»÷ј: —труктура ----------
           (princ "\n\n")
           (princ "\n—труктура фильтров:")
           (princ (strcat "\n  "
@@ -944,7 +931,6 @@
           )
           (princ "\n\n")
 
-          ;; ---------- ѕор€док создани€ ----------
           (setq orderedDefs (LI:BuildFilterOrder parsedDefs))
 
           (princ "\nЁтап: удаление старых одноимЄнных фильтров...")
@@ -960,7 +946,6 @@
           (princ " готово.")
           (princ "\n\n")
 
-          ;; ---------- “јЅЋ»÷ј: —оздание ----------
           (princ "\n—оздание фильтров:")
           (princ (strcat "\n  "
                          (LI:PadRight "—татус" 9)
@@ -1082,6 +1067,21 @@
       (princ (strcat "\n—оздано слоЄв:   " (itoa created)))
       (princ (strcat "\nќбновлено слоЄв: " (itoa updated)))
       (princ (strcat "\nќшибок:          " (itoa errors)))
+
+      ;; ---------- »нтеграци€ с 01_Variables.lsp ----------
+      ;; ѕосле импорта слоЄв примен€ем переменные (TEXTLAYER, DIMLAYER, ...).
+      ;; ћодуль 01 даЄт команду ћќ»—Ћќ»ѕќ”ћќЋ„јЌ»ё.
+      (cond
+        (C:ћќ»—Ћќ»ѕќ”ћќЋ„јЌ»ё
+          (princ "\n\n")
+          (princ "\n=== ѕрименение переменных слоЄв (модуль 01) ===")
+          (C:ћќ»—Ћќ»ѕќ”ћќЋ„јЌ»ё)
+        )
+        (t
+          (princ "\n\n[»нфо] ћодуль 01_Variables.lsp не загружен Ч")
+          (princ "\n       переменные слоЄв не примен€лись.")
+        )
+      )
     )
   )
   (princ)
@@ -1173,14 +1173,13 @@
   (princ)
 )
 
-(defun C:—Ћќ»«ј√–”«»“№ () (LI:Run))
-(defun C:LAYERSLOAD ()   (LI:Run))
+(defun C:ћќ»—Ћќ»«ј√–”«»“№ () (LI:Run))
 
 ;;; ============================================================
 ;;; ƒ»ј√Ќќ—“» ј XML
 ;;; ============================================================
 
-(defun C:ƒ»ј√Ќќ—“» јXML (/ fname cs txt)
+(defun C:ћќ»—Ћќ»ѕ–ќ¬≈–»“№XML (/ fname cs txt)
   (princ "\n=== ƒ»ј√Ќќ—“» ј XML ===")
   (setq fname (LI:FindTemplateFile))
   (if (not fname)
@@ -1222,7 +1221,7 @@
 ;;; ќчистка фильтров слоЄв
 ;;; ============================================================
 
-(defun C:‘»Ћ№“–џќ„»—“»“№ ( / fname xml sheet rows vals name names pass)
+(defun C:ћќ»—Ћќ»‘»Ћ№“–џќ„»—“»“№ ( / fname xml sheet rows vals name names pass)
   (princ "\n=== ”даление фильтров слоЄв ===")
   (setq names nil)
 
@@ -1243,7 +1242,8 @@
                   (progn
                     (setq name (LI:SafeTrim (car vals)))
                     (if (and name (/= name "")
-                                (/= (LI:SafeStrCase name) "»ћя ‘»Ћ№“–ј"))
+                                (/= (LI:SafeStrCase name) "»ћя ‘»Ћ№“–ј")
+                                (/= (LI:SafeStrCase name) "‘»Ћ№“–џ Ќ≈ Ќј…ƒ≈Ќџ"))
                       (setq names (LI:SafeAddUnique names name))
                     )
                   )
@@ -1302,9 +1302,8 @@
 (princ "\n  Х фильтры: автоматически пересоздаютс€, вложенные >>»м€")
 (princ "\n  Х предупреждени€ и фильтры Ч отдельными таблицами с отбивкой")
 (princ "\n оманды:")
-(princ "\n  —Ћќ»«ј√–”«»“№")
-(princ "\n  LAYERSLOAD")
-(princ "\n  ƒ»ј√Ќќ—“» јXML")
-(princ "\n  ‘»Ћ№“–џќ„»—“»“№")
+(princ "\n  ћќ»—Ћќ»«ј√–”«»“№")
+(princ "\n  ћќ»—Ћќ»ѕ–ќ¬≈–»“№XML")
+(princ "\n  ћќ»—Ћќ»‘»Ћ№“–џќ„»—“»“№")
 (princ "\n=============================================")
 (princ)
