@@ -1139,6 +1139,15 @@
 (setq *LI:SET-CURRENT-FILTER* nil)
 (setq *LI:WARN* nil)
 
+;; Старые фильтры слоёв (удаляются при импорте и очистке фильтров)
+(setq *LI:OLD-FILTERS*
+  '(
+    "Витражи"
+    "Фасады"
+    "Фонарь 3D"
+  )
+)
+
 ;;; ============================================================
 ;;; Базовые безопасные функции
 ;;; ============================================================
@@ -2186,7 +2195,7 @@
        (doc xml / sheet rows headerIndex headers dataRows
         map row vals name layersList filterDefs uniqueDefs
         def parsedDefs p raw parsed direct children
-        directString fullLayers orderedDefs reversedDefs
+        directString fullLayers orderedDefs reversedDefs delNames
         createdNames parentName delPass ok parentLabel layerCount
         existing tmp mergedCount)
   (princ "\n\n")
@@ -2312,15 +2321,22 @@
           )
           (princ "\n\n")
           (setq orderedDefs (LI:BuildFilterOrder parsedDefs))
-          (princ "\nЭтап: удаление старых одноимённых фильтров...")
+          (princ "\nЭтап: удаление старых и одноимённых фильтров...")
           (setq reversedDefs nil)
           (foreach p orderedDefs
             (setq reversedDefs (cons p reversedDefs))
           )
+          (setq delNames nil)
+          (foreach p reversedDefs
+            (setq delNames (LI:SafeAddUnique delNames (nth 0 p)))
+          )
+          (foreach name *LI:OLD-FILTERS*
+            (setq delNames (LI:SafeAddUnique delNames name))
+          )
           (setq delPass 1)
           (while (<= delPass 2)
-            (foreach p reversedDefs
-              (LI:DeleteFilterByName (nth 0 p))
+            (foreach name delNames
+              (LI:DeleteFilterByName name)
             )
             (setq delPass (1+ delPass))
           )
@@ -2634,6 +2650,7 @@
                   )
                 )
               )
+              (setq names (reverse names))
             )
             (princ "\nЛист 'Фильтры' не найден.")
           )
@@ -2642,6 +2659,9 @@
       )
     )
     (princ "\nШаблон не найден в папке чертежа.")
+  )
+  (foreach name *LI:OLD-FILTERS*
+    (setq names (LI:SafeAddUnique names name))
   )
   (if (null names)
     (progn
