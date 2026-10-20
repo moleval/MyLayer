@@ -1,6 +1,6 @@
 ;;; ============================================================
 ;;; MyLayer.lsp — МОНОЛИТ модулей слоёв AutoCAD
-;;; Маркер редакции для RELOAD: (ред. 1)
+;;; Маркер редакции для RELOAD: (ред. 2)
 ;;;
 ;;; Объединение модулей:
 ;;;   секция 1: 01_Variables.lsp   (слои шаблона и системные переменные, LV:*)
@@ -18,6 +18,10 @@
 ;;;   МОИСЛОИЗАГРУЗИТЬ       - загрузить слои, фильтры и применить переменные
 ;;;   МОИСЛОИФИЛЬТРЫ         - загрузить только фильтры (без слоёв)
 ;;;   МОИСЛОИФИЛЬТРЫОЧИСТИТЬ - удалить фильтры слоёв из XML
+;;;   МОИФАСАДОБЛ            - вкл: Облицовка (Подсистема, Утепление, Железо выкл)
+;;;   МОИФАСАДПОД            - вкл: Подсистема (Облицовка, Утепление, Железо выкл)
+;;;   МОИФАСАДУТЕП           - вкл: Утепление (Подсистема, Облицовка, Железо выкл)
+;;;   МОИФАСАДФАС            - вкл: Подсистема без слоёв подсистем + Железо
 ;;; ============================================================
 
 (vl-load-com)
@@ -1147,6 +1151,65 @@
     "Фонарь 3D"
   )
 )
+
+;; Имена фильтров фасадных групп (новый и старый шаблон)
+(setq *LI:FACADE-OBL-FILTERS*  '("Фасад - Облицовка" "Облицовка"))
+(setq *LI:FACADE-POD-FILTERS*  '("Фасад - Подсистема" "Подсистема"))
+(setq *LI:FACADE-UTEP-FILTERS* '("Фасад - Утепление" "Утепление" "Утеплитель"))
+
+;; Резервные списки слоёв фасадных групп (если фильтры ещё не созданы в чертеже)
+(setq *LI:FACADE-OBL-DEFAULT-LAYERS*
+  '(
+    "Вентиляционные решетки"
+    "Водосток"
+    "Кассеты"
+    "Керамогранит"
+    "Ламели"
+    "Обозначения узлов разрезов и сечений"
+    "Отметки"
+    "Подшивка"
+    "Размеры облицовки"
+  )
+)
+
+(setq *LI:FACADE-POD-DEFAULT-LAYERS*
+  '(
+    "Контур КЖ"
+    "Контур КМ"
+    "Контур стен"
+    "Отметки"
+    "Подсистема"
+    "Подсистема алюминиевая"
+    "Подсистема оцинкованная"
+    "Размеры подсистемы"
+  )
+)
+
+(setq *LI:FACADE-UTEP-DEFAULT-LAYERS*
+  '(
+    "Контур КЖ"
+    "Контур КМ"
+    "Контур стен"
+    "Контуры штриховки утеплителя"
+    "Молниезащита"
+    "Отметки"
+    "Размеры утеплителя"
+    "Штриховка утеплителя"
+  )
+)
+
+;; Слои подсистем, которые выключаются в режиме МОИФАСАДФАС
+(setq *LI:FACADE-SUBSYS-LAYERS*
+  '(
+    "Подсистема"
+    "Подсистема алюминиевая"
+    "Подсистема оцинкованная"
+    "Размеры подсистемы"
+  )
+)
+
+;; Слой фасонки / железа
+(setq *LI:FACADE-IRON-LAYER* "Железо")
 
 ;;; ============================================================
 ;;; Базовые безопасные функции
@@ -2696,10 +2759,399 @@
 )
 
 ;;; ============================================================
+;;; Переключение видимости фасадных фильтров (МОИФАСАД*)
+;;; Обход дерева групповых фильтров чертежа (ACLYDICTIONARY)
+;;; на любом уровне вложенности (новый и старый шаблон).
+;;; ============================================================
+
+(defun LI:FilterObjEname (ref / e)
+  (cond
+    ((= (type ref) 'ENAME) ref)
+    ((= (type ref) 'STR) (if (setq e (handent ref)) e nil))
+    (t nil)
+  )
+)
+
+(defun LI:FilterObjData (ref / e d)
+  (setq e (LI:FilterObjEname ref))
+  (if e
+    (progn
+      (setq d (vl-catch-all-apply 'entget (list e)))
+      (if (LI:IsError d) nil d)
+    )
+    nil
+  )
+)
+
+(defun LI:FilterExtDict (data / tail ref)
+  (setq ref nil)
+  (if (setq tail (member '(102 . "{ACAD_XDICTIONARY") data))
+    (setq ref (cdr (assoc 360 tail)))
+  )
+  (if (null ref)
+    (setq ref (cdr (assoc 360 data)))
+  )
+  (LI:FilterObjEname ref)
+)
+
+(defun LI:FilterDictEntry (dict refName / e d)
+  (setq d nil)
+  (if (setq e (LI:FilterObjEname dict))
+    (progn
+      (setq d (vl-catch-all-apply 'dictsearch (list e refName)))
+      (if (LI:IsError d) (setq d nil))
+    )
+  )
+  d
+)
+
+(defun LI:FilterContainer (data / ext d)
+  (setq d nil)
+  (if (setq ext (LI:FilterExtDict data))
+    (progn
+      (setq d (LI:FilterDictEntry ext "ACLYDICTIONARY"))
+      (if (null d)
+        (setq d (LI:FilterObjData ext))
+      )
+    )
+  )
+  d
+)
+
+(defun LI:FilterDataLayers (data / out pair code objdef lname)
+  (setq out nil)
+  (foreach pair data
+    (setq code (car pair))
+    (if (or (= code 330) (= code 340) (= code 350) (= code 360))
+      (progn
+        (setq objdef (LI:FilterObjData (cdr pair)))
+        (if (and objdef (= (strcase (LI:ForceString (cdr (assoc 0 objdef)))) "LAYER"))
+          (progn
+            (setq lname (cdr (assoc 2 objdef)))
+            (if (and (LI:IsString lname) (/= lname ""))
+              (setq out (LI:SafeAddUnique out lname))
+            )
+          )
+        )
+      )
+    )
+  )
+  out
+)
+
+(defun LI:FilterRootDictData ( / layer0 tableExt ext d)
+  (setq d nil)
+  (if (setq layer0 (tblobjname "LAYER" "0"))
+    (progn
+      (setq tableExt (LI:FilterObjEname (cdr (assoc 330 (entget layer0)))))
+      (if tableExt
+        (progn
+          (setq ext (LI:FilterExtDict (entget tableExt)))
+          (if ext
+            (progn
+              (setq d (LI:FilterDictEntry ext "ACLYDICTIONARY"))
+              (if (null d)
+                (setq d (LI:FilterObjData ext))
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  d
+)
+
+;;; Рекурсивный обход словаря групповых фильтров чертежа (любая глубина).
+;;; Возвращает список записей: (имя_фильтра список_всех_слоёв_с_дочерними)
+(defun LI:FilterWalkTree (data visited / out pair ref objdef lname
+                          childEntries directLayers allLayers cEntry cLayer)
+  (setq out nil)
+  (if (listp data)
+    (foreach pair data
+      (if (= (car pair) 350)
+        (progn
+          (setq ref (cdr pair))
+          (if (not (member ref visited))
+            (progn
+              (setq objdef (LI:FilterObjData ref))
+              (cond
+                ((and objdef
+                      (setq lname (cdr (assoc 300 objdef)))
+                      (LI:IsString lname))
+                  (setq lname (LI:SafeTrim lname))
+                  (setq childEntries
+                    (LI:FilterWalkTree
+                      (LI:FilterContainer objdef)
+                      (cons ref visited)))
+                  (setq directLayers (LI:FilterDataLayers objdef))
+                  (setq allLayers directLayers)
+                  (foreach cEntry childEntries
+                    (foreach cLayer (cadr cEntry)
+                      (setq allLayers (LI:SafeAddUnique allLayers cLayer))
+                    )
+                  )
+                  (setq out
+                    (append out
+                            (list (list lname allLayers))
+                            childEntries))
+                )
+                ((and objdef
+                      (= (strcase (LI:ForceString (cdr (assoc 0 objdef))))
+                         "DICTIONARY"))
+                  (setq childEntries
+                    (LI:FilterWalkTree objdef (cons ref visited)))
+                  (setq out (append out childEntries))
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  out
+)
+
+;;; Получить слои фильтра по списку возможных имён (новый + старый шаблон).
+;;; Если фильтр в чертеже не найден — возвращает defaultLayers.
+(defun LI:ResolveFacadeFilterLayers (candidateNames defaultLayers tree
+                                     / found cName entry lyr)
+  (setq found nil)
+  (foreach cName candidateNames
+    (foreach entry tree
+      (if (= (LI:SafeStrCase (car entry)) (LI:SafeStrCase cName))
+        (foreach lyr (cadr entry)
+          (setq found (LI:SafeAddUnique found lyr))
+        )
+      )
+    )
+  )
+  (if found found defaultLayers)
+)
+
+;;; Установить видимость одного слоя (visible = T -> вкл, nil -> выкл)
+;;; через знак DXF-кода 62 (работает даже для текущего слоя CLAYER без запросов).
+;;; Возвращает: T (изменён/установлен) или nil (слой не найден в чертеже).
+(defun LI:SetLayerVisible (name visible / ename ent c62 aci newColor res)
+  (setq name (LI:SafeTrim name))
+  (if (= name "")
+    nil
+    (progn
+      (setq ename (tblobjname "LAYER" name))
+      (if (not ename)
+        nil
+        (progn
+          (setq ent (entget ename))
+          (setq c62 (cdr (assoc 62 ent)))
+          (if (or (null c62) (= c62 0))
+            (setq aci 7)
+            (setq aci (abs c62))
+          )
+          (setq newColor (if visible aci (- aci)))
+          (setq ent (LI:SetDxf ent 62 newColor))
+          (setq res (vl-catch-all-apply 'entmod (list ent)))
+          (not (LI:IsError res))
+        )
+      )
+    )
+  )
+)
+
+;;; Является ли слой собственным слоем подсистемы (для отключения в МОИФАСАДФАС)
+(defun LI:IsSubsysLayer (name / up)
+  (setq up (LI:SafeStrCase (LI:SafeTrim name)))
+  (or (LI:NameInList *LI:FACADE-SUBSYS-LAYERS* name)
+      (wcmatch up "*ПОДСИСТЕМ*"))
+)
+
+;;; Универсальное переключение фасадного режима:
+;;;   1) выключает все слои из offList
+;;;   2) включает все слои из onList
+;;;   3) выключает все слои из postOffList (если передан)
+(defun LI:ApplyFacadeMode (modeTitle offList onList postOffList
+                           / lyr finalOn finalOff onOk offOk missCnt)
+  (setq finalOn nil)
+  (setq finalOff nil)
+  (setq onOk 0)
+  (setq offOk 0)
+  (setq missCnt 0)
+
+  ;; Шаг 1: сначала выключаем
+  (foreach lyr offList
+    (LI:SetLayerVisible lyr nil)
+  )
+
+  ;; Шаг 2: затем включаем (пересекающиеся слои остаются включёнными)
+  (foreach lyr onList
+    (LI:SetLayerVisible lyr T)
+  )
+
+  ;; Шаг 3: дополнительное отключение (например, слои подсистем в МОИФАСАДФАС)
+  (foreach lyr postOffList
+    (LI:SetLayerVisible lyr nil)
+  )
+
+  ;; Формируем итоговые списки для отчёта
+  (foreach lyr onList
+    (if (not (LI:NameInList postOffList lyr))
+      (setq finalOn (LI:SafeAddUnique finalOn lyr))
+    )
+  )
+  (foreach lyr offList
+    (if (not (LI:NameInList finalOn lyr))
+      (setq finalOff (LI:SafeAddUnique finalOff lyr))
+    )
+  )
+  (foreach lyr postOffList
+    (if (not (LI:NameInList finalOn lyr))
+      (setq finalOff (LI:SafeAddUnique finalOff lyr))
+    )
+  )
+
+  (princ (strcat "\n\n=== " modeTitle " ==="))
+  (princ (strcat "\n  "
+                 (LI:PadRight "Статус" 10) "| "
+                 (LI:PadRight "Имя слоя" 42) "| "
+                 "В чертеже"))
+  (princ (strcat "\n  "
+                 (LI:RepeatChar "-" 10) "+"
+                 (LI:RepeatChar "-" 43) "+"
+                 (LI:RepeatChar "-" 12)))
+
+  (foreach lyr finalOn
+    (if (tblobjname "LAYER" lyr)
+      (progn
+        (setq onOk (1+ onOk))
+        (princ (strcat "\n  "
+                       (LI:PadRight "[ВКЛ]" 10) "| "
+                       (LI:PadRight lyr 42) "| да"))
+      )
+      (progn
+        (setq missCnt (1+ missCnt))
+        (princ (strcat "\n  "
+                       (LI:PadRight "[ВКЛ]" 10) "| "
+                       (LI:PadRight lyr 42) "| нет слоя"))
+      )
+    )
+  )
+
+  (foreach lyr finalOff
+    (if (tblobjname "LAYER" lyr)
+      (progn
+        (setq offOk (1+ offOk))
+        (princ (strcat "\n  "
+                       (LI:PadRight "[ВЫКЛ]" 10) "| "
+                       (LI:PadRight lyr 42) "| да"))
+      )
+      (progn
+        (setq missCnt (1+ missCnt))
+        (princ (strcat "\n  "
+                       (LI:PadRight "[ВЫКЛ]" 10) "| "
+                       (LI:PadRight lyr 42) "| нет слоя"))
+      )
+    )
+  )
+
+  (vl-catch-all-apply 'vl-cmdf (list "._REGEN"))
+  (princ (strcat "\n\nИтог: включено слоёв: " (itoa onOk)
+                 ", выключено слоёв: " (itoa offOk)
+                 (if (> missCnt 0)
+                   (strcat " (отсутствует в чертеже: " (itoa missCnt) ")")
+                   "")))
+  (princ)
+)
+
+;;; Выполнение одного из 4 режимов: "OBL", "POD", "UTEP", "FAS"
+(defun LI:RunFacadePreset (mode / tree oblLayers podLayers utepLayers
+                           offList onList postOffList lyr)
+  (setq tree (LI:FilterWalkTree (LI:FilterRootDictData) nil))
+  (setq oblLayers
+    (LI:ResolveFacadeFilterLayers
+      *LI:FACADE-OBL-FILTERS*
+      *LI:FACADE-OBL-DEFAULT-LAYERS*
+      tree))
+  (setq podLayers
+    (LI:ResolveFacadeFilterLayers
+      *LI:FACADE-POD-FILTERS*
+      *LI:FACADE-POD-DEFAULT-LAYERS*
+      tree))
+  (setq utepLayers
+    (LI:ResolveFacadeFilterLayers
+      *LI:FACADE-UTEP-FILTERS*
+      *LI:FACADE-UTEP-DEFAULT-LAYERS*
+      tree))
+
+  (setq offList nil)
+  (setq onList nil)
+  (setq postOffList nil)
+
+  (cond
+    ;; МОИФАСАДОБЛ: выкл (Подсистема + Утепление + Железо) -> вкл (Облицовка)
+    ((= mode "OBL")
+      (foreach lyr podLayers  (setq offList (LI:SafeAddUnique offList lyr)))
+      (foreach lyr utepLayers (setq offList (LI:SafeAddUnique offList lyr)))
+      (setq offList (LI:SafeAddUnique offList *LI:FACADE-IRON-LAYER*))
+      (foreach lyr oblLayers  (setq onList  (LI:SafeAddUnique onList  lyr)))
+      (LI:ApplyFacadeMode
+        "МОИФАСАДОБЛ: вкл Фасад - Облицовка"
+        offList onList nil)
+    )
+
+    ;; МОИФАСАДПОД: выкл (Облицовка + Утепление + Железо) -> вкл (Подсистема)
+    ((= mode "POD")
+      (foreach lyr oblLayers  (setq offList (LI:SafeAddUnique offList lyr)))
+      (foreach lyr utepLayers (setq offList (LI:SafeAddUnique offList lyr)))
+      (setq offList (LI:SafeAddUnique offList *LI:FACADE-IRON-LAYER*))
+      (foreach lyr podLayers  (setq onList  (LI:SafeAddUnique onList  lyr)))
+      (LI:ApplyFacadeMode
+        "МОИФАСАДПОД: вкл Фасад - Подсистема"
+        offList onList nil)
+    )
+
+    ;; МОИФАСАДУТЕП: выкл (Подсистема + Облицовка + Железо) -> вкл (Утепление)
+    ((= mode "UTEP")
+      (foreach lyr podLayers  (setq offList (LI:SafeAddUnique offList lyr)))
+      (foreach lyr oblLayers  (setq offList (LI:SafeAddUnique offList lyr)))
+      (setq offList (LI:SafeAddUnique offList *LI:FACADE-IRON-LAYER*))
+      (foreach lyr utepLayers (setq onList  (LI:SafeAddUnique onList  lyr)))
+      (LI:ApplyFacadeMode
+        "МОИФАСАДУТЕП: вкл Фасад - Утепление"
+        offList onList nil)
+    )
+
+    ;; МОИФАСАДФАС: выкл (Облицовка + Утепление) -> вкл (Подсистема + Железо) -> выкл (слои подсистем)
+    ((= mode "FAS")
+      (foreach lyr oblLayers  (setq offList (LI:SafeAddUnique offList lyr)))
+      (foreach lyr utepLayers (setq offList (LI:SafeAddUnique offList lyr)))
+      (foreach lyr podLayers  (setq onList  (LI:SafeAddUnique onList  lyr)))
+      (setq onList (LI:SafeAddUnique onList *LI:FACADE-IRON-LAYER*))
+      (foreach lyr *LI:FACADE-SUBSYS-LAYERS*
+        (setq postOffList (LI:SafeAddUnique postOffList lyr))
+      )
+      (foreach lyr podLayers
+        (if (LI:IsSubsysLayer lyr)
+          (setq postOffList (LI:SafeAddUnique postOffList lyr))
+        )
+      )
+      (LI:ApplyFacadeMode
+        "МОИФАСАДФАС: вкл Железо + контуры подсистемы"
+        offList onList postOffList)
+    )
+  )
+  (princ)
+)
+
+(defun C:МОИФАСАДОБЛ  () (LI:RunFacadePreset "OBL"))
+(defun C:МОИФАСАДПОД  () (LI:RunFacadePreset "POD"))
+(defun C:МОИФАСАДУТЕП () (LI:RunFacadePreset "UTEP"))
+(defun C:МОИФАСАДФАС  () (LI:RunFacadePreset "FAS"))
+
+;;; ============================================================
 ;;; Сообщение при загрузке
 ;;; ============================================================
 
-(princ "\nЗагружено: MyLayer.lsp (ред. 1) — слои, фильтры и переменные слоёв.")
+(princ "\nЗагружено: MyLayer.lsp (ред. 2) — слои, фильтры и переменные слоёв.")
 (princ "\nОсновные команды:")
 (princ "\n  +--------------------------------------------------------------+")
 (princ "\n  | КОМАНДА                  | ЧТО ДЕЛАЕТ                        |")
@@ -2711,5 +3163,9 @@
 (princ "\n  | МОИСЛОИЗАГРУЗИТЬ         | слои + фильтры + переменные       |")
 (princ "\n  | МОИСЛОИФИЛЬТРЫ           | только фильтры (без слоёв)        |")
 (princ "\n  | МОИСЛОИФИЛЬТРЫОЧИСТИТЬ   | удалить фильтры из XML            |")
+(princ "\n  | МОИФАСАДОБЛ              | вкл: Облицовка (ост. фасад выкл)  |")
+(princ "\n  | МОИФАСАДПОД              | вкл: Подсистема (ост. фасад выкл) |")
+(princ "\n  | МОИФАСАДУТЕП             | вкл: Утепление (ост. фасад выкл)  |")
+(princ "\n  | МОИФАСАДФАС              | вкл: Железо + контуры подсистемы  |")
 (princ "\n  +--------------------------------------------------------------+")
 (princ)
