@@ -22,6 +22,14 @@
 ;;;   МОИФАСАДПОД            - вкл: Подсистема (Облицовка, Утепление, Железо выкл)
 ;;;   МОИФАСАДУТЕП           - вкл: Утепление (Подсистема, Облицовка, Железо выкл)
 ;;;   МОИФАСАДФАС            - вкл: Подсистема без слоёв подсистем + Железо
+;;;   МОИСЛОИФИЛЬТРАР        - создать фильтр АР (всё, что не в фильтрах)
+;;;   МОИСЛОИПРОВЕРКАФАЙЛА   - проверить баланс скобок в LISP-файле
+;;;
+;;; Шаблон фильтров (Слои и фильтры 2.xml):
+;;;   Стройплэкс -> Витражи, Окна, Отключенные, Фасад
+;;;   Фасад      -> Облицовка, Подсистема, Утепление
+;;; Фильтр АР создаётся автоматически: слои чертежа без XREF и без
+;;; слоёв, перечисленных в фильтрах шаблона.
 ;;; ============================================================
 
 (vl-load-com)
@@ -715,7 +723,7 @@
 ;;; Путь и файл экспорта
 ;;; ============================================================
 
-(defun LX:OutFile (/ p)
+(defun LX:OutFile (/ p out d)
   (setq p (getvar "DWGPREFIX"))
   (if (and p (/= p ""))
     (if (vl-file-directory-p p)
@@ -729,7 +737,16 @@
       (if (not p) (setq p "C:\\Temp"))
       (if (/= (substr p (strlen p) 1) "\\")
         (setq p (strcat p "\\")))))
-  (strcat p "Слои и фильтры.xml")
+  ;; *LX:OUT-FILE*: полный путь — как есть, имя файла — в папке чертежа.
+  (setq out (if (and *LX:OUT-FILE*
+                     (= (type *LX:OUT-FILE*) 'STR)
+                     (/= *LX:OUT-FILE* ""))
+              *LX:OUT-FILE*
+              "Слои и фильтры.xml"))
+  (setq d (vl-filename-directory out))
+  (if (and d (= (type d) 'STR) (/= d ""))
+    out
+    (strcat p out))
 )
 
 ;;; ============================================================
@@ -792,12 +809,25 @@
 ;;; ============================================================
 
 (defun LX:WriteLayersSheet
-       (fh doc / layers layer name ent flags color
+       (fh doc onlySet / layers layer name ent flags color
               desc linetype lw plotflag transparency
               plotStyle colorName red green blue colorMethod
               row count allRows sortedRows rec
-              layerObj rgb rVal gVal bVal tcAny)
+              layerObj rgb rVal gVal bVal tcAny totalCnt skippedCnt)
   (write-line "<Worksheet ss:Name=\"Слои\"><Table>" fh)
+  (write-line
+    (strcat
+      " <Column ss:Width=\"189\"/><Column ss:Width=\"49.5\"/>"
+      "<Column ss:Width=\"45.75\"/><Column ss:Width=\"47.25\"/>"
+      "<Column ss:Width=\"57\"/><Column ss:Width=\"21\"/>"
+      "<Column ss:Width=\"15.75\"/><Column ss:Width=\"21\"/>"
+      "<Column ss:Width=\"64.5\"/><Column ss:Width=\"71.25\"/>"
+      "<Column ss:Width=\"78\"/><Column ss:Width=\"67.5\"/>"
+      "<Column ss:Width=\"64.5\"/><Column ss:Width=\"45\"/>"
+      "<Column ss:Width=\"56.25\"/><Column ss:Width=\"114\"/>"
+      "<Column ss:Width=\"69\"/><Column ss:Width=\"56.25\"/>"
+      "<Column ss:Width=\"81.75\"/><Column ss:Width=\"46.5\"/>")
+    fh)
   (write-line
     (XML:Row
       '("Имя слоя" "Описание" "Цвет ACI" "Цвет имя" "Цвет метод"
@@ -808,10 +838,13 @@
     fh)
 
   (setq allRows nil)
+  (setq totalCnt 0)
+  (setq skippedCnt 0)
   (setq layers (vla-get-Layers doc))
 
   ;; ---------- Сбор данных ----------
   (vlax-for layer layers
+    (setq totalCnt (1+ totalCnt))
     (setq name (LX:PropStr layer 'Name))
     (setq ent  (tblsearch "LAYER" name))
 
@@ -890,7 +923,10 @@
         (if (= 16 (logand flags 16)) "Да" "Нет")
         flags))
 
-    (setq allRows (append allRows (list (cons name row))))
+    (if (or (null onlySet) (LI:NameInList onlySet name))
+      (setq allRows (append allRows (list (cons name row))))
+      (setq skippedCnt (1+ skippedCnt))
+    )
   )
 
   ;; ---------- Сортировка по имени без учёта регистра ----------
@@ -901,6 +937,12 @@
 
   ;; ---------- Печать в командную строку ----------
   (princ "\n\n=== Экспорт слоёв ===")
+  (if onlySet
+    (princ (strcat "\n[Инфо] Только слои фильтра '" *LX:ROOT-FILTER*
+                   "': " (itoa (length sortedRows))
+                   " из " (itoa totalCnt)
+                   " (пропущено: " (itoa skippedCnt) ")"))
+  )
   (princ (strcat "\n  "
                  (LX:PadRight "Имя слоя"  45) "| "
                  (LX:PadRight "Цвет"       6) "| "
@@ -1051,27 +1093,148 @@
 ;;; Экспорт фильтров
 ;;; ============================================================
 
-(defun LX:WriteFiltersSheet (fh / items item key count)
+;; Слои фильтра-корня «моих» слоёв (с вложенными).
+;; nil — фильтр не найден или дерево не прочитано.
+(defun LX:RootFilterLayers (/ tree rec found)
+  (setq tree (LI:FilterTreeFull (LI:FilterRootDictData) nil))
+  (foreach rec tree
+    (if (and (not found)
+             (= (LI:SafeStrCase (nth 0 rec))
+                (LI:SafeStrCase *LX:ROOT-FILTER*)))
+      (setq found (nth 3 rec))
+    )
+  )
+  found
+)
+
+;; Поддерево фильтров: сам фильтр и все потомки (родитель раньше детей).
+(defun LX:FilterSubtree (tree name / rec out child sub)
+  (setq rec (LI:FindParsedDef tree name))
+  (if rec
+    (progn
+      (setq out (list rec))
+      (foreach child (nth 2 rec)
+        (foreach sub (LX:FilterSubtree tree child)
+          (setq out (append out (list sub)))
+        )
+      )
+      out
+    )
+    nil
+  )
+)
+
+;; Собственные слои фильтра: прямые минус слои всех потомков.
+(defun LX:FilterOwnLayers (tree rec / childAll out child crec lyr)
+  (setq childAll nil)
+  (foreach child (nth 2 rec)
+    (setq crec (LI:FindParsedDef tree child))
+    (if crec
+      (foreach lyr (nth 3 crec)
+        (setq childAll (LI:SafeAddUnique childAll lyr))
+      )
+    )
+  )
+  (setq out nil)
+  (foreach lyr (nth 1 rec)
+    (if (not (LI:NameInList childAll lyr))
+      (setq out (append out (list lyr)))
+    )
+  )
+  out
+)
+
+;; Строка состава фильтра для листа «Фильтры»:
+;; собственные слои, затем токены >>Дочерний.
+(defun LX:FilterRowString (direct kids / s k)
+  (setq s (LI:SafeListToComma direct))
+  (foreach k kids
+    (setq s (if (= s "")
+              (strcat ">>" k)
+              (strcat s ",>>" k))
+    )
+  )
+  s
+)
+
+(defun LX:WriteFiltersSheet (fh / tree defs rec item name parent ownCnt
+                                allCnt kids own rowStr count rootRec)
   (write-line "<Worksheet ss:Name=\"Фильтры\"><Table>" fh)
+  (write-line
+    " <Column ss:Width=\"189\"/><Column ss:Width=\"600\"/>"
+    fh)
   (write-line (XML:Row '("Имя фильтра" "Список слоев")) fh)
-  (princ "\n\n=== Экспорт фильтров ===")
+  (princ "\n\n")
+  (princ "\n=== Экспорт фильтров ===")
+  (setq tree (LI:FilterTreeFull (LI:FilterRootDictData) nil))
+  (if tree
+    (progn
+      (if (and *LX:ROOT-FILTER* (/= *LX:ROOT-FILTER* ""))
+        (setq rootRec (LI:FindParsedDef tree *LX:ROOT-FILTER*))
+      )
+      (if rootRec
+        (setq defs (LX:FilterSubtree tree *LX:ROOT-FILTER*))
+        (progn
+          (princ (strcat "\n[Предупр.] Фильтр-корень '"
+                         *LX:ROOT-FILTER*
+                         "' не найден — выгружены все пользовательские фильтры."))
+          (foreach rec tree
+            (setq name (nth 0 rec))
+            (if (and (not (LI:IsSystemFilter name))
+                     (not (LI:NameInList (list *LI:AR-FILTER-NAME*) name))
+                     (not (LI:NameInList (list *LI:UNASSIGNED-FILTER-NAME*) name)))
+              (setq defs (append defs (list rec)))
+            )
+          )
+        )
+      )
+    )
+    (progn
+      (princ "\n[Предупр.] Не удалось прочитать дерево фильтров — выгружены только имена.")
+      (foreach item (LX:GetLayerFilters)
+        (setq name (car item))
+        (if (and (not (LI:IsSystemFilter name))
+                 (not (LI:NameInList (list *LI:AR-FILTER-NAME*) name))
+                 (not (LI:NameInList (list *LI:UNASSIGNED-FILTER-NAME*) name)))
+          (setq defs (append defs (list (list name nil nil nil))))
+        )
+      )
+    )
+  )
   (princ (strcat "\n  "
-                 (LX:PadRight "Имя фильтра" 30) "| Список слоёв"))
+                 (LX:PadRight "Имя фильтра" 24) "| "
+                 (LX:PadRight "Родитель" 14) "| "
+                 (LX:PadRight "Своих" 6) "| "
+                 (LX:PadRight "Всего" 6) "| Дети"))
   (princ (strcat "\n  "
-                 (LX:RepeatChar "-" 30) "+"
-                 (LX:RepeatChar "-" 40)))
-  (setq items (LX:GetLayerFilters))
+                 (LX:RepeatChar "-" 24) "+"
+                 (LX:RepeatChar "-" 15) "+"
+                 (LX:RepeatChar "-" 7) "+"
+                 (LX:RepeatChar "-" 7) "+"
+                 (LX:RepeatChar "-" 20)))
   (setq count 0)
-  (if items
-    (foreach item items
-      (setq key (car item))
-      (write-line (XML:Row (list key "")) fh)
+  (if defs
+    (foreach rec defs
+      (setq name   (nth 0 rec))
+      (setq parent (LI:FindParentOf defs name))
+      (setq kids   (nth 2 rec))
+      (setq own    (LX:FilterOwnLayers tree rec))
+      (setq ownCnt (length own))
+      (setq allCnt (length (nth 3 rec)))
+      (setq rowStr (LX:FilterRowString own kids))
+      (write-line (XML:Row (list name rowStr)) fh)
       (princ (strcat "\n  "
-                     (LX:PadRight key 30) "| (заполнить в Excel)"))
-      (setq count (1+ count)))
-    (princ "\n  (фильтры не найдены)"))
+                     (LX:PadRight name 24) "| "
+                     (LX:PadRight (if parent parent "-") 14) "| "
+                     (LX:PadRight (itoa ownCnt) 6) "| "
+                     (LX:PadRight (itoa allCnt) 6) "| "
+                     (LI:SafeListToComma kids)))
+      (setq count (1+ count))
+    )
+    (princ "\n  (фильтры не найдены)")
+  )
   (write-line "</Table></Worksheet>" fh)
-  (princ "\n")
+  (princ "\n\n")
   count
 )
 
@@ -1079,7 +1242,7 @@
 ;;; Основная команда
 ;;; ============================================================
 
-(defun LX:Export (/ doc fname fh tmpdir layerCount filterCount)
+(defun LX:Export (/ doc fname fh tmpdir layerCount filterCount tpl myLayers)
   (vl-load-com)
   (princ "\n")
   (princ "\n=== Экспорт слоёв и фильтров в XML ===")
@@ -1087,6 +1250,30 @@
   (setq fname (LX:OutFile))
   (princ (strcat "\nЧертёж: " (getvar "DWGNAME")))
   (princ (strcat "\nФайл:   " fname))
+  ;; Только «мои» слои — из фильтра-корня.
+  (setq myLayers nil)
+  (if *LX:ONLY-MY-LAYERS*
+    (progn
+      (setq myLayers (LX:RootFilterLayers))
+      (if myLayers
+        (princ (strcat "\n[Инфо] Слои фильтра-корня '" *LX:ROOT-FILTER*
+                       "': " (itoa (length myLayers))))
+        (princ (strcat "\n[Предупр.] Фильтр-корень '" *LX:ROOT-FILTER*
+                       "' не найден — выгружаю все слои."))
+      )
+    )
+  )
+  ;; Предупреждение, если пишем поверх действующего шаблона.
+  (setq tpl (LI:FindTemplateFile))
+  (if (and tpl
+           (findfile fname)
+           (= (strcase (vl-filename-directory (findfile fname)))
+              (strcase (vl-filename-directory tpl)))
+           (= (strcase (vl-filename-base fname))
+              (strcase (vl-filename-base tpl))))
+    (princ (strcat "\n[Предупр.] Файл совпадает с шаблоном и будет перезаписан: "
+                   tpl))
+  )
   (if (findfile fname) (princ "\nФайл существует — перезаписываю."))
   (setq fh (open fname "w"))
   (if (not fh)
@@ -1113,13 +1300,13 @@
       (write-line "  <Style ss:ID=\"Default\" ss:Name=\"Normal\">" fh)
       (write-line "   <Alignment ss:Vertical=\"Bottom\"/>" fh)
       (write-line "   <Borders/>" fh)
-      (write-line "   <Font ss:FontName=\"Arial\" ss:Size=\"10\"/>" fh)
+      (write-line "   <Font ss:FontName=\"Arial\"/>" fh)
       (write-line "   <Interior/>" fh)
       (write-line "   <NumberFormat/>" fh)
       (write-line "   <Protection/>" fh)
       (write-line "  </Style>" fh)
       (write-line " </Styles>" fh)
-      (setq layerCount  (LX:WriteLayersSheet  fh doc))
+      (setq layerCount  (LX:WriteLayersSheet  fh doc myLayers))
       (setq filterCount (LX:WriteFiltersSheet fh))
       (write-line "</Workbook>" fh)
       (close fh)
@@ -1143,12 +1330,55 @@
 (setq *LI:SET-CURRENT-FILTER* nil)
 (setq *LI:WARN* nil)
 
+;; ---------- Шаблоны, экспорт и фильтр АР ----------
+(setq *LI:TEMPLATE-NAME*      "Слои и фильтры.xml")     ; основной шаблон для импорта
+(setq *LI:TEMPLATE-FALLBACKS* '("Слои.xml"))
+(setq *LX:OUT-FILE*           "Слои и фильтры.xml")     ; имя файла экспорта
+(setq *LX:ROOT-FILTER*        "Стройплэкс")             ; корень «моих» фильтров и слоёв
+(setq *LX:ONLY-MY-LAYERS*     T)          ; выгружать только слои из корня
+(setq *LI:AUTO-AR*            T)          ; создавать АР при импорте
+(setq *LI:AR-FILTER-NAME*     "АР")
+(setq *LI:AR-SKIP-XREF*       T)          ; не включать XREF-слои (бит 16 кода 70)
+(setq *LI:AR-SKIP-LAYERS*     '("0" "DEFPOINTS"))
+(setq *LI:AR-CLEAN-WITH-FILTERS* T)       ; очистка удаляет АР и Нераспределённые
+(setq *LI:AR-LAST-COUNT*      nil)        ; итог последнего построения АР
+(setq *LI:AR-LAST-XREF*       0)          ; пропущено XREF в последнем построении
+(setq *LI:ARF-NAME-OVERRIDE*  nil)        ; временное имя целевого фильтра
+
+;; ---------- Миграция: фильтр «Нераспределённые» ----------
+(setq *LI:AUTO-UNASSIGNED*        T)      ; создавать при импорте
+(setq *LI:UNASSIGNED-FILTER-NAME* "Нераспределённые")
+(setq *LI:LEGACY-FILTER-MASKS*  '("ВИТРАЖ" "ФОНАР" "ФАСАД")) ; подстроки, без регистра
+(setq *LI:DELETE-ALL-FILTERS*     T)      ; удалять все пользовательские фильтры
+(setq *LI:UNASSIGNED-LAST-COUNT*  nil)
+(setq *LI:UNASSIGNED-LAST-XREF*   0)
+
 ;; Старые фильтры слоёв (удаляются при импорте и очистке фильтров)
 (setq *LI:OLD-FILTERS*
   '(
-    "Витражи"
+    "Фасад - Облицовка"
+    "Фасад - Подсистема"
+    "Фасад - Утепление"
     "Фасады"
     "Фонарь 3D"
+    "АР"
+    "Нераспределённые"
+  )
+)
+
+;; Системные фильтры AutoCAD: не удаляются и не экспортируются.
+(setq *LI:SYSTEM-FILTERS*
+  '("Все" "Все используемые слои" "Все слои без внешних ссылок"
+    "Вн-ссылки" "Внешние ссылки" "XREF"))
+
+;; Системный ли фильтр: имя из списка (без учёта регистра)
+;; или любое имя, начинающееся с "*".
+(defun LI:IsSystemFilter (name / s)
+  (setq s (LI:SafeTrim name))
+  (if (= s "")
+    nil
+    (or (= (substr s 1 1) "*")
+        (LI:NameInList *LI:SYSTEM-FILTERS* s))
   )
 )
 
@@ -2157,7 +2387,8 @@
 )
 
 (defun LI:DeleteFilterByName (name)
-  (if (and name (/= name ""))
+  (if (and name (/= name "")
+           (not (LI:IsSystemFilter name)))
     (command "._-LAYER" "_Filter" "_Delete" name "")
   )
 )
@@ -2251,19 +2482,19 @@
 )
 
 ;;; ============================================================
-;;; Импорт фильтров
+;;; Разбор листа «Фильтры»
 ;;; ============================================================
 
-(defun LI:ImportFilters
-       (doc xml / sheet rows headerIndex headers dataRows
+;;; Читает лист «Фильтры» из XML и возвращает список определений
+;;; (имя прямые_слои дочерние_имена). Повторяющиеся строки одного
+;;; фильтра склеиваются, как и раньше при импорте.
+(defun LI:ParseFilterSheet
+       (xml / sheet rows headerIndex headers dataRows
         map row vals name layersList filterDefs uniqueDefs
-        def parsedDefs p raw parsed direct children
-        directString fullLayers orderedDefs reversedDefs delNames
-        createdNames parentName delPass ok parentLabel layerCount
-        existing tmp mergedCount)
-  (princ "\n\n")
-  (princ "\nЧтение фильтров слоёв...")
+        def tmp mergedCount parsedDefs p parentName fullLayers
+        raw parsed direct children existing)
   (setq filterDefs nil)
+  (setq parsedDefs nil)
   (setq sheet (LI:GetWorksheet xml "Фильтры"))
   (if (not sheet)
     (princ "\nЛист 'Фильтры' не найден в XML.")
@@ -2383,76 +2614,134 @@
                            (LI:SafeListToComma fullLayers)))
           )
           (princ "\n\n")
-          (setq orderedDefs (LI:BuildFilterOrder parsedDefs))
-          (princ "\nЭтап: удаление старых и одноимённых фильтров...")
-          (setq reversedDefs nil)
-          (foreach p orderedDefs
-            (setq reversedDefs (cons p reversedDefs))
-          )
-          (setq delNames nil)
-          (foreach p reversedDefs
-            (setq delNames (LI:SafeAddUnique delNames (nth 0 p)))
-          )
-          (foreach name *LI:OLD-FILTERS*
-            (setq delNames (LI:SafeAddUnique delNames name))
-          )
-          (setq delPass 1)
-          (while (<= delPass 2)
-            (foreach name delNames
-              (LI:DeleteFilterByName name)
-            )
-            (setq delPass (1+ delPass))
-          )
-          (princ " готово.")
-          (princ "\n\n")
-          (princ "\nСоздание фильтров:")
-          (princ (strcat "\n  "
-                         (LI:PadRight "Статус" 9) "| "
-                         (LI:PadRight "Фильтр" 24) "| "
-                         (LI:PadRight "Родитель" 14) "| Слои"))
-          (princ (strcat "\n  "
-                         (LI:RepeatChar "-" 9)  "+"
-                         (LI:RepeatChar "-" 25) "+"
-                         (LI:RepeatChar "-" 15) "+"
-                         (LI:RepeatChar "-" 12)))
-          (setq createdNames nil)
-          (foreach p orderedDefs
-            (setq name (nth 0 p))
-            (setq parentName (LI:FindParentOf parsedDefs name))
-            (if (null parentName) (setq parentName ""))
-            (setq fullLayers (LI:CollectLayersDeep parsedDefs name nil))
-            (setq layerCount (length fullLayers))
-            (setq directString (LI:SafeListToComma fullLayers))
-            (if (and (/= parentName "")
-                     (not (LI:NameInList createdNames parentName)))
-              (progn
-                (LI:AddWarn name "фильтр"
-                            (strcat "родитель '" parentName
-                                    "' не найден, создан как корневой"))
-                (setq parentName "")
-              )
-            )
-            (setq parentLabel (if (= parentName "") "-" parentName))
-            (setq ok (LI:CreateGroupFilterWithParentCmd
-                       name directString parentName))
-            (princ (strcat "\n  "
-                           (LI:PadRight (if ok "[OK] " "[!] ") 9) "| "
-                           (LI:PadRight name 24) "| "
-                           (LI:PadRight parentLabel 14) "| "
-                           (itoa layerCount)
-                           (if (= layerCount 1) " слой" " слоёв")))
-            (if ok
-              (setq createdNames (append createdNames (list name)))
-              (LI:AddWarn name "фильтр" "не удалось создать")
-            )
-          )
-          (princ "\n\n")
-          (vl-catch-all-apply 'vl-cmdf (list "._REGENALL"))
-          (princ "\nИмпорт фильтров завершён.")
         )
       )
     )
   )
+  parsedDefs
+)
+
+;;; ============================================================
+;;; Импорт фильтров
+;;; ============================================================
+
+(defun LI:ImportFilters
+       (doc xml / parsedDefs orderedDefs p name fullLayers
+        parentName directString reversedDefs delNames createdNames
+        delPass ok parentLabel layerCount sheet rows
+        curTree legacyInfo legacyLayers ourLayers nm rec)
+  (princ "\n\n")
+  (princ "\nЧтение фильтров слоёв...")
+  (setq *LI:AR-LAST-COUNT* nil)
+  (setq *LI:AR-LAST-XREF* 0)
+  (setq *LI:UNASSIGNED-LAST-COUNT* nil)
+  (setq *LI:UNASSIGNED-LAST-XREF* 0)
+  (setq sheet (LI:GetWorksheet xml "Фильтры"))
+  (setq rows (if sheet (LI:GetRows sheet) nil))
+  (if (not sheet)
+    (princ "\nЛист 'Фильтры' не найден в XML.")
+    (if (< (length rows) 2)
+      (princ "\nВ файле нет данных о фильтрах.")
+      (progn
+        (setq parsedDefs (LI:ParseFilterSheet xml))
+        (setq orderedDefs (LI:BuildFilterOrder parsedDefs))
+        ;; Снимок старых фильтров и слоёв нашего шаблона — до удаления.
+        (setq ourLayers (LI:ARF-TemplateLayers parsedDefs))
+        (setq curTree (LI:FilterTreeFull (LI:FilterRootDictData) nil))
+        (setq legacyInfo (LI:LegacyInfo curTree ourLayers))
+        (setq legacyLayers (LI:LegacyLayers curTree))
+        (princ "\nЭтап: удаление старых и одноимённых фильтров...")
+        (setq reversedDefs nil)
+        (foreach p orderedDefs
+          (setq reversedDefs (cons p reversedDefs))
+        )
+        (setq delNames nil)
+        (foreach p reversedDefs
+          (setq delNames (LI:SafeAddUnique delNames (nth 0 p)))
+        )
+        (foreach name *LI:OLD-FILTERS*
+          (setq delNames (LI:SafeAddUnique delNames name))
+        )
+        ;; Удалить все пользовательские фильтры реципиента.
+        (if (and *LI:DELETE-ALL-FILTERS* parsedDefs)
+          (foreach rec curTree
+            (setq nm (nth 0 rec))
+            (if (not (LI:IsSystemFilter nm))
+              (setq delNames (LI:SafeAddUnique delNames nm))
+            )
+          )
+        )
+        (setq delPass 1)
+        (while (<= delPass 3)
+          (foreach name delNames
+            (LI:DeleteFilterByName name)
+          )
+          (setq delPass (1+ delPass))
+        )
+        (princ " готово.")
+        (princ "\n\n")
+        (princ "\nСоздание фильтров:")
+        (princ (strcat "\n  "
+                       (LI:PadRight "Статус" 9) "| "
+                       (LI:PadRight "Фильтр" 24) "| "
+                       (LI:PadRight "Родитель" 14) "| Слои"))
+        (princ (strcat "\n  "
+                       (LI:RepeatChar "-" 9)  "+"
+                       (LI:RepeatChar "-" 25) "+"
+                       (LI:RepeatChar "-" 15) "+"
+                       (LI:RepeatChar "-" 12)))
+        (setq createdNames nil)
+        (foreach p orderedDefs
+          (setq name (nth 0 p))
+          (setq parentName (LI:FindParentOf parsedDefs name))
+          (if (null parentName) (setq parentName ""))
+          (setq fullLayers (LI:CollectLayersDeep parsedDefs name nil))
+          (setq layerCount (length fullLayers))
+          (setq directString (LI:SafeListToComma fullLayers))
+          (if (and (/= parentName "")
+                   (not (LI:NameInList createdNames parentName)))
+            (progn
+              (LI:AddWarn name "фильтр"
+                          (strcat "родитель '" parentName
+                                  "' не найден, создан как корневой"))
+              (setq parentName "")
+            )
+          )
+          (setq parentLabel (if (= parentName "") "-" parentName))
+          (setq ok (LI:CreateGroupFilterWithParentCmd
+                     name directString parentName))
+          (princ (strcat "\n  "
+                         (LI:PadRight (if ok "[OK] " "[!] ") 9) "| "
+                         (LI:PadRight name 24) "| "
+                         (LI:PadRight parentLabel 14) "| "
+                         (itoa layerCount)
+                         (if (= layerCount 1) " слой" " слоёв")))
+          (if ok
+            (setq createdNames (append createdNames (list name)))
+            (LI:AddWarn name "фильтр" "не удалось создать")
+          )
+        )
+        (princ "\n\n")
+        (vl-catch-all-apply 'vl-cmdf (list "._REGENALL"))
+        ;; ---------- АР: все слои вне шаблона ----------
+        (if (and *LI:AUTO-AR* parsedDefs)
+          (setq *LI:AR-LAST-COUNT* (LI:ARF-RunFromDefs parsedDefs))
+          nil
+        )
+        ;; ---------- Нераспределённые: старые фильтры вне шаблона ----------
+        (if (and *LI:AUTO-UNASSIGNED* parsedDefs)
+          (progn
+            (LI:PrintLegacyCheck legacyInfo)
+            (setq *LI:UNASSIGNED-LAST-COUNT*
+                  (LI:RunUnassigned parsedDefs legacyLayers))
+          )
+          nil
+        )
+        (princ "\nИмпорт фильтров завершён.")
+      )
+    )
+  )
+  (princ)
 )
 
 ;;; ============================================================
@@ -2538,6 +2827,15 @@
       (if (> skipped 0)
         (princ (strcat "\nПропущено (XREF): " (itoa skipped)))
       )
+      (if (and *LI:AUTO-AR* *LI:AR-LAST-COUNT*)
+        (princ (strcat "\nФильтр АР: " (itoa *LI:AR-LAST-COUNT*)
+                       " слоёв (XREF пропущено: "
+                       (itoa *LI:AR-LAST-XREF*) ")"))
+      )
+      (if (and *LI:AUTO-UNASSIGNED* *LI:UNASSIGNED-LAST-COUNT*)
+        (princ (strcat "\nНераспределённые: " (itoa *LI:UNASSIGNED-LAST-COUNT*)
+                       " слоёв (из старых фильтров)"))
+      )
 
       (princ "\n\n")
       (princ "\n=== Применение переменных слоёв ===")
@@ -2573,23 +2871,48 @@
   (if (or (not p) (= p "") (= p "\\")) nil p)
 )
 
-(defun LI:LocalTemplateFile (/ dir base candidates f result)
+(defun LI:LocalTemplateFile (/ dir base candidates f c result)
   (setq dir (LI:DrawingDir))
   (if dir
     (progn
       (setq base (getvar "DWGNAME"))
       (if (or (not base) (= base "")) (setq base "Untitled.dwg"))
       (setq base (vl-filename-base base))
-      (setq candidates
-        (list
-          (strcat dir "Слои и фильтры.xml")
-          (strcat dir base " Слои.xml")
-          (strcat dir base ".xml")
-          (strcat dir "Слои.xml")
+      (setq candidates nil)
+      ;; 1) основной шаблон из настроек
+      (if (and *LI:TEMPLATE-NAME*
+               (= (type *LI:TEMPLATE-NAME*) 'STR)
+               (/= *LI:TEMPLATE-NAME* ""))
+        (setq candidates
+          (append candidates (list (strcat dir *LI:TEMPLATE-NAME*))))
+      )
+      ;; 2) запасные имена
+      (foreach f *LI:TEMPLATE-FALLBACKS*
+        (if (and f (= (type f) 'STR) (/= f ""))
+          (setq candidates
+            (append candidates (list (strcat dir f))))
         )
       )
+      ;; 3) прежние варианты
+      (setq candidates
+        (append candidates
+          (list
+            (strcat dir "Слои и фильтры.xml")
+            (strcat dir base " Слои.xml")
+            (strcat dir base ".xml")
+            (strcat dir "Слои.xml")
+          )
+        )
+      )
+      ;; убрать повторы, сохранив порядок
+      (setq c nil)
+      (foreach f candidates
+        (setq c (LI:SafeAddUnique c f))
+      )
+      (setq candidates c)
       (princ (strcat "\n[Поиск] Папка чертежа: " dir))
-      (princ (strcat "\n[Поиск] Имя чертежа (без расширения): " base))
+      (princ (strcat "\n[Поиск] Имя чертежа (без расширения): "
+                     (vl-filename-base (getvar "DWGNAME"))))
       (foreach f candidates
         (princ (strcat "\n[Поиск] Проверка: " f))
         (if (and (not result) (findfile f))
@@ -2605,8 +2928,19 @@
   )
 )
 
-(defun LI:FindTemplateFile (/ f)
+(defun LI:FindTemplateFile (/ f n)
   (setq f (LI:LocalTemplateFile))
+  (if (and (not f)
+           *LI:TEMPLATE-NAME*
+           (= (type *LI:TEMPLATE-NAME*) 'STR)
+           (/= *LI:TEMPLATE-NAME* ""))
+    (setq f (findfile *LI:TEMPLATE-NAME*))
+  )
+  (foreach n *LI:TEMPLATE-FALLBACKS*
+    (if (and (not f) n (= (type n) 'STR) (/= n ""))
+      (setq f (findfile n))
+    )
+  )
   (if (not f) (setq f (findfile "Слои и фильтры.xml")))
   (if (not f) (setq f (findfile "Слои.xml")))
   f
@@ -2685,7 +3019,7 @@
 ;;; ============================================================
 
 (defun C:МОИСЛОИФИЛЬТРЫОЧИСТИТЬ
-       (/ fname xml sheet rows vals name names pass)
+       (/ fname xml sheet rows vals name names filtered pass)
   (princ "\n=== Удаление фильтров слоёв ===")
   (setq names nil)
   (setq fname (LI:FindTemplateFile))
@@ -2726,6 +3060,14 @@
   (foreach name *LI:OLD-FILTERS*
     (setq names (LI:SafeAddUnique names name))
   )
+  ;; Системные фильтры не удаляем ни при каких условиях.
+  (setq filtered nil)
+  (foreach name names
+    (if (not (LI:IsSystemFilter name))
+      (setq filtered (LI:SafeAddUnique filtered name))
+    )
+  )
+  (setq names filtered)
   (if (null names)
     (progn
       (setq name (getstring T
@@ -2751,12 +3093,544 @@
         )
         (setq pass (1+ pass))
       )
-      (princ "\nГотово.")
     )
     (princ "\nСписок фильтров пуст — нечего удалять.")
   )
+  ;; Дополнительно удаляем служебные фильтры (они не входят в шаблон).
+  (if *LI:AR-CLEAN-WITH-FILTERS*
+    (progn
+      (princ (strcat "\nУдаление фильтра '" *LI:AR-FILTER-NAME* "'..."))
+      (setq pass 1)
+      (while (<= pass 2)
+        (LI:DeleteFilterByName *LI:AR-FILTER-NAME*)
+        (setq pass (1+ pass))
+      )
+      (princ (strcat "\nУдаление фильтра '"
+                     *LI:UNASSIGNED-FILTER-NAME* "'..."))
+      (setq pass 1)
+      (while (<= pass 2)
+        (LI:DeleteFilterByName *LI:UNASSIGNED-FILTER-NAME*)
+        (setq pass (1+ pass))
+      )
+    )
+  )
+  (princ "\nГотово.")
   (princ)
 )
+
+;;; ============================================================
+;;; Проверка LISP-файла (скобки и строки)
+;;; ============================================================
+
+(defun LI:ReadTextFile (fname / f line out)
+  (setq out "")
+  (if (setq f (open fname "r"))
+    (progn
+      (while (setq line (read-line f))
+        (setq out (strcat out line "\n"))
+      )
+      (close f)
+      out
+    )
+    nil
+  )
+)
+
+;;; Проверяет баланс скобок и кавычек с учётом ;-комментариев.
+;;; Возвращает T, если ошибок нет.
+(defun LI:CheckFileText (txt / i n ch depth line inStr strLine inComment
+                            badDepth badLine ok)
+  (setq i 0)
+  (setq n (strlen txt))
+  (setq depth 0)
+  (setq line 1)
+  (setq inStr nil)
+  (setq inComment nil)
+  (setq strLine 0)
+  (setq badDepth nil)
+  (setq badLine nil)
+  (while (< i n)
+    (setq ch (substr txt (1+ i) 1))
+    (cond
+      (inStr
+        (cond
+          ((= ch "\\") (setq i (+ i 2)))
+          ((= ch "\"") (setq inStr nil) (setq i (1+ i)))
+          (t
+            (if (= ch "\n") (setq line (1+ line)))
+            (setq i (1+ i))
+          )
+        )
+      )
+      (inComment
+        (if (= ch "\n")
+          (progn (setq inComment nil) (setq line (1+ line)))
+        )
+        (setq i (1+ i))
+      )
+      (t
+        (cond
+          ((= ch ";") (setq inComment T) (setq i (1+ i)))
+          ((= ch "\"") (setq inStr T) (setq strLine line) (setq i (1+ i)))
+          ((= ch "(") (setq depth (1+ depth)) (setq i (1+ i)))
+          ((= ch ")")
+            (setq depth (1- depth))
+            (if (and (null badDepth) (< depth 0))
+              (progn
+                (setq badDepth depth)
+                (setq badLine line)
+              )
+            )
+            (setq i (1+ i))
+          )
+          ((= ch "\n") (setq line (1+ line)) (setq i (1+ i)))
+          (t (setq i (1+ i)))
+        )
+      )
+    )
+  )
+  (setq ok T)
+  (if inStr
+    (progn
+      (setq ok nil)
+      (princ (strcat "\n[FAIL] Незакрытая строка, начатая в строке "
+                     (itoa strLine) "."))
+    )
+  )
+  (if badDepth
+    (progn
+      (setq ok nil)
+      (princ (strcat "\n[FAIL] Лишняя закрывающая скобка в строке "
+                     (itoa badLine) "."))
+    )
+  )
+  (if (> depth 0)
+    (progn
+      (setq ok nil)
+      (princ (strcat "\n[FAIL] Не закрыто скобок: " (itoa depth)
+                     " (итоговая глубина " (itoa depth) ")."))
+    )
+  )
+  (if ok
+    (princ (strcat "\n[OK] Скобки и строки сбалансированы (строк: "
+                   (itoa line) ", глубина 0)."))
+    (princ (strcat "\nСтрок в файле: " (itoa line) "."))
+  )
+  ok
+)
+
+(defun C:МОИСЛОИПРОВЕРКАФАЙЛА (/ f txt)
+  (princ "\n\n=== Проверка файла AutoLISP ===")
+  (setq f (getfiled "Проверить LISP-файл" "" "lsp" 0))
+  (if (and f (/= f ""))
+    (progn
+      (princ (strcat "\nФайл: " f))
+      (setq txt (LI:ReadTextFile f))
+      (if txt
+        (LI:CheckFileText txt)
+        (princ "\n[FAIL] Не удалось прочитать файл.")
+      )
+    )
+    (princ "\n[Инфо] Файл не выбран.")
+  )
+  (princ "\n")
+  (princ)
+)
+
+;;; ============================================================
+;;; СЕКЦИЯ 4: фильтр АР (всё, что не входит в фильтры шаблона)
+;;; ============================================================
+
+;;; Все слои чертежа, отсортированные по имени без учёта регистра.
+(defun LI:ARF-AllLayers (/ doc layers lyr name out)
+  (setq out nil)
+  (setq doc (vla-get-ActiveDocument (vlax-get-acad-object)))
+  (setq layers (vl-catch-all-apply 'vla-get-Layers (list doc)))
+  (if (not (LI:IsError layers))
+    (vlax-for lyr layers
+      (setq name (vl-catch-all-apply 'vla-get-Name (list lyr)))
+      (if (and (not (LI:IsError name))
+               (LI:IsString name)
+               (/= name ""))
+        (setq out (LI:SafeAddUnique out name))
+      )
+    )
+  )
+  (vl-sort out
+    '(lambda (a b) (< (strcase a) (strcase b))))
+)
+
+;;; Слой внешней ссылки: бит 16 кода 70.
+(defun LI:ARF-IsXref (name / en ent flags)
+  (setq name (LI:SafeTrim name))
+  (setq en (if (= name "") nil (tblobjname "LAYER" name)))
+  (if en
+    (progn
+      (setq ent (entget en))
+      (setq flags (cdr (assoc 70 ent)))
+      (and (numberp flags) (= 16 (logand flags 16)))
+    )
+    nil
+  )
+)
+
+;;; Системный слой, который не включается в АР.
+(defun LI:ARF-IsSkip (name)
+  (LI:NameInList *LI:AR-SKIP-LAYERS* name)
+)
+
+;;; Объединение слоёв всех фильтров шаблона (с вложенными).
+(defun LI:ARF-TemplateLayers (parsedDefs / out def lyr)
+  (setq out nil)
+  (foreach def parsedDefs
+    (foreach lyr (LI:CollectLayersDeep parsedDefs (nth 0 def) nil)
+      (setq out (LI:SafeAddUnique out lyr))
+    )
+  )
+  out
+)
+
+;;; Полный расчёт: (слои xref системных шаблонных).
+;;; Имя целевого фильтра — *LI:ARF-NAME-OVERRIDE* или *LI:AR-FILTER-NAME*.
+(defun LI:ARF-Compute (parsedDefs
+                       / all templ out name xrefCnt sysCnt usedCnt fname)
+  (setq fname (if (and *LI:ARF-NAME-OVERRIDE*
+                       (= (type *LI:ARF-NAME-OVERRIDE*) 'STR)
+                       (/= *LI:ARF-NAME-OVERRIDE* ""))
+                *LI:ARF-NAME-OVERRIDE*
+                *LI:AR-FILTER-NAME*))
+  (setq all (LI:ARF-AllLayers))
+  (setq templ (LI:ARF-TemplateLayers parsedDefs))
+  (setq out nil)
+  (setq xrefCnt 0)
+  (setq sysCnt 0)
+  (setq usedCnt 0)
+  (foreach name all
+    (cond
+      ((and *LI:AR-SKIP-XREF* (LI:ARF-IsXref name))
+        (setq xrefCnt (1+ xrefCnt))
+      )
+      ((LI:ARF-IsSkip name)
+        (setq sysCnt (1+ sysCnt))
+      )
+      ((LI:NameInList templ name)
+        (setq usedCnt (1+ usedCnt))
+      )
+      ((LI:NameInList (list fname) name)
+        nil
+      )
+      (t
+        (setq out (append out (list name)))
+      )
+    )
+  )
+  (list out xrefCnt sysCnt usedCnt)
+)
+
+;;; Итоговый список слоёв АР.
+(defun LI:ARF-BuildList (parsedDefs)
+  (car (LI:ARF-Compute parsedDefs))
+)
+
+;;; Создание фильтра в корне дерева (идемпотентно).
+;;; Имя фильтра — *LI:ARF-NAME-OVERRIDE* или *LI:AR-FILTER-NAME*.
+(defun LI:ARF-Create (layers / layerString pass fname)
+  (setq fname (if (and *LI:ARF-NAME-OVERRIDE*
+                       (= (type *LI:ARF-NAME-OVERRIDE*) 'STR)
+                       (/= *LI:ARF-NAME-OVERRIDE* ""))
+                *LI:ARF-NAME-OVERRIDE*
+                *LI:AR-FILTER-NAME*))
+  (if (null layers)
+    nil
+    (progn
+      (setq layerString (LI:SafeListToComma layers))
+      (setq pass 1)
+      (while (<= pass 2)
+        (LI:DeleteFilterByName fname)
+        (setq pass (1+ pass))
+      )
+      (LI:CreateGroupFilterWithParentCmd fname layerString "")
+      T
+    )
+  )
+)
+
+;;; Полная таблица слоёв фильтра и арифметика отбора.
+;;; Имя фильтра — *LI:ARF-NAME-OVERRIDE* или *LI:AR-FILTER-NAME*.
+(defun LI:ARF-Report (layers skippedXref skippedSys
+                      / all total nonXref arLayer templCnt name fname)
+  (setq fname (if (and *LI:ARF-NAME-OVERRIDE*
+                       (= (type *LI:ARF-NAME-OVERRIDE*) 'STR)
+                       (/= *LI:ARF-NAME-OVERRIDE* ""))
+                *LI:ARF-NAME-OVERRIDE*
+                *LI:AR-FILTER-NAME*))
+  (setq all (LI:ARF-AllLayers))
+  (setq total (length all))
+  (setq nonXref (- total skippedXref))
+  (setq arLayer (if (LI:NameInList all fname) 1 0))
+  (setq templCnt (- nonXref skippedSys (length layers) arLayer))
+  (princ "\n\n")
+  (princ (strcat "\n=== Фильтр " fname " ==="))
+  (princ (strcat "\n  "
+                 (LI:PadRight "Слой" 45) "| Статус"))
+  (princ (strcat "\n  "
+                 (LI:RepeatChar "-" 45) "+"
+                 (LI:RepeatChar "-" 10)))
+  (foreach name layers
+    (princ (strcat "\n  "
+                   (LI:PadRight name 45) "| [OK]"))
+  )
+  (if (null layers)
+    (princ "\n  [Инфо] Список пуст.")
+  )
+  (princ "\n")
+  (princ (strcat "\n  Слоёв в " fname ": " (itoa (length layers))))
+  (princ (strcat "\n  Пропущено XREF: " (itoa skippedXref)))
+  (princ (strcat "\n  Пропущено системных: " (itoa skippedSys)))
+  (princ (strcat "\n  Всего не-XREF слоёв: " (itoa nonXref)))
+  (princ (strcat "\n  Слоёв в фильтрах-источнике: " (itoa templCnt)))
+  (princ (strcat "\n  Проверка: " (itoa nonXref) " - "
+                 (itoa skippedSys) " - " (itoa templCnt)
+                 " = " (itoa (+ (length layers) arLayer))))
+  (princ "\n\n")
+)
+
+;;; Определения фильтров из реального дерева чертежа (fallback).
+(defun LI:ARF-DrawingDefs (/ tree out rec name)
+  (setq tree (LI:FilterTreeFull (LI:FilterRootDictData) nil))
+  (foreach rec tree
+    (setq name (nth 0 rec))
+    (if (and (not (LI:IsSystemFilter name))
+             (not (LI:NameInList (list *LI:AR-FILTER-NAME*) name))
+             (not (LI:NameInList (list *LI:UNASSIGNED-FILTER-NAME*) name)))
+      (setq out (append out (list (list name (nth 1 rec) (nth 2 rec)))))
+    )
+  )
+  out
+)
+
+;;; Построение и отчёт по готовым определениям фильтров.
+(defun LI:ARF-RunFromDefs (parsedDefs / res layers xrefCnt sysCnt)
+  (setq res (LI:ARF-Compute parsedDefs))
+  (setq layers  (nth 0 res))
+  (setq xrefCnt (nth 1 res))
+  (setq sysCnt  (nth 2 res))
+  (setq *LI:AR-LAST-COUNT* (length layers))
+  (setq *LI:AR-LAST-XREF*  xrefCnt)
+  (if (null layers)
+    (progn
+      (princ (strcat "\n[Инфо] Список АР пуст — фильтр '"
+                     *LI:AR-FILTER-NAME* "' не создаётся: нет не-XREF слоёв вне фильтров шаблона."))
+      (LI:ARF-Report layers xrefCnt sysCnt)
+      nil
+    )
+    (if (LI:ARF-Create layers)
+      (progn
+        (princ (strcat "\n[OK] Фильтр '" *LI:AR-FILTER-NAME*
+                       "' создан: " (itoa (length layers)) " слоёв."))
+        (LI:ARF-Report layers xrefCnt sysCnt)
+        (length layers)
+      )
+      (progn
+        (princ "\n[Ошибка] Не удалось создать фильтр АР.")
+        (LI:ARF-Report layers xrefCnt sysCnt)
+        nil
+      )
+    )
+  )
+)
+
+;;; Совпадение имени старого фильтра с масками (подстрока, без регистра).
+(defun LI:MatchesLegacyFilter (name / up m found)
+  (setq up (strcase (LI:SafeTrim name)))
+  (foreach m *LI:LEGACY-FILTER-MASKS*
+    (if (and (not found) m (= (type m) 'STR) (/= m "")
+             (vl-string-search (strcase m) up))
+      (setq found T)
+    )
+  )
+  found
+)
+
+;;; Снимок старых фильтров: (имя всего наших нераспределённых).
+;;; ourLayers — слои фильтров шаблона.
+(defun LI:LegacyInfo (tree ourLayers / out rec name lls matched
+                        unmatched l)
+  (setq out nil)
+  (foreach rec tree
+    (setq name (nth 0 rec))
+    (if (LI:MatchesLegacyFilter name)
+      (progn
+        (setq lls (nth 3 rec))
+        (setq matched 0)
+        (setq unmatched 0)
+        (foreach l lls
+          (cond
+            ((LI:NameInList ourLayers l)
+              (setq matched (1+ matched))
+            )
+            ((and *LI:AR-SKIP-XREF* (LI:ARF-IsXref l))
+              nil
+            )
+            ((LI:ARF-IsSkip l)
+              nil
+            )
+            (t
+              (setq unmatched (1+ unmatched))
+            )
+          )
+        )
+        (setq out
+          (append out
+                  (list (list name (length lls) matched unmatched))))
+      )
+    )
+  )
+  out
+)
+
+;;; Объединение слоёв старых фильтров (по маскам).
+(defun LI:LegacyLayers (tree / out rec name l)
+  (setq out nil)
+  (foreach rec tree
+    (setq name (nth 0 rec))
+    (if (LI:MatchesLegacyFilter name)
+      (foreach l (nth 3 rec)
+        (setq out (LI:SafeAddUnique out l))
+      )
+    )
+  )
+  out
+)
+
+;;; Таблица сверки старых фильтров.
+(defun LI:PrintLegacyCheck (legacyInfo / rec)
+  (if legacyInfo
+    (progn
+      (princ "\n\n")
+      (princ "\n=== Сверка старых фильтров ===")
+      (princ (strcat "\n  "
+                     (LI:PadRight "Старый фильтр" 40) "| "
+                     (LI:PadRight "Слоёв" 6) "| "
+                     (LI:PadRight "В наших" 8) "| "
+                     "Нераспределённые"))
+      (princ (strcat "\n  "
+                     (LI:RepeatChar "-" 40) "+"
+                     (LI:RepeatChar "-" 7) "+"
+                     (LI:RepeatChar "-" 9) "+"
+                     (LI:RepeatChar "-" 17)))
+      (foreach rec legacyInfo
+        (princ (strcat "\n  "
+                       (LI:PadRight (nth 0 rec) 40) "| "
+                       (LI:PadRight (itoa (nth 1 rec)) 6) "| "
+                       (LI:PadRight (itoa (nth 2 rec)) 8) "| "
+                       (itoa (nth 3 rec))))
+      )
+      (princ "\n\n")
+    )
+  )
+)
+
+;;; Создание «Нераспределённые»: слои старых фильтров,
+;;; не входящие в структуру шаблона (минус XREF и системные).
+(defun LI:RunUnassigned (parsedDefs legacyLayers
+                         / templ layers l name xrefCnt sysCnt)
+  (setq *LI:ARF-NAME-OVERRIDE* *LI:UNASSIGNED-FILTER-NAME*)
+  (setq templ (LI:ARF-TemplateLayers parsedDefs))
+  (setq layers nil)
+  (setq xrefCnt 0)
+  (setq sysCnt 0)
+  (foreach l legacyLayers
+    (cond
+      ((LI:NameInList templ l)
+        nil
+      )
+      ((and *LI:AR-SKIP-XREF* (LI:ARF-IsXref l))
+        (setq xrefCnt (1+ xrefCnt))
+      )
+      ((LI:ARF-IsSkip l)
+        (setq sysCnt (1+ sysCnt))
+      )
+      ((LI:NameInList (list *LI:UNASSIGNED-FILTER-NAME*) l)
+        nil
+      )
+      (t
+        (setq layers (append layers (list l)))
+      )
+    )
+  )
+  (setq layers
+    (vl-sort layers
+      '(lambda (a b) (< (strcase a) (strcase b)))))
+  (setq *LI:UNASSIGNED-LAST-COUNT* (length layers))
+  (setq *LI:UNASSIGNED-LAST-XREF*  xrefCnt)
+  (if (null layers)
+    (progn
+      (princ (strcat "\n[Инфо] Список «" *LI:UNASSIGNED-FILTER-NAME*
+                     "» пуст — фильтр не создаётся."))
+      (setq *LI:ARF-NAME-OVERRIDE* nil)
+      nil
+    )
+    (if (LI:ARF-Create layers)
+      (progn
+        (princ (strcat "\n[OK] Фильтр '" *LI:UNASSIGNED-FILTER-NAME*
+                       "' создан: " (itoa (length layers)) " слоёв."))
+        (princ (strcat "\n\n=== Фильтр "
+                       *LI:UNASSIGNED-FILTER-NAME* " ==="))
+        (princ (strcat "\n  " (LI:PadRight "Слой" 45) "| Статус"))
+        (princ (strcat "\n  " (LI:RepeatChar "-" 45) "+"
+                       (LI:RepeatChar "-" 10)))
+        (foreach name layers
+          (princ (strcat "\n  " (LI:PadRight name 45) "| [OK]"))
+        )
+        (princ (strcat "\n\n  Слоёв в " *LI:UNASSIGNED-FILTER-NAME*
+                       ": " (itoa (length layers))))
+        (princ (strcat "\n  Слоёв в старых фильтрах: "
+                       (itoa (length legacyLayers))))
+        (princ (strcat "\n  Пропущено XREF: " (itoa xrefCnt)))
+        (princ (strcat "\n  Пропущено системных: " (itoa sysCnt)))
+        (princ "\n\n")
+        (setq *LI:ARF-NAME-OVERRIDE* nil)
+        (length layers)
+      )
+      (progn
+        (princ (strcat "\n[Ошибка] Не удалось создать фильтр «"
+                       *LI:UNASSIGNED-FILTER-NAME* "»."))
+        (setq *LI:ARF-NAME-OVERRIDE* nil)
+        nil
+      )
+    )
+  )
+)
+
+;;; Команда: шаблон -> определения фильтров -> список АР -> создание.
+(defun LI:RunAR (/ fname xml parsedDefs)
+  (princ "\n\n=== Фильтр АР ===")
+  (setq fname (LI:FindTemplateFile))
+  (if fname
+    (progn
+      (princ (strcat "\nШаблон: " fname))
+      (setq xml (LI:ReadFile fname))
+      (if xml
+        (setq parsedDefs (LI:ParseFilterSheet xml))
+      )
+      (if (null parsedDefs)
+        (progn
+          (princ "\n[Предупр.] Фильтры шаблона не разобраны — беру фильтры чертежа.")
+          (setq parsedDefs (LI:ARF-DrawingDefs))
+        )
+      )
+    )
+    (progn
+      (princ "\n[Инфо] Шаблон не найден — беру фильтры чертежа.")
+      (setq parsedDefs (LI:ARF-DrawingDefs))
+    )
+  )
+  (LI:ARF-RunFromDefs parsedDefs)
+  (princ)
+)
+
+(defun C:МОИСЛОИФИЛЬТРАР () (LI:RunAR) (princ))
 
 ;;; ============================================================
 ;;; Переключение видимости фасадных фильтров (МОИФАСАД*)
@@ -2902,6 +3776,90 @@
                   (setq childEntries
                     (LI:FilterWalkTree objdef (cons ref visited)))
                   (setq out (append out childEntries))
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  out
+)
+
+;;; Имена непосредственных дочерних групповых фильтров в контейнере.
+(defun LI:FilterChildNames (data visited / out pair ref objdef lname)
+  (setq out nil)
+  (if (listp data)
+    (foreach pair data
+      (if (= (car pair) 350)
+        (progn
+          (setq ref (cdr pair))
+          (if (not (member ref visited))
+            (progn
+              (setq objdef (LI:FilterObjData ref))
+              (cond
+                ((and objdef
+                      (setq lname (cdr (assoc 300 objdef)))
+                      (LI:IsString lname))
+                  (setq out (LI:SafeAddUnique out (LI:SafeTrim lname)))
+                )
+                ((and objdef
+                      (= (strcase (LI:ForceString (cdr (assoc 0 objdef))))
+                         "DICTIONARY"))
+                  (foreach lname (LI:FilterChildNames objdef (cons ref visited))
+                    (setq out (LI:SafeAddUnique out lname))
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  out
+)
+
+;;; Полное дерево фильтров: (имя прямые_слои дочерние_имена все_слои).
+;;; Родитель идёт перед потомками, порядок — как в ACLYDICTIONARY.
+(defun LI:FilterTreeFull (data visited / out pair ref objdef lname cont
+                            direct childNames sub all cEntry cLayer)
+  (setq out nil)
+  (if (listp data)
+    (foreach pair data
+      (if (= (car pair) 350)
+        (progn
+          (setq ref (cdr pair))
+          (if (not (member ref visited))
+            (progn
+              (setq objdef (LI:FilterObjData ref))
+              (cond
+                ((and objdef
+                      (setq lname (cdr (assoc 300 objdef)))
+                      (LI:IsString lname))
+                  (setq lname (LI:SafeTrim lname))
+                  (setq cont (LI:FilterContainer objdef))
+                  (setq direct (LI:FilterDataLayers objdef))
+                  (setq childNames (LI:FilterChildNames cont (cons ref visited)))
+                  (setq sub (LI:FilterTreeFull cont (cons ref visited)))
+                  (setq all direct)
+                  (foreach cEntry sub
+                    (foreach cLayer (nth 3 cEntry)
+                      (setq all (LI:SafeAddUnique all cLayer))
+                    )
+                  )
+                  (setq out
+                    (append out
+                            (list (list lname direct childNames all))
+                            sub))
+                )
+                ((and objdef
+                      (= (strcase (LI:ForceString (cdr (assoc 0 objdef))))
+                         "DICTIONARY"))
+                  (foreach cEntry (LI:FilterTreeFull objdef (cons ref visited))
+                    (setq out (append out (list cEntry)))
+                  )
                 )
               )
             )
@@ -3167,5 +4125,7 @@
 (princ "\n  | МОИФАСАДПОД              | вкл: Подсистема (ост. фасад выкл)  |")
 (princ "\n  | МОИФАСАДУТЕП             | вкл: Утепление (ост. фасад выкл)   |")
 (princ "\n  | МОИФАСАДФАС              | вкл: Железо + контуры подсистемы   |")
+(princ "\n  | МОИСЛОИФИЛЬТРАР          | фильтр АР: всё, что не в фильтрах  |")
+(princ "\n  | МОИСЛОИПРОВЕРКАФАЙЛА     | проверка скобок в LISP-файле       |")
 (princ "\n  +---------------------------------------------------------------+")
 (princ)
