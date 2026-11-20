@@ -1,35 +1,20 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="windows-1251"?>
 <?mso-application progid="Excel.Sheet"?>
 <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
  xmlns:o="urn:schemas-microsoft-com:office:office"
  xmlns:x="urn:schemas-microsoft-com:office:excel"
  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
- xmlns:html="http://www.w3.org/TR/REC-html40">
- <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
-  <Version>16.00</Version>
- </DocumentProperties>
- <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
-  <AllowPNG/>
- </OfficeDocumentSettings>
- <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
-  <WindowHeight>11745</WindowHeight>
-  <WindowWidth>28800</WindowWidth>
-  <WindowTopX>32767</WindowTopX>
-  <WindowTopY>32767</WindowTopY>
-  <ProtectStructure>False</ProtectStructure>
-  <ProtectWindows>False</ProtectWindows>
- </ExcelWorkbook>
- <Styles>
-  <Style ss:ID="Default" ss:Name="Normal">
-   <Alignment ss:Vertical="Bottom"/>
-   <Borders/>
-   <Font ss:FontName="Arial"/>
-   <Interior/>
-   <NumberFormat/>
-   <Protection/>
-  </Style>
- </Styles>
- <Worksheet ss:Name="РЎР»РѕРё">
+ xmlns:html="http://www.w3.org/TR/REC-html40"> <Styles>
+   <Style ss:ID="Default" ss:Name="Normal">
+    <Alignment ss:Vertical="Bottom"/>
+    <Borders/>
+    <Font ss:FontName="Arial"/>
+    <Interior/>
+    <NumberFormat/>
+    <Protection/>
+   </Style>
+  </Styles>
+<Worksheet ss:Name="Слои">
   <Table ss:ExpandedColumnCount="20" ss:ExpandedRowCount="73" x:FullColumns="1"
    x:FullRows="1">
    <Column ss:Width="189"/>
@@ -53,26 +38,26 @@
    <Column ss:Width="81.75"/>
    <Column ss:Width="46.5"/>
    <Row>
-    <Cell><Data ss:Type="String">РРјСЏ СЃР»РѕСЏ</Data></Cell>
-    <Cell><Data ss:Type="String">РћРїРёСЃР°РЅРёРµ</Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚ ACI</Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚ РёРјСЏ</Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚ РјРµС‚РѕРґ</Data></Cell>
+    <Cell><Data ss:Type="String">Имя слоя</Data></Cell>
+    <Cell><Data ss:Type="String">Описание</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет ACI</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет имя</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет метод</Data></Cell>
     <Cell><Data ss:Type="String">R</Data></Cell>
     <Cell><Data ss:Type="String">G</Data></Cell>
     <Cell><Data ss:Type="String">B</Data></Cell>
-    <Cell><Data ss:Type="String">РўРёРї Р»РёРЅРёРё</Data></Cell>
-    <Cell><Data ss:Type="String">Р’РµСЃ Р»РёРЅРёРё РєРѕРґ</Data></Cell>
-    <Cell><Data ss:Type="String">Р’РµСЃ Р»РёРЅРёРё С‚РµРєСЃС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РџСЂРѕР·СЂР°С‡РЅРѕСЃС‚СЊ</Data></Cell>
-    <Cell><Data ss:Type="String">РЎС‚РёР»СЊ РїРµС‡Р°С‚Рё</Data></Cell>
-    <Cell><Data ss:Type="String">Р’РєР»СЋС‡РµРЅ</Data></Cell>
-    <Cell><Data ss:Type="String">Р—Р°РјРѕСЂРѕР¶РµРЅ</Data></Cell>
-    <Cell><Data ss:Type="String">Р—Р°РјРѕСЂРѕР¶РµРЅ РІ РЅРѕРІС‹С… Р’Р­</Data></Cell>
-    <Cell><Data ss:Type="String">Р—Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ</Data></Cell>
-    <Cell><Data ss:Type="String">РџРµС‡Р°С‚Р°РµС‚СЃСЏ</Data></Cell>
-    <Cell><Data ss:Type="String">Р—Р°РІРёСЃРёС‚ РѕС‚ XREF</Data></Cell>
-    <Cell><Data ss:Type="String">Р¤Р»Р°РіРё 70</Data></Cell>
+    <Cell><Data ss:Type="String">Тип линии</Data></Cell>
+    <Cell><Data ss:Type="String">Вес линии код</Data></Cell>
+    <Cell><Data ss:Type="String">Вес линии текст</Data></Cell>
+    <Cell><Data ss:Type="String">Прозрачность</Data></Cell>
+    <Cell><Data ss:Type="String">Стиль печати</Data></Cell>
+    <Cell><Data ss:Type="String">Включен</Data></Cell>
+    <Cell><Data ss:Type="String">Заморожен</Data></Cell>
+    <Cell><Data ss:Type="String">Заморожен в новых ВЭ</Data></Cell>
+    <Cell><Data ss:Type="String">Заблокирован</Data></Cell>
+    <Cell><Data ss:Type="String">Печатается</Data></Cell>
+    <Cell><Data ss:Type="String">Зависит от XREF</Data></Cell>
+    <Cell><Data ss:Type="String">Флаги 70</Data></Cell>
    </Row>
    <Row>
     <Cell><Data ss:Type="String">0</Data></Cell>
@@ -85,38 +70,38 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_7</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_7</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РђРґР°РїС‚РµСЂ Р°Р»СЋРјРёРЅРёРµРІС‹Р№</Data></Cell>
+    <Cell><Data ss:Type="String">Адаптер алюминиевый</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="Number">3</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">ACI</Data></Cell>
     <Cell ss:Index="9"><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_192</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_192</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РђРґР°РїС‚РµСЂ РџР’РҐ</Data></Cell>
+    <Cell><Data ss:Type="String">Адаптер ПВХ</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">174</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -126,19 +111,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_174</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_174</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">Р’РµРЅС‚РёР»СЏС†РёРѕРЅРЅС‹Рµ СЂРµС€РµС‚РєРё</Data></Cell>
+    <Cell><Data ss:Type="String">Вентиляционные решетки</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">2</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -148,19 +133,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_2</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_2</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">Р’РёС‚СЂР°Р¶Рё</Data></Cell>
+    <Cell><Data ss:Type="String">Витражи</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">140</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -170,19 +155,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">9</Data></Cell>
-    <Cell><Data ss:Type="String">0.09 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.09 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_140</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_140</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">Р’РѕРґРѕСЃС‚РѕРє</Data></Cell>
+    <Cell><Data ss:Type="String">Водосток</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">5</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -192,19 +177,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">5</Data></Cell>
-    <Cell><Data ss:Type="String">0.05 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.05 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_5</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_5</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ РґР»СЏ С€С‚СЂРёС…РѕРІРєРё</Data></Cell>
+    <Cell><Data ss:Type="String">Вспомогательные для штриховки</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">37</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -214,19 +199,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_37</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_37</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">Р“РµРѕРґРµР·РёСЏ</Data></Cell>
+    <Cell><Data ss:Type="String">Геодезия</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">60</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -236,19 +221,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_60</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_60</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">Р”РІРµСЂРё</Data></Cell>
+    <Cell><Data ss:Type="String">Двери</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">22</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -258,19 +243,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_22</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_22</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">Р”РµС‚Р°Р»Рё</Data></Cell>
+    <Cell><Data ss:Type="String">Детали</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">40</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -280,19 +265,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">20</Data></Cell>
-    <Cell><Data ss:Type="String">0.2 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.2 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_40</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_40</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">Р–РµР»РµР·Рѕ</Data></Cell>
+    <Cell><Data ss:Type="String">Железо</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">204</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -301,19 +286,19 @@
     <Cell ss:Index="8"><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_204</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_204</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">Р—Р°РєР»Р°РґРЅС‹Рµ</Data></Cell>
+    <Cell><Data ss:Type="String">Закладные</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">251</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -323,19 +308,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_251</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_251</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">Р—Р°РїРѕР»РЅРµРЅРёРµ</Data></Cell>
+    <Cell><Data ss:Type="String">Заполнение</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">5</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -345,19 +330,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">9</Data></Cell>
-    <Cell><Data ss:Type="String">0.09 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.09 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_5</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_5</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РљР°СЃСЃРµС‚С‹</Data></Cell>
+    <Cell><Data ss:Type="String">Кассеты</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">20</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -367,19 +352,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">15</Data></Cell>
-    <Cell><Data ss:Type="String">0.15 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.15 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_20</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_20</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РљРµСЂР°РјРѕРіСЂР°РЅРёС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Керамогранит</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">251</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -389,19 +374,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">15</Data></Cell>
-    <Cell><Data ss:Type="String">0.15 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.15 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_251</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_251</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РљР»СЏРјРјРµСЂС‹</Data></Cell>
+    <Cell><Data ss:Type="String">Кляммеры</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">254</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -411,19 +396,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">DASHED</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_254</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_254</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РљРѕРЅС‚СѓСЂ РљР–</Data></Cell>
+    <Cell><Data ss:Type="String">Контур КЖ</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">4</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -433,19 +418,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">DASHED</Data></Cell>
     <Cell><Data ss:Type="String">5</Data></Cell>
-    <Cell><Data ss:Type="String">0.05 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.05 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_4</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_4</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РљРѕРЅС‚СѓСЂ РљРњ</Data></Cell>
+    <Cell><Data ss:Type="String">Контур КМ</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">1</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -455,19 +440,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">DASHED</Data></Cell>
     <Cell><Data ss:Type="String">5</Data></Cell>
-    <Cell><Data ss:Type="String">0.05 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.05 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_1</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_1</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РљРѕРЅС‚СѓСЂ СЃС‚РµРЅ</Data></Cell>
+    <Cell><Data ss:Type="String">Контур стен</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">73</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -477,19 +462,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">DASHED</Data></Cell>
     <Cell><Data ss:Type="String">5</Data></Cell>
-    <Cell><Data ss:Type="String">0.05 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.05 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_73</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_73</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РљРѕРЅС‚СѓСЂС‹ С€С‚СЂРёС…РѕРІРєРё СѓС‚РµРїР»РёС‚РµР»СЏ</Data></Cell>
+    <Cell><Data ss:Type="String">Контуры штриховки утеплителя</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">150</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -499,19 +484,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">13</Data></Cell>
-    <Cell><Data ss:Type="String">0.13 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.13 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_150</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_150</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РљСЂРµРїРµР¶</Data></Cell>
+    <Cell><Data ss:Type="String">Крепеж</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">1</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -521,19 +506,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">25</Data></Cell>
-    <Cell><Data ss:Type="String">0.25 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.25 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_1</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_1</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РљСЂС‹С€РєРё СЂРёРіРµР»СЊРЅС‹Рµ</Data></Cell>
+    <Cell><Data ss:Type="String">Крышки ригельные</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">30</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -543,19 +528,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_30</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_30</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РљСЂС‹С€РєРё СЃС‚РѕРµС‡РЅС‹Рµ</Data></Cell>
+    <Cell><Data ss:Type="String">Крышки стоечные</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">2</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -565,19 +550,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_2</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_2</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РљСЂС‹С€РєРё СЃС‚РѕРµС‡РЅС‹Рµ СѓРіР»РѕРІС‹Рµ</Data></Cell>
+    <Cell><Data ss:Type="String">Крышки стоечные угловые</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">52</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -587,19 +572,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_52</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_52</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">Р›Р°РјРµР»Рё</Data></Cell>
+    <Cell><Data ss:Type="String">Ламели</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">102</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -609,19 +594,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_102</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_102</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РњР°СЂРєРёСЂРѕРІРєР°</Data></Cell>
+    <Cell><Data ss:Type="String">Маркировка</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">14</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -631,19 +616,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">9</Data></Cell>
-    <Cell><Data ss:Type="String">0.09 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.09 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_14</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_14</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РњРµС‚Р°Р»Р»</Data></Cell>
+    <Cell><Data ss:Type="String">Металл</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">102</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -653,19 +638,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">30</Data></Cell>
-    <Cell><Data ss:Type="String">0.3 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.3 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_102</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_102</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РњРѕР»РЅРёРµР·Р°С‰РёС‚Р°</Data></Cell>
+    <Cell><Data ss:Type="String">Молниезащита</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">50</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -675,19 +660,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">GOST2.303 8</Data></Cell>
     <Cell><Data ss:Type="String">30</Data></Cell>
-    <Cell><Data ss:Type="String">0.3 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.3 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_50</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_50</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РќР°С‰РµР»СЊРЅРёРєРё</Data></Cell>
+    <Cell><Data ss:Type="String">Нащельники</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">5</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -697,19 +682,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">9</Data></Cell>
-    <Cell><Data ss:Type="String">0.09 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.09 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_5</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_5</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РќРµРІРёРґРёРјС‹Рµ</Data></Cell>
+    <Cell><Data ss:Type="String">Невидимые</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">250</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -719,19 +704,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">13</Data></Cell>
-    <Cell><Data ss:Type="String">0.13 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.13 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_250</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_250</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РќРµРІРёРґРёРјС‹Рµ СЂР°Р·РјРµСЂС‹</Data></Cell>
+    <Cell><Data ss:Type="String">Невидимые размеры</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">250</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -741,19 +726,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">13</Data></Cell>
-    <Cell><Data ss:Type="String">0.13 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.13 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_250</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_250</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РћР±РѕР·РЅР°С‡РµРЅРёСЏ</Data></Cell>
+    <Cell><Data ss:Type="String">Обозначения</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">14</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -763,19 +748,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">9</Data></Cell>
-    <Cell><Data ss:Type="String">0.09 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.09 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_14</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_14</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РћР±РѕР·РЅР°С‡РµРЅРёСЏ СѓР·Р»РѕРІ СЂР°Р·СЂРµР·РѕРІ Рё СЃРµС‡РµРЅРёР№</Data></Cell>
+    <Cell><Data ss:Type="String">Обозначения узлов разрезов и сечений</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">14</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -785,19 +770,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">9</Data></Cell>
-    <Cell><Data ss:Type="String">0.09 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.09 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_14</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_14</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РћРіСЂР°Р¶РґРµРЅРёСЏ</Data></Cell>
+    <Cell><Data ss:Type="String">Ограждения</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">250</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -807,19 +792,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">13</Data></Cell>
-    <Cell><Data ss:Type="String">0.13 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.13 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_250</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_250</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РћРєРЅР°</Data></Cell>
+    <Cell><Data ss:Type="String">Окна</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">195</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -829,19 +814,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_195</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_195</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РћСЃРё</Data></Cell>
+    <Cell><Data ss:Type="String">Оси</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">14</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -851,19 +836,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">9</Data></Cell>
-    <Cell><Data ss:Type="String">0.09 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.09 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_14</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_14</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РћСЃРЅРѕРІРЅС‹Рµ</Data></Cell>
+    <Cell><Data ss:Type="String">Основные</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">4</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -873,19 +858,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">35</Data></Cell>
-    <Cell><Data ss:Type="String">0.35 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.35 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_4</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_4</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РћС‚РјРµС‚РєРё</Data></Cell>
+    <Cell><Data ss:Type="String">Отметки</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">14</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -895,19 +880,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">13</Data></Cell>
-    <Cell><Data ss:Type="String">0.13 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.13 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_14</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_14</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РџР»РѕС‰Р°РґРё</Data></Cell>
+    <Cell><Data ss:Type="String">Площади</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">7</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -917,19 +902,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">9</Data></Cell>
-    <Cell><Data ss:Type="String">0.09 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.09 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_7</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_7</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РџРѕРґСЃРёСЃС‚РµРјР°</Data></Cell>
+    <Cell><Data ss:Type="String">Подсистема</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">33</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -939,19 +924,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">DASHED</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_33</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_33</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РџРѕРґСЃРёСЃС‚РµРјР° Р°Р»СЋРјРёРЅРёРµРІР°СЏ</Data></Cell>
+    <Cell><Data ss:Type="String">Подсистема алюминиевая</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">33</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -961,19 +946,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">DASHED</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_33</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_33</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РџРѕРґСЃРёСЃС‚РµРјР° РѕС†РёРЅРєРѕРІР°РЅРЅР°СЏ</Data></Cell>
+    <Cell><Data ss:Type="String">Подсистема оцинкованная</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">33</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -983,19 +968,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">DASHED</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_33</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_33</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РџРѕРґС€РёРІРєР°</Data></Cell>
+    <Cell><Data ss:Type="String">Подшивка</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">252</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1005,19 +990,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">9</Data></Cell>
-    <Cell><Data ss:Type="String">0.09 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.09 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_252</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_252</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РџСЂРѕС„РёР»Рё</Data></Cell>
+    <Cell><Data ss:Type="String">Профили</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">60</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1027,19 +1012,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_60</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_60</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">Р Р°Р·РјРµСЂС‹</Data></Cell>
+    <Cell><Data ss:Type="String">Размеры</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">14</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1049,19 +1034,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">13</Data></Cell>
-    <Cell><Data ss:Type="String">0.13 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.13 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_14</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_14</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">Р Р°Р·РјРµСЂС‹ РѕР±Р»РёС†РѕРІРєРё</Data></Cell>
+    <Cell><Data ss:Type="String">Размеры облицовки</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">14</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1071,19 +1056,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">5</Data></Cell>
-    <Cell><Data ss:Type="String">0.05 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.05 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_14</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_14</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">Р Р°Р·РјРµСЂС‹ РїРѕРґСЃРёСЃС‚РµРјС‹</Data></Cell>
+    <Cell><Data ss:Type="String">Размеры подсистемы</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">1</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1093,19 +1078,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">5</Data></Cell>
-    <Cell><Data ss:Type="String">0.05 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.05 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_1</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_1</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">Р Р°Р·РјРµСЂС‹ СѓС‚РµРїР»РёС‚РµР»СЏ</Data></Cell>
+    <Cell><Data ss:Type="String">Размеры утеплителя</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">30</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1115,19 +1100,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">5</Data></Cell>
-    <Cell><Data ss:Type="String">0.05 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.05 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_30</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_30</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">Р Р°РјРєРё</Data></Cell>
+    <Cell><Data ss:Type="String">Рамки</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">7</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1137,19 +1122,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_7</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_7</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">Р РёРіРµР»Рё</Data></Cell>
+    <Cell><Data ss:Type="String">Ригели</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">73</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1159,19 +1144,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_73</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_73</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РЎС‚Р°РЅРґР°СЂС‚РЅС‹Рµ СЌР»РµРјРµРЅС‚С‹</Data></Cell>
+    <Cell><Data ss:Type="String">Стандартные элементы</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">40</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1181,19 +1166,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">15</Data></Cell>
-    <Cell><Data ss:Type="String">0.15 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.15 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_40</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_40</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РЎС‚РµРєР»РѕРїР°РєРµС‚С‹</Data></Cell>
+    <Cell><Data ss:Type="String">Стеклопакеты</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">1</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1203,19 +1188,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_1</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_1</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РЎС‚РµРЅС‹</Data></Cell>
+    <Cell><Data ss:Type="String">Стены</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">4</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1225,19 +1210,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_4</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_4</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РЎС‚РѕР№РєРё РїСЂСЏРјС‹Рµ</Data></Cell>
+    <Cell><Data ss:Type="String">Стойки прямые</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">17</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1247,19 +1232,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_17</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_17</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РЎС‚РѕР№РєРё СѓРіР»РѕРІС‹Рµ</Data></Cell>
+    <Cell><Data ss:Type="String">Стойки угловые</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">28</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1269,19 +1254,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_28</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_28</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РЎСѓС…Р°СЂРё</Data></Cell>
+    <Cell><Data ss:Type="String">Сухари</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">134</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1291,19 +1276,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_134</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_134</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РЎСѓС‰РµСЃС‚РІСѓСЋС‰РёРµ РєРѕРЅСЃС‚СЂСѓРєС†РёРё Р·РґР°РЅРёСЏ</Data></Cell>
+    <Cell><Data ss:Type="String">Существующие конструкции здания</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">6</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1313,19 +1298,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">30</Data></Cell>
-    <Cell><Data ss:Type="String">0.3 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.3 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_6</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_6</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РўРµРєСЃС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Текст</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">2</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1335,19 +1320,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">15</Data></Cell>
-    <Cell><Data ss:Type="String">0.15 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.15 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_2</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_2</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РўРµСЂРјРѕРјРѕСЃС‚ СЂРёРіРµР»РµР№</Data></Cell>
+    <Cell><Data ss:Type="String">Термомост ригелей</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">174</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1357,19 +1342,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_174</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_174</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РўРµСЂРјРѕРјРѕСЃС‚ СЃС‚РѕР№РєРё РїСЂСЏРјРѕР№</Data></Cell>
+    <Cell><Data ss:Type="String">Термомост стойки прямой</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">174</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1379,19 +1364,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_174</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_174</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РўРµСЂРјРѕРјРѕСЃС‚ СЃС‚РѕР№РєРё СѓРіР»РѕРІРѕР№</Data></Cell>
+    <Cell><Data ss:Type="String">Термомост стойки угловой</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">174</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1401,19 +1386,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_174</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_174</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РўРѕРЅРєР°СЏ</Data></Cell>
+    <Cell><Data ss:Type="String">Тонкая</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">110</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1423,19 +1408,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">13</Data></Cell>
-    <Cell><Data ss:Type="String">0.13 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.13 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_110</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_110</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РЈРїР»РѕС‚РЅРёС‚РµР»Рё РїСЂРёР¶РёРјРЅС‹Рµ</Data></Cell>
+    <Cell><Data ss:Type="String">Уплотнители прижимные</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">55</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1445,19 +1430,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_55</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_55</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РЈРїР»РѕС‚РЅРёС‚РµР»Рё СЂРёРіРµР»СЊРЅС‹Рµ</Data></Cell>
+    <Cell><Data ss:Type="String">Уплотнители ригельные</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">53</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1467,19 +1452,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_53</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_53</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РЈРїР»РѕС‚РЅРёС‚РµР»Рё СЃС‚РѕРµС‡РЅС‹Рµ</Data></Cell>
+    <Cell><Data ss:Type="String">Уплотнители стоечные</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">45</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1489,19 +1474,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_45</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_45</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РЈРїР»РѕС‚РЅРёС‚РµР»Рё СЃС‚РѕРµС‡РЅС‹Рµ СѓРіР»РѕРІС‹Рµ</Data></Cell>
+    <Cell><Data ss:Type="String">Уплотнители стоечные угловые</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">24</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1511,19 +1496,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_24</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_24</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">Р§РµСЂРЅРѕ-Р±РµР»С‹Р№</Data></Cell>
+    <Cell><Data ss:Type="String">Черно-белый</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">7</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1533,19 +1518,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
+    <Cell><Data ss:Type="String">По умолчанию</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_7</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_7</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РЁС‚СЂРёС…РѕРІРєР°</Data></Cell>
+    <Cell><Data ss:Type="String">Штриховка</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">44</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1555,19 +1540,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">9</Data></Cell>
-    <Cell><Data ss:Type="String">0.09 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.09 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_44</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_44</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РЁС‚СЂРёС…РѕРІРєР° РІРёС‚СЂР°Р¶РµР№</Data></Cell>
+    <Cell><Data ss:Type="String">Штриховка витражей</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">85</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1577,19 +1562,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_85</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_85</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РЁС‚СЂРёС…РѕРІРєР° СѓС‚РµРїР»РёС‚РµР»СЏ</Data></Cell>
+    <Cell><Data ss:Type="String">Штриховка утеплителя</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">150</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1599,19 +1584,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">Continuous</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_150</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_150</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РЁС‚СЂРёС…РѕРІС‹Рµ</Data></Cell>
+    <Cell><Data ss:Type="String">Штриховые</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">170</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1621,19 +1606,19 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">GOST2.303 4</Data></Cell>
     <Cell><Data ss:Type="String">9</Data></Cell>
-    <Cell><Data ss:Type="String">0.09 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0.09 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_170</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_170</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
    <Row>
-    <Cell><Data ss:Type="String">РЁС‚СЂРёС…РїСѓРЅРєС‚РёСЂРЅС‹Рµ Рё РѕСЃРµРІС‹Рµ</Data></Cell>
+    <Cell><Data ss:Type="String">Штрихпунктирные и осевые</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">14</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
@@ -1643,15 +1628,15 @@
     <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">GOST2.303 6</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0 РјРј</Data></Cell>
+    <Cell><Data ss:Type="String">0 мм</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_14</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
+    <Cell><Data ss:Type="String">Цвет_14</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
+    <Cell><Data ss:Type="String">Да</Data></Cell>
+    <Cell><Data ss:Type="String">Нет</Data></Cell>
     <Cell><Data ss:Type="String">0</Data></Cell>
    </Row>
   </Table>
@@ -1667,1734 +1652,20 @@
    <ProtectScenarios>False</ProtectScenarios>
   </WorksheetOptions>
  </Worksheet>
- <Worksheet ss:Name="Р¤РёР»СЊС‚СЂС‹">
-  <Table ss:ExpandedColumnCount="2" ss:ExpandedRowCount="14" x:FullColumns="1"
-   x:FullRows="1">
-   <Column ss:Width="102"/>
-   <Column ss:Width="314.25"/>
-   <Row>
-    <Cell><Data ss:Type="String">РРјСЏ С„РёР»СЊС‚СЂР°</Data></Cell>
-    <Cell><Data ss:Type="String">РЎРїРёСЃРѕРє СЃР»РѕРµРІ</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЎС‚СЂРѕР№РїР»СЌРєСЃ</Data></Cell>
-    <Cell><Data ss:Type="String">РћСЃРё,РћСЃРЅРѕРІРЅС‹Рµ,РЎС‚РµРЅС‹,РЎСѓС‰РµСЃС‚РІСѓСЋС‰РёРµ РєРѕРЅСЃС‚СЂСѓРєС†РёРё Р·РґР°РЅРёСЏ,РўРµРєСЃС‚,Р§РµСЂРЅРѕ-Р±РµР»С‹Р№,РЁС‚СЂРёС…РѕРІРєР°</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р’РёС‚СЂР°Р¶Рё</Data></Cell>
-    <Cell><Data ss:Type="String">РђРґР°РїС‚РµСЂ Р°Р»СЋРјРёРЅРёРµРІС‹Р№,РђРґР°РїС‚РµСЂ РџР’РҐ,Р’РµРЅС‚РёР»СЏС†РёРѕРЅРЅС‹Рµ СЂРµС€РµС‚РєРё,Р’РёС‚СЂР°Р¶Рё,Р”РІРµСЂРё,Р”РµС‚Р°Р»Рё,Р—Р°РєР»Р°РґРЅС‹Рµ,Р—Р°РїРѕР»РЅРµРЅРёРµ,РљСЂРµРїРµР¶,РљСЂС‹С€РєРё СЂРёРіРµР»СЊРЅС‹Рµ,РљСЂС‹С€РєРё СЃС‚РѕРµС‡РЅС‹Рµ,РљСЂС‹С€РєРё СЃС‚РѕРµС‡РЅС‹Рµ СѓРіР»РѕРІС‹Рµ,РњР°СЂРєРёСЂРѕРІРєР°,РќРµРІРёРґРёРјС‹Рµ,РћР±РѕР·РЅР°С‡РµРЅРёСЏ,РћРіСЂР°Р¶РґРµРЅРёСЏ,РћС‚РјРµС‚РєРё,РџСЂРѕС„РёР»Рё,Р Р°Р·РјРµСЂС‹,Р Р°РјРєРё,Р РёРіРµР»Рё,РЎС‚Р°РЅРґР°СЂС‚РЅС‹Рµ СЌР»РµРјРµРЅС‚С‹,РЎС‚РµРєР»РѕРїР°РєРµС‚С‹,РЎС‚РѕР№РєРё РїСЂСЏРјС‹Рµ,РЎС‚РѕР№РєРё СѓРіР»РѕРІС‹Рµ,РЎСѓС…Р°СЂРё,РўРµСЂРјРѕРјРѕСЃС‚ СЂРёРіРµР»РµР№,РўРµСЂРјРѕРјРѕСЃС‚ СЃС‚РѕР№РєРё РїСЂСЏРјРѕР№,РўРµСЂРјРѕРјРѕСЃС‚ СЃС‚РѕР№РєРё СѓРіР»РѕРІРѕР№,РўРѕРЅРєР°СЏ,РЈРїР»РѕС‚РЅРёС‚РµР»Рё РїСЂРёР¶РёРјРЅС‹Рµ,РЈРїР»РѕС‚РЅРёС‚РµР»Рё СЂРёРіРµР»СЊРЅС‹Рµ,РЈРїР»РѕС‚РЅРёС‚РµР»Рё СЃС‚РѕРµС‡РЅС‹Рµ,РЈРїР»РѕС‚РЅРёС‚РµР»Рё СЃС‚РѕРµС‡РЅС‹Рµ СѓРіР»РѕРІС‹Рµ,РЁС‚СЂРёС…РѕРІРєР° РІРёС‚СЂР°Р¶РµР№,РЁС‚СЂРёС…РѕРІС‹Рµ,РЁС‚СЂРёС…РїСѓРЅРєС‚РёСЂРЅС‹Рµ Рё РѕСЃРµРІС‹Рµ</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РћРєРЅР°</Data></Cell>
-    <Cell><Data ss:Type="String">Р’РµРЅС‚РёР»СЏС†РёРѕРЅРЅС‹Рµ СЂРµС€РµС‚РєРё,Р”РІРµСЂРё,Р”РµС‚Р°Р»Рё,РњР°СЂРєРёСЂРѕРІРєР°,РћРєРЅР°,РћС‚РјРµС‚РєРё</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РћС‚РєР»СЋС‡РµРЅРЅС‹Рµ</Data></Cell>
-    <Cell><Data ss:Type="String">Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ РґР»СЏ С€С‚СЂРёС…РѕРІРєРё,Р“РµРѕРґРµР·РёСЏ,Р–РµР»РµР·Рѕ,РљР»СЏРјРјРµСЂС‹,РњРµС‚Р°Р»Р»,РќРµРІРёРґРёРјС‹Рµ,РќРµРІРёРґРёРјС‹Рµ СЂР°Р·РјРµСЂС‹,РџР»РѕС‰Р°РґРё</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р¤Р°СЃР°Рґ - РћР±Р»РёС†РѕРІРєР°</Data></Cell>
-    <Cell><Data ss:Type="String">Р’РµРЅС‚РёР»СЏС†РёРѕРЅРЅС‹Рµ СЂРµС€РµС‚РєРё,Р’РѕРґРѕСЃС‚РѕРє,РљР°СЃСЃРµС‚С‹,РљРµСЂР°РјРѕРіСЂР°РЅРёС‚,Р›Р°РјРµР»Рё,РћР±РѕР·РЅР°С‡РµРЅРёСЏ СѓР·Р»РѕРІ СЂР°Р·СЂРµР·РѕРІ Рё СЃРµС‡РµРЅРёР№,РћС‚РјРµС‚РєРё,РџРѕРґС€РёРІРєР°,Р Р°Р·РјРµСЂС‹ РѕР±Р»РёС†РѕРІРєРё</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р¤Р°СЃР°Рґ - РџРѕРґСЃРёСЃС‚РµРјР°</Data></Cell>
-    <Cell><Data ss:Type="String">РљРѕРЅС‚СѓСЂ РљР–,РљРѕРЅС‚СѓСЂ РљРњ,РљРѕРЅС‚СѓСЂ СЃС‚РµРЅ,РћС‚РјРµС‚РєРё,РџРѕРґСЃРёСЃС‚РµРјР°,РџРѕРґСЃРёСЃС‚РµРјР° Р°Р»СЋРјРёРЅРёРµРІР°СЏ,РџРѕРґСЃРёСЃС‚РµРјР° РѕС†РёРЅРєРѕРІР°РЅРЅР°СЏ,Р Р°Р·РјРµСЂС‹ РїРѕРґСЃРёСЃС‚РµРјС‹</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р¤Р°СЃР°Рґ - РЈС‚РµРїР»РµРЅРёРµ</Data></Cell>
-    <Cell><Data ss:Type="String">РљРѕРЅС‚СѓСЂ РљР–,РљРѕРЅС‚СѓСЂ РљРњ,РљРѕРЅС‚СѓСЂ СЃС‚РµРЅ,РљРѕРЅС‚СѓСЂС‹ С€С‚СЂРёС…РѕРІРєРё СѓС‚РµРїР»РёС‚РµР»СЏ,РњРѕР»РЅРёРµР·Р°С‰РёС‚Р°,РћС‚РјРµС‚РєРё,Р Р°Р·РјРµСЂС‹ СѓС‚РµРїР»РёС‚РµР»СЏ,РЁС‚СЂРёС…РѕРІРєР° СѓС‚РµРїР»РёС‚РµР»СЏ</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЎС‚СЂРѕР№РїР»СЌРєСЃ</Data></Cell>
-    <Cell><Data ss:Type="String">&gt;&gt;Р’РёС‚СЂР°Р¶Рё</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЎС‚СЂРѕР№РїР»СЌРєСЃ</Data></Cell>
-    <Cell><Data ss:Type="String">&gt;&gt;РћРєРЅР°</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЎС‚СЂРѕР№РїР»СЌРєСЃ</Data></Cell>
-    <Cell><Data ss:Type="String">&gt;&gt;РћС‚РєР»СЋС‡РµРЅРЅС‹Рµ</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЎС‚СЂРѕР№РїР»СЌРєСЃ</Data></Cell>
-    <Cell><Data ss:Type="String">&gt;&gt;Р¤Р°СЃР°Рґ - РћР±Р»РёС†РѕРІРєР°</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЎС‚СЂРѕР№РїР»СЌРєСЃ</Data></Cell>
-    <Cell><Data ss:Type="String">&gt;&gt;Р¤Р°СЃР°Рґ - РџРѕРґСЃРёСЃС‚РµРјР°</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЎС‚СЂРѕР№РїР»СЌРєСЃ</Data></Cell>
-    <Cell><Data ss:Type="String">&gt;&gt;Р¤Р°СЃР°Рґ - РЈС‚РµРїР»РµРЅРёРµ</Data></Cell>
-   </Row>
-  </Table>
-  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
-   <Panes>
-    <Pane>
-     <Number>3</Number>
-     <ActiveRow>13</ActiveRow>
-     <ActiveCol>1</ActiveCol>
-     <RangeSelection>R1C1:R14C2</RangeSelection>
-    </Pane>
-   </Panes>
-   <ProtectObjects>False</ProtectObjects>
-   <ProtectScenarios>False</ProtectScenarios>
-  </WorksheetOptions>
- </Worksheet>
- <Worksheet ss:Name="РЎР»РѕРё (2)">
-  <Table ss:ExpandedColumnCount="20" ss:ExpandedRowCount="72" x:FullColumns="1"
+<Worksheet ss:Name="Фильтры">
+  <Table ss:ExpandedColumnCount="2" ss:ExpandedRowCount="9" x:FullColumns="1"
    x:FullRows="1">
    <Column ss:Width="189"/>
-   <Column ss:Width="49.5"/>
-   <Column ss:Width="45.75"/>
-   <Column ss:Width="47.25"/>
-   <Column ss:Width="57"/>
-   <Column ss:Width="21" ss:Span="2"/>
-   <Column ss:Index="9" ss:Width="64.5"/>
-   <Column ss:Width="71.25"/>
-   <Column ss:Width="78"/>
-   <Column ss:Width="67.5"/>
-   <Column ss:Width="64.5"/>
-   <Column ss:Width="45"/>
-   <Column ss:Width="56.25"/>
-   <Column ss:Width="114"/>
-   <Column ss:Width="69"/>
-   <Column ss:Width="56.25"/>
-   <Column ss:Width="81.75"/>
-   <Column ss:Width="46.5"/>
-   <Row>
-    <Cell><Data ss:Type="String">РРјСЏ СЃР»РѕСЏ</Data></Cell>
-    <Cell><Data ss:Type="String">РћРїРёСЃР°РЅРёРµ</Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚ ACI</Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚ РёРјСЏ</Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚ РјРµС‚РѕРґ</Data></Cell>
-    <Cell><Data ss:Type="String">R</Data></Cell>
-    <Cell><Data ss:Type="String">G</Data></Cell>
-    <Cell><Data ss:Type="String">B</Data></Cell>
-    <Cell><Data ss:Type="String">РўРёРї Р»РёРЅРёРё</Data></Cell>
-    <Cell><Data ss:Type="String">Р’РµСЃ Р»РёРЅРёРё РєРѕРґ</Data></Cell>
-    <Cell><Data ss:Type="String">Р’РµСЃ Р»РёРЅРёРё С‚РµРєСЃС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РџСЂРѕР·СЂР°С‡РЅРѕСЃС‚СЊ</Data></Cell>
-    <Cell><Data ss:Type="String">РЎС‚РёР»СЊ РїРµС‡Р°С‚Рё</Data></Cell>
-    <Cell><Data ss:Type="String">Р’РєР»СЋС‡РµРЅ</Data></Cell>
-    <Cell><Data ss:Type="String">Р—Р°РјРѕСЂРѕР¶РµРЅ</Data></Cell>
-    <Cell><Data ss:Type="String">Р—Р°РјРѕСЂРѕР¶РµРЅ РІ РЅРѕРІС‹С… Р’Р­</Data></Cell>
-    <Cell><Data ss:Type="String">Р—Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ</Data></Cell>
-    <Cell><Data ss:Type="String">РџРµС‡Р°С‚Р°РµС‚СЃСЏ</Data></Cell>
-    <Cell><Data ss:Type="String">Р—Р°РІРёСЃРёС‚ РѕС‚ XREF</Data></Cell>
-    <Cell><Data ss:Type="String">Р¤Р»Р°РіРё 70</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">7</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_7</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РђРґР°РїС‚РµСЂ Р°Р»СЋРјРёРЅРёРµРІС‹Р№</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">3</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_3</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РђРґР°РїС‚РµСЂ РџР’РҐ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">174</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_174</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р’РµРЅС‚РёР»СЏС†РёРѕРЅРЅС‹Рµ СЂРµС€РµС‚РєРё</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">2</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0.0 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_2</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р’РёС‚СЂР°Р¶Рё</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">140</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">191</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">9</Data></Cell>
-    <Cell><Data ss:Type="String">0.09 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_140</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р’РѕРґРѕСЃС‚РѕРє</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">5</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">5</Data></Cell>
-    <Cell><Data ss:Type="String">0.05 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_5</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ РґР»СЏ С€С‚СЂРёС…РѕРІРєРё</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">37</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">127</Data></Cell>
-    <Cell><Data ss:Type="String">95</Data></Cell>
-    <Cell><Data ss:Type="String">63</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0.0 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_37</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р“РµРѕРґРµР·РёСЏ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">60</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">191</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_60</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р”РІРµСЂРё</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">22</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">204</Data></Cell>
-    <Cell><Data ss:Type="String">51</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0.0 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_22</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р”РµС‚Р°Р»Рё</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">40</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">191</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">20</Data></Cell>
-    <Cell><Data ss:Type="String">0.2 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_40</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р–РµР»РµР·Рѕ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">204</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">114</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_204</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р—Р°РєР»Р°РґРЅС‹Рµ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">251</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">91</Data></Cell>
-    <Cell><Data ss:Type="String">91</Data></Cell>
-    <Cell><Data ss:Type="String">91</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_251</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р—Р°РїРѕР»РЅРµРЅРёРµ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">5</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">9</Data></Cell>
-    <Cell><Data ss:Type="String">0.09 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_5</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РљР°СЃСЃРµС‚С‹</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">20</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">63</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">15</Data></Cell>
-    <Cell><Data ss:Type="String">0.15 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_20</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РљРµСЂР°РјРѕРіСЂР°РЅРёС‚</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">251</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">91</Data></Cell>
-    <Cell><Data ss:Type="String">91</Data></Cell>
-    <Cell><Data ss:Type="String">91</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">15</Data></Cell>
-    <Cell><Data ss:Type="String">0.15 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_251</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РљР»СЏРјРјРµСЂС‹</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">254</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">214</Data></Cell>
-    <Cell><Data ss:Type="String">214</Data></Cell>
-    <Cell><Data ss:Type="String">214</Data></Cell>
-    <Cell><Data ss:Type="String">DASHED</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0.0 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_254</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РљРѕРЅС‚СѓСЂ РљР–</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">4</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">DASHED</Data></Cell>
-    <Cell><Data ss:Type="String">5</Data></Cell>
-    <Cell><Data ss:Type="String">0.05 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_4</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РљРѕРЅС‚СѓСЂ РљРњ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">1</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">DASHED</Data></Cell>
-    <Cell><Data ss:Type="String">5</Data></Cell>
-    <Cell><Data ss:Type="String">0.05 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_1</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РљРѕРЅС‚СѓСЂ СЃС‚РµРЅ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">73</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">204</Data></Cell>
-    <Cell><Data ss:Type="String">102</Data></Cell>
-    <Cell><Data ss:Type="String">DASHED</Data></Cell>
-    <Cell><Data ss:Type="String">5</Data></Cell>
-    <Cell><Data ss:Type="String">0.05 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_73</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РљРѕРЅС‚СѓСЂС‹ С€С‚СЂРёС…РѕРІРєРё СѓС‚РµРїР»РёС‚РµР»СЏ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">150</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">127</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">13</Data></Cell>
-    <Cell><Data ss:Type="String">0.13 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_150</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РљСЂРµРїРµР¶</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">1</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">25</Data></Cell>
-    <Cell><Data ss:Type="String">0.25 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_1</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РљСЂС‹С€РєРё СЂРёРіРµР»СЊРЅС‹Рµ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">30</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">127</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_30</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РљСЂС‹С€РєРё СЃС‚РѕРµС‡РЅС‹Рµ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">2</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_2</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РљСЂС‹С€РєРё СЃС‚РѕРµС‡РЅС‹Рµ СѓРіР»РѕРІС‹Рµ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">52</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">204</Data></Cell>
-    <Cell><Data ss:Type="String">204</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_52</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р›Р°РјРµР»Рё</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">102</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">204</Data></Cell>
-    <Cell><Data ss:Type="String">51</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0.0 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_102</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РњРµС‚Р°Р»Р»</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">102</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">204</Data></Cell>
-    <Cell><Data ss:Type="String">51</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">30</Data></Cell>
-    <Cell><Data ss:Type="String">0.3 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_102</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РњРѕР»РЅРёРµР·Р°С‰РёС‚Р°</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">50</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">GOST2.303 8</Data></Cell>
-    <Cell><Data ss:Type="String">30</Data></Cell>
-    <Cell><Data ss:Type="String">0.3 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_50</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РќР°С‰РµР»СЊРЅРёРєРё</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">5</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">9</Data></Cell>
-    <Cell><Data ss:Type="String">0.09 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_5</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РќРµРІРёРґРёРјС‹Рµ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">250</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">51</Data></Cell>
-    <Cell><Data ss:Type="String">51</Data></Cell>
-    <Cell><Data ss:Type="String">51</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">13</Data></Cell>
-    <Cell><Data ss:Type="String">0.13 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_250</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РќРµРІРёРґРёРјС‹Рµ СЂР°Р·РјРµСЂС‹</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">250</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">51</Data></Cell>
-    <Cell><Data ss:Type="String">51</Data></Cell>
-    <Cell><Data ss:Type="String">51</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">13</Data></Cell>
-    <Cell><Data ss:Type="String">0.13 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_250</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РћР±РѕР·РЅР°С‡РµРЅРёСЏ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">14</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">9</Data></Cell>
-    <Cell><Data ss:Type="String">0.09 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_14</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РћР±РѕР·РЅР°С‡РµРЅРёСЏ СѓР·Р»РѕРІ СЂР°Р·СЂРµР·РѕРІ Рё СЃРµС‡РµРЅРёР№</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">14</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">9</Data></Cell>
-    <Cell><Data ss:Type="String">0.09 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_14</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РћРіСЂР°Р¶РґРµРЅРёСЏ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">250</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">51</Data></Cell>
-    <Cell><Data ss:Type="String">51</Data></Cell>
-    <Cell><Data ss:Type="String">51</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">13</Data></Cell>
-    <Cell><Data ss:Type="String">0.13 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_250</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РћРєРЅР°</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">114</Data></Cell>
-    <Cell><Data ss:Type="String">76</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0.0 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_195</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РћСЃРё</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">14</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">9</Data></Cell>
-    <Cell><Data ss:Type="String">0.09 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_14</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РћСЃРЅРѕРІРЅС‹Рµ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">4</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">35</Data></Cell>
-    <Cell><Data ss:Type="String">0.35 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_4</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РћС‚РјРµС‚РєРё</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">14</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">13</Data></Cell>
-    <Cell><Data ss:Type="String">0.13 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_14</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РџР»РѕС‰Р°РґРё</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">7</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">9</Data></Cell>
-    <Cell><Data ss:Type="String">0.09 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_7</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РџРѕРґСЃРёСЃС‚РµРјР°</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">33</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">204</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">102</Data></Cell>
-    <Cell><Data ss:Type="String">DASHED</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0.0 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_33</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РџРѕРґСЃРёСЃС‚РµРјР° Р°Р»СЋРјРёРЅРёРµРІР°СЏ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">33</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">204</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">102</Data></Cell>
-    <Cell><Data ss:Type="String">DASHED</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0.0 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_33</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РџРѕРґСЃРёСЃС‚РµРјР° РѕС†РёРЅРєРѕРІР°РЅРЅР°СЏ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">33</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">204</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">102</Data></Cell>
-    <Cell><Data ss:Type="String">DASHED</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0.0 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_33</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РџРѕРґС€РёРІРєР°</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">252</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">132</Data></Cell>
-    <Cell><Data ss:Type="String">132</Data></Cell>
-    <Cell><Data ss:Type="String">132</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">9</Data></Cell>
-    <Cell><Data ss:Type="String">0.09 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_252</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РџСЂРѕС„РёР»Рё</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">60</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">191</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_60</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р Р°Р·РјРµСЂС‹</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">14</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">13</Data></Cell>
-    <Cell><Data ss:Type="String">0.13 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_14</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р Р°Р·РјРµСЂС‹ РѕР±Р»РёС†РѕРІРєРё</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">14</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">5</Data></Cell>
-    <Cell><Data ss:Type="String">0.05 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_14</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р Р°Р·РјРµСЂС‹ РїРѕРґСЃРёСЃС‚РµРјС‹</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">1</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">5</Data></Cell>
-    <Cell><Data ss:Type="String">0.05 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_1</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р Р°Р·РјРµСЂС‹ СѓС‚РµРїР»РёС‚РµР»СЏ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">30</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">127</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">5</Data></Cell>
-    <Cell><Data ss:Type="String">0.05 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_30</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р Р°РјРєРё</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">7</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_7</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р РёРіРµР»Рё</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">73</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">204</Data></Cell>
-    <Cell><Data ss:Type="String">102</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_73</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЎС‚Р°РЅРґР°СЂС‚РЅС‹Рµ СЌР»РµРјРµРЅС‚С‹</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">40</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">191</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">15</Data></Cell>
-    <Cell><Data ss:Type="String">0.15 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_40</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЎС‚РµРєР»РѕРїР°РєРµС‚С‹</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">1</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_1</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЎС‚РµРЅС‹</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">4</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_4</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЎС‚РѕР№РєРё РїСЂСЏРјС‹Рµ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">17</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">127</Data></Cell>
-    <Cell><Data ss:Type="String">63</Data></Cell>
-    <Cell><Data ss:Type="String">63</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_17</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЎС‚РѕР№РєРё СѓРіР»РѕРІС‹Рµ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">28</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">76</Data></Cell>
-    <Cell><Data ss:Type="String">19</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_28</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЎСѓС…Р°СЂРё</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">134</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_134</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЎСѓС‰РµСЃС‚РІСѓСЋС‰РёРµ РєРѕРЅСЃС‚СЂСѓРєС†РёРё Р·РґР°РЅРёСЏ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">6</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">30</Data></Cell>
-    <Cell><Data ss:Type="String">0.3 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_6</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РўРµРєСЃС‚</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">2</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">15</Data></Cell>
-    <Cell><Data ss:Type="String">0.15 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_2</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РўРµСЂРјРѕРјРѕСЃС‚ СЂРёРіРµР»РµР№</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">174</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_174</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РўРµСЂРјРѕРјРѕСЃС‚ СЃС‚РѕР№РєРё РїСЂСЏРјРѕР№</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">174</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_174</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РўРµСЂРјРѕРјРѕСЃС‚ СЃС‚РѕР№РєРё СѓРіР»РѕРІРѕР№</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">174</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_174</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РўРѕРЅРєР°СЏ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">110</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">127</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">13</Data></Cell>
-    <Cell><Data ss:Type="String">0.13 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_110</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЈРїР»РѕС‚РЅРёС‚РµР»Рё РїСЂРёР¶РёРјРЅС‹Рµ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">55</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">76</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_55</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЈРїР»РѕС‚РЅРёС‚РµР»Рё СЂРёРіРµР»СЊРЅС‹Рµ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">53</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">204</Data></Cell>
-    <Cell><Data ss:Type="String">204</Data></Cell>
-    <Cell><Data ss:Type="String">102</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_53</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЈРїР»РѕС‚РЅРёС‚РµР»Рё СЃС‚РѕРµС‡РЅС‹Рµ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">45</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">133</Data></Cell>
-    <Cell><Data ss:Type="String">76</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_45</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЈРїР»РѕС‚РЅРёС‚РµР»Рё СЃС‚РѕРµС‡РЅС‹Рµ СѓРіР»РѕРІС‹Рµ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">24</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">38</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_24</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р§РµСЂРЅРѕ-Р±РµР»С‹Р№</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">7</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">-3</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_7</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЁС‚СЂРёС…РѕРІРєР°</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">44</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">114</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">9</Data></Cell>
-    <Cell><Data ss:Type="String">0.09 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_44</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЁС‚СЂРёС…РѕРІРєР° РІРёС‚СЂР°Р¶РµР№</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">85</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">95</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">76</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0.0 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_85</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЁС‚СЂРёС…РѕРІРєР° СѓС‚РµРїР»РёС‚РµР»СЏ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">150</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">127</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">Continuous</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0.0 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_150</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЁС‚СЂРёС…РѕРІС‹Рµ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">170</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">255</Data></Cell>
-    <Cell><Data ss:Type="String">GOST2.303 4</Data></Cell>
-    <Cell><Data ss:Type="String">9</Data></Cell>
-    <Cell><Data ss:Type="String">0.09 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_170</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РЁС‚СЂРёС…РїСѓРЅРєС‚РёСЂРЅС‹Рµ Рё РѕСЃРµРІС‹Рµ</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">14</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">195</Data></Cell>
-    <Cell><Data ss:Type="String">153</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">GOST2.303 6</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-    <Cell><Data ss:Type="String">0.0 РјРј</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-    <Cell><Data ss:Type="String">Р¦РІРµС‚_14</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">Р”Р°</Data></Cell>
-    <Cell><Data ss:Type="String">РќРµС‚</Data></Cell>
-    <Cell><Data ss:Type="String">0</Data></Cell>
-   </Row>
+   <Column ss:Width="600"/>
+   <Row><Cell><Data ss:Type="String">Имя фильтра</Data></Cell><Cell><Data ss:Type="String">Список слоев</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">Стройплэкс</Data></Cell><Cell><Data ss:Type="String">Оси,Основные,Стены,Существующие конструкции здания,Текст,Черно-белый,Штриховка,Нащельники,&gt;&gt;Витражи,&gt;&gt;Окна,&gt;&gt;Отключенные,&gt;&gt;Фасад</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">Витражи</Data></Cell><Cell><Data ss:Type="String">Адаптер алюминиевый,Адаптер ПВХ,Вентиляционные решетки,Витражи,Двери,Детали,Закладные,Заполнение,Крепеж,Крышки ригельные,Крышки стоечные,Крышки стоечные угловые,Маркировка,Невидимые,Обозначения,Ограждения,Отметки,Профили,Размеры,Рамки,Ригели,Стандартные элементы,Стеклопакеты,Стойки прямые,Стойки угловые,Сухари,Термомост ригелей,Термомост стойки прямой,Термомост стойки угловой,Тонкая,Уплотнители прижимные,Уплотнители ригельные,Уплотнители стоечные,Уплотнители стоечные угловые,Штриховка витражей,Штриховые,Штрихпунктирные и осевые</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">Окна</Data></Cell><Cell><Data ss:Type="String">Вентиляционные решетки,Двери,Детали,Маркировка,Окна,Отметки</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">Отключенные</Data></Cell><Cell><Data ss:Type="String">Вспомогательные для штриховки,Геодезия,Железо,Кляммеры,Металл,Невидимые,Невидимые размеры,Площади</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">Фасад</Data></Cell><Cell><Data ss:Type="String">&gt;&gt;Облицовка,&gt;&gt;Подсистема,&gt;&gt;Утепление</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">Облицовка</Data></Cell><Cell><Data ss:Type="String">Вентиляционные решетки,Водосток,Кассеты,Керамогранит,Ламели,Обозначения узлов разрезов и сечений,Отметки,Подшивка,Размеры облицовки</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">Подсистема</Data></Cell><Cell><Data ss:Type="String">Контур КЖ,Контур КМ,Контур стен,Отметки,Подсистема,Подсистема алюминиевая,Подсистема оцинкованная,Размеры подсистемы</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">Утепление</Data></Cell><Cell><Data ss:Type="String">Контур КЖ,Контур КМ,Контур стен,Контуры штриховки утеплителя,Молниезащита,Отметки,Размеры утеплителя,Штриховка утеплителя</Data></Cell></Row>
   </Table>
-  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
-   <Panes>
-    <Pane>
-     <Number>3</Number>
-     <ActiveRow>9</ActiveRow>
-    </Pane>
-   </Panes>
-   <ProtectObjects>False</ProtectObjects>
-   <ProtectScenarios>False</ProtectScenarios>
-  </WorksheetOptions>
- </Worksheet>
- <Worksheet ss:Name="Р¤РёР»СЊС‚СЂС‹ (2)">
-  <Table ss:ExpandedColumnCount="2" ss:ExpandedRowCount="5" x:FullColumns="1"
-   x:FullRows="1">
-   <Column ss:Width="102"/>
-   <Column ss:Width="314.25"/>
-   <Row>
-    <Cell><Data ss:Type="String">РРјСЏ С„РёР»СЊС‚СЂР°</Data></Cell>
-    <Cell><Data ss:Type="String">РЎРїРёСЃРѕРє СЃР»РѕРµРІ</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р’РёС‚СЂР°Р¶Рё</Data></Cell>
-    <Cell><Data ss:Type="String">Р’РёС‚СЂР°Р¶Рё,РђРґР°РїС‚РµСЂ Р°Р»СЋРјРёРЅРёРµРІС‹Р№,РђРґР°РїС‚РµСЂ РџР’РҐ</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">РџРѕРґСЃРёСЃС‚РµРјР°</Data></Cell>
-    <Cell><Data ss:Type="String">РџРѕРґСЃРёСЃС‚РµРјР°,РџРѕРґСЃРёСЃС‚РµРјР° Р°Р»СЋРјРёРЅРёРµРІР°СЏ,РџРѕРґСЃРёСЃС‚РµРјР° РѕС†РёРЅРєРѕРІР°РЅРЅР°СЏ</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р¤Р°СЃР°РґС‹</Data></Cell>
-    <Cell><Data ss:Type="String">&gt;&gt;РџРѕРґСЃРёСЃС‚РµРјР°</Data></Cell>
-   </Row>
-   <Row>
-    <Cell><Data ss:Type="String">Р¤РѕРЅР°СЂСЊ 3D</Data></Cell>
-    <Cell><Data ss:Type="String">РЈРїР»РѕС‚РЅРёС‚РµР»Рё РїСЂРёР¶РёРјРЅС‹Рµ</Data></Cell>
-   </Row>
-  </Table>
-  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
-   <Panes>
-    <Pane>
-     <Number>3</Number>
-     <ActiveRow>27</ActiveRow>
-     <ActiveCol>1</ActiveCol>
-    </Pane>
-   </Panes>
-   <ProtectObjects>False</ProtectObjects>
-   <ProtectScenarios>False</ProtectScenarios>
-  </WorksheetOptions>
- </Worksheet>
+</Worksheet>
 </Workbook>
